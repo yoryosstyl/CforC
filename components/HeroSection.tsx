@@ -22,8 +22,23 @@ export default function HeroSection() {
 
   return (
     <section className="relative pt-20">
-      {/* Video Section - Behind the card */}
-      <div className="relative w-full h-[60vh] bg-gray-900 -mt-12">
+      {/* Orange Card with Rotating Text - 25% viewport height */}
+      <div className="bg-coral h-[25vh] flex items-center rounded-b-3xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
+            <div>CULTURE</div>
+            <div className="flex items-center">
+              <span>FOR&nbsp;</span>
+              <span className="inline-block min-w-[300px] transition-opacity duration-300">
+                {rotatingTexts[currentTextIndex]}
+              </span>
+            </div>
+          </h1>
+        </div>
+      </div>
+
+      {/* Video Section */}
+      <div className="relative w-full aspect-video bg-gray-900">
         <video
           className="w-full h-full object-cover"
           autoPlay
@@ -65,21 +80,6 @@ export default function HeroSection() {
               <path d="M8 5v14l11-7z" />
             </svg>
           </button>
-        </div>
-      </div>
-
-      {/* Orange Card with Rotating Text - 25% viewport height - In Front */}
-      <div className="absolute top-20 left-0 right-0 z-10 bg-coral h-[25vh] flex items-center rounded-b-3xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
-            <div>CULTURE</div>
-            <div className="flex items-center">
-              <span>FOR&nbsp;</span>
-              <span className="inline-block min-w-[300px] transition-opacity duration-300">
-                {rotatingTexts[currentTextIndex]}
-              </span>
-            </div>
-          </h1>
         </div>
       </div>
     </section>
