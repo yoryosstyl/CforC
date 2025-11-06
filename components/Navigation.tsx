@@ -10,31 +10,12 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-full h-full">
-                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="2"/>
-                <g transform="translate(50, 50)">
-                  {[...Array(12)].map((_, i) => (
-                    <line
-                      key={i}
-                      x1="0"
-                      y1="-30"
-                      x2="0"
-                      y2="-35"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      transform={`rotate(${i * 30})`}
-                    />
-                  ))}
-                </g>
-              </svg>
-            </div>
-            <div className="text-sm font-bold leading-tight">
-              <div>CULTURE</div>
-              <div>FOR</div>
-              <div>CHANGE</div>
-            </div>
+          <div className="flex items-center">
+            <img
+              src="/cforc_logo.svg"
+              alt="Culture for Change"
+              className="h-12"
+            />
           </div>
 
           {/* Desktop Navigation */}
