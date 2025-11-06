@@ -72,7 +72,7 @@ export default function HeroSection() {
         </video>
 
         {/* Optional: Play button overlay */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
           <button
             className="pointer-events-auto w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
             onClick={(e) => {
