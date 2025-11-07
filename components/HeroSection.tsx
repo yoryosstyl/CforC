@@ -23,7 +23,7 @@ export default function HeroSection() {
   return (
     <section className="relative pt-20">
       {/* Video Section - Behind the card */}
-      <div className="relative w-full h-[60vh] bg-gray-900 -mt-12">
+      <div className="relative w-full h-[100vh] bg-gray-900 -mt-12">
         <video
           className="w-full h-full object-cover"
           autoPlay
@@ -47,7 +47,7 @@ export default function HeroSection() {
         </video>
 
         {/* Optional: Play button overlay */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none hidden">
           <button
             className="pointer-events-auto w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/30 transition-colors"
             onClick={(e) => {
