@@ -1,20 +1,60 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+
 export default function AboutSection() {
+  const imageRef = useRef<HTMLDivElement>(null)
+  const [imageOffset, setImageOffset] = useState(100)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (imageRef.current) {
+        const rect = imageRef.current.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+
+        // Calculate offset based on scroll position
+        // When section enters viewport, image starts at +100px and moves to 0
+        if (rect.top < windowHeight && rect.bottom > 0) {
+          const progress = Math.max(0, Math.min(1, (windowHeight - rect.top) / windowHeight))
+          setImageOffset(100 - (progress * 100))
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Initial check
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <section id="about" className="py-24 bg-gray-50">
+    <section id="about" className="py-24 bg-gray-50 -mt-[20%]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
-          <p className="text-coral text-sm font-medium mb-2">ΠΡΟΣ ΕΙΚΑΣΤΕ</p>
+          <p className="text-coral text-sm font-medium mb-2">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</p>
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             ΤΟ CULTURE FOR CHANGE<br />ΜΕ ΜΙΑ ΜΑΤΙΑ
           </h2>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-          {/* Image */}
-          <div className="aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden">
-            <div className="w-full h-full flex items-center justify-center bg-charcoal/10">
-              <span className="text-gray-500">Community Image</span>
-            </div>
+          {/* Image with scroll animation */}
+          <div
+            ref={imageRef}
+            className="aspect-[4/3] rounded-3xl overflow-hidden"
+            style={{
+              transform: `translateY(${imageOffset}px)`,
+              transition: 'transform 0.1s ease-out'
+            }}
+          >
+            <Image
+              src="/Homepage_Block1.jpg"
+              alt="Culture for Change Community"
+              width={800}
+              height={600}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* Content */}
