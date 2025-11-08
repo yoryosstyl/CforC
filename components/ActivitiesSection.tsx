@@ -140,7 +140,7 @@ export default function ActivitiesSection() {
                                     alt={card.Visuals[0].alternativeText || card.Title}
                                     width={card.Visuals[0].width}
                                     height={card.Visuals[0].height}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover transition-transform duration-300 hover:duration-500 hover:scale-110"
                                   />
                                 </div>
                               ) : (
@@ -189,9 +189,9 @@ export default function ActivitiesSection() {
           <div className="flex justify-center items-center gap-4 mt-8">
             <button
               onClick={prevSlide}
-              className="w-12 h-12 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
@@ -210,9 +210,9 @@ export default function ActivitiesSection() {
 
             <button
               onClick={nextSlide}
-              className="w-12 h-12 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
