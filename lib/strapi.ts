@@ -41,7 +41,8 @@ async function fetchStrapi(endpoint: string, options: RequestInit = {}) {
  * Get all activities
  */
 export async function getActivities() {
-  return fetchStrapi('/activities?populate=*');
+  // Strapi v5: Explicitly populate Visuals field (media fields need explicit population)
+  return fetchStrapi('/activities?populate[Visuals]=*');
 }
 
 /**
