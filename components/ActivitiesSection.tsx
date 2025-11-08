@@ -122,9 +122,15 @@ export default function ActivitiesSection() {
                         return null
                       }
 
+                      // Debug: Log the Visuals structure
+                      if (offset === 0 && index === 0) {
+                        console.log('Card Visuals structure:', card.Visuals)
+                        console.log('Full card data:', card)
+                      }
+
                       return (
                         <div
-                          key={cardIndex}
+                          key={`${card.id}-${offset}`}
                           className="bg-orange-50 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                         >
                           {/* Image with overlapping date */}
@@ -154,12 +160,6 @@ export default function ActivitiesSection() {
                           </div>
 
                           <div className="p-6 pt-8">
-                            {card.Featured && (
-                              <div className="mb-4 aspect-video bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-2xl">
-                                PLATO
-                              </div>
-                            )}
-
                             <h3 className="text-lg font-bold mb-4 line-clamp-3">
                               {card.Title}
                             </h3>
