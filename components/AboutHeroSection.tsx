@@ -19,51 +19,36 @@ export default function AboutHeroSection() {
   }, [])
 
   return (
-    <section className="relative h-[50vh] min-h-[400px] overflow-hidden bg-coral">
-      {/* Parallax Background Image */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
-          willChange: 'transform'
-        }}
-      >
-        <Image
-          src="/about-us.jpg"
-          alt="Culture for Change Team"
-          fill
-          className="object-cover"
-          priority
-          quality={90}
-        />
-        {/* Overlay for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-coral/40 via-coral/30 to-coral/60" />
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 h-full flex items-center justify-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-7xl md:text-8xl lg:text-9xl font-bold text-charcoal leading-none tracking-tight">
-            ABOUT US
+    <section className="relative -bottom-20">
+      {/* Orange Card with Title - 25% viewport height */}
+      <div className="bg-coral h-[25vh] flex items-center rounded-b-3xl relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
+            <div>ABOUT US</div>
           </h1>
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 animate-bounce">
-        <svg
-          className="w-6 h-6 text-charcoal"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
+      {/* Image Section with Parallax */}
+      <div className="relative bottom-56 w-full h-[80vh] bg-gray-900 -mt-10 rounded-3xl overflow-hidden">
+        <div
+          className="absolute inset-0 w-full h-full"
+          style={{
+            transform: `translateY(${scrollY * 0.5}px)`,
+            willChange: 'transform'
+          }}
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          <Image
+            src="/about-us.jpg"
+            alt="Culture for Change Team"
+            fill
+            className="object-cover"
+            priority
+            quality={90}
           />
-        </svg>
+          {/* Overlay for better text contrast if needed */}
+          <div className="absolute inset-0 bg-black/10" />
+        </div>
       </div>
     </section>
   )
