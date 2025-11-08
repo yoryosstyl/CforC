@@ -13,13 +13,11 @@ const nextConfig = {
         hostname: 'localhost',
         pathname: '/uploads/**',
       },
-      // Add your production Strapi domain here when deploying
-      // Example:
-      // {
-      //   protocol: 'https',
-      //   hostname: 'your-strapi-domain.com',
-      //   pathname: '/uploads/**',
-      // },
+      {
+        protocol: 'https',
+        hostname: 'faithful-crystal-a2269c9fd9.strapiapp.com',
+        pathname: '/uploads/**',
+      },
     ],
   },
 }
