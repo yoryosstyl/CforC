@@ -58,8 +58,13 @@ export default function AboutSection() {
             />
           </div>
 
-          {/* Content */}
-          <div>
+          {/* Content with fade-in animation */}
+          <div
+            className="transition-opacity duration-1000 ease-out"
+            style={{
+              opacity: isVisible ? 1 : 0
+            }}
+          >
             <h3 className="text-3xl font-bold mb-6">
               ΤΟ ΠΡΩΤΟ ΕΛΛΗΝΙΚΟ ΔΙΚΤΥΟ ΓΙΑ ΤΗΝ<br />
               ΚΟΙΝΩΝΙΚΗ ΚΑΙΝΟΤΟΜΙΑ ΣΤΗΝ<br />
