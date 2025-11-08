@@ -16,7 +16,7 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'faithful-crystal-a2269c9fd9.strapiapp.com',
-        pathname: '/uploads/**',
+        pathname: '/**',
       },
     ],
   },
