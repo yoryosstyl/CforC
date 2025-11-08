@@ -43,7 +43,13 @@ export default function OpenCallsSection() {
         console.log('Open calls data:', response.data)
         console.log('Number of open calls:', response.data?.length || 0)
 
-        setOpenCalls(response.data)
+        // Sort by createdAt (submission date) in descending order (most recent first)
+        // Then take only the 4 most recent entries
+        const sortedCalls = response.data
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+          .slice(0, 4)
+
+        setOpenCalls(sortedCalls)
       } catch (err) {
         setError('Failed to load open calls from Strapi')
         console.error('Error fetching open calls:', err)
