@@ -1,16 +1,76 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 
-// City data with their positions and regions
+// Map regions for Greek cities only (excluding foreign cities)
+const greekRegions = {
+  thessaloniki: {
+    name: 'ΘΕΣΣΑΛΟΝΙΚΗ',
+    position: { top: '15%', left: '58%', width: '15%', height: '12%' },
+    type: 'region'
+  },
+  attiki: {
+    name: 'ΑΤΤΙΚΗ',
+    position: { top: '48%', left: '52%', width: '12%', height: '10%' },
+    type: 'region'
+  },
+  athens: {
+    name: 'ΑΘΗΝΑ',
+    position: { top: '48%', left: '52%', width: '12%', height: '10%' },
+    type: 'region'
+  },
+  chios: {
+    name: 'ΧΙΟΣ',
+    position: { top: '35%', left: '80%', width: '8%', height: '6%' },
+    type: 'island'
+  },
+  kalamata: {
+    name: 'ΚΑΛΑΜΑΤΑ',
+    position: { top: '62%', left: '42%', width: '14%', height: '12%' },
+    type: 'region'
+  },
+  syros: {
+    name: 'ΣΥΡΟΣ',
+    position: { top: '52%', left: '68%', width: '6%', height: '5%' },
+    type: 'island'
+  },
+  volos: {
+    name: 'ΒΟΛΟΣ',
+    position: { top: '32%', left: '54%', width: '10%', height: '8%' },
+    type: 'region'
+  },
+  messolonghi: {
+    name: 'ΜΕΣΟΛΟΓΓΙ',
+    position: { top: '42%', left: '38%', width: '10%', height: '8%' },
+    type: 'region'
+  },
+  skopelos: {
+    name: 'ΣΚΟΠΕΛΟΣ',
+    position: { top: '28%', left: '64%', width: '6%', height: '5%' },
+    type: 'island'
+  },
+  preveza: {
+    name: 'ΠΡΕΒΕΖΑ',
+    position: { top: '35%', left: '35%', width: '10%', height: '8%' },
+    type: 'region'
+  },
+  crete: {
+    name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ',
+    position: { top: '82%', left: '48%', width: '28%', height: '12%' },
+    type: 'region'
+  }
+}
+
+// City lists with region mappings
 const cities = {
   left: [
     { name: 'ΑΤΤΙΚΗ', region: 'attiki' },
     { name: 'ΧΙΟΣ', region: 'chios' },
     { name: 'ΚΑΛΑΜΑΤΑ', region: 'kalamata' },
-    { name: 'ΒΡΥΣΕΛΛΕΣ', region: 'brussels' },
-    { name: 'ΛΙΣΑΒΟΝΑ', region: 'lisbon' },
-    { name: 'ΚΥΠΡΟΣ', region: 'cyprus' },
+    { name: 'ΒΡΥΣΕΛΛΕΣ', region: null }, // Foreign city
+    { name: 'ΛΙΣΑΒΟΝΑ', region: null }, // Foreign city
+    { name: 'ΚΥΠΡΟΣ', region: null }, // Foreign/not on map
     { name: 'ΣΥΡΟΣ', region: 'syros' },
     { name: 'ΒΟΛΟΣ', region: 'volos' },
   ],
@@ -20,9 +80,9 @@ const cities = {
     { name: 'ΣΚΟΠΕΛΟΣ', region: 'skopelos' },
     { name: 'ΠΡΕΒΕΖΑ', region: 'preveza' },
     { name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ', region: 'crete' },
-    { name: 'ΘΕΣΣΑΛΟΝΙΚΗ', region: 'thessaloniki2' },
+    { name: 'ΘΕΣΣΑΛΟΝΙΚΗ', region: 'thessaloniki' },
     { name: 'ΑΘΗΝΑ', region: 'athens' },
-    { name: 'ΠΟΡΤΟΓΑΛΙΑ', region: 'portugal' },
+    { name: 'ΠΟΡΤΟΓΑΛΙΑ', region: null }, // Foreign city
   ],
 }
 
@@ -34,7 +94,7 @@ export default function AboutMapSection() {
     setHoveredRegion(region)
   }
 
-  const handleCityClick = (region: string) => {
+  const handleRegionClick = (region: string) => {
     setSelectedRegion(selectedRegion === region ? null : region)
   }
 
@@ -58,17 +118,21 @@ export default function AboutMapSection() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           {/* Left Cities List */}
           <div className="space-y-4">
-            {cities.left.map((city) => (
+            {cities.left.map((city, idx) => (
               <div
-                key={city.region}
-                className={`cursor-pointer transition-colors duration-300 pb-3 border-b border-gray-300 ${
-                  isRegionActive(city.region)
-                    ? 'text-coral border-coral'
-                    : 'text-charcoal hover:text-coral hover:border-coral'
+                key={`${city.name}-${idx}`}
+                className={`pb-3 border-b border-gray-300 ${
+                  city.region
+                    ? `cursor-pointer transition-colors duration-300 ${
+                        isRegionActive(city.region)
+                          ? 'text-coral border-coral'
+                          : 'text-charcoal hover:text-coral hover:border-coral'
+                      }`
+                    : 'text-gray-400 cursor-not-allowed'
                 }`}
-                onMouseEnter={() => handleCityHover(city.region)}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick(city.region)}
+                onMouseEnter={() => city.region && handleCityHover(city.region)}
+                onMouseLeave={() => city.region && handleCityHover(null)}
+                onClick={() => city.region && handleRegionClick(city.region)}
               >
                 <span className="text-sm font-medium">{city.name}</span>
               </div>
@@ -77,144 +141,66 @@ export default function AboutMapSection() {
 
           {/* Map in Center */}
           <div className="flex items-center justify-center relative">
-            {/* Simplified Greece Map SVG - Placeholder */}
-            <svg
-              viewBox="0 0 400 500"
-              className="w-full max-w-md"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* This is a simplified placeholder - you'll need actual Greece map SVG paths */}
-
-              {/* Northern Greece / Macedonia */}
-              <path
-                d="M 100 80 L 300 80 L 320 120 L 280 150 L 100 140 Z"
-                fill={isRegionActive('thessaloniki') || isRegionActive('thessaloniki2') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('thessaloniki')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('thessaloniki')}
+            <div className="relative w-full max-w-md aspect-[3/4]">
+              {/* Greece Map Background */}
+              <Image
+                src="/map-of-greece.jpg"
+                alt="Map of Greece"
+                fill
+                className="object-contain"
               />
 
-              {/* Central Greece / Epirus */}
-              <path
-                d="M 90 140 L 280 150 L 250 220 L 80 210 Z"
-                fill={isRegionActive('preveza') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('preveza')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('preveza')}
-              />
+              {/* Interactive Region Overlays */}
+              {Object.entries(greekRegions).map(([regionKey, region]) => (
+                <div
+                  key={regionKey}
+                  className="absolute cursor-pointer transition-all duration-300"
+                  style={{
+                    top: region.position.top,
+                    left: region.position.left,
+                    width: region.position.width,
+                    height: region.position.height,
+                    backgroundColor: isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent',
+                    borderRadius: region.type === 'island' ? '50%' : '8px',
+                  }}
+                  onMouseEnter={() => handleCityHover(regionKey)}
+                  onMouseLeave={() => handleCityHover(null)}
+                  onClick={() => handleRegionClick(regionKey)}
+                />
+              ))}
 
-              {/* Attica / Athens */}
-              <path
-                d="M 150 220 L 250 220 L 260 280 L 140 270 Z"
-                fill={isRegionActive('athens') || isRegionActive('attiki') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('athens')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('athens')}
-              />
-
-              {/* Peloponnese */}
-              <path
-                d="M 100 270 L 240 280 L 220 380 L 80 370 Z"
-                fill={isRegionActive('kalamata') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('kalamata')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('kalamata')}
-              />
-
-              {/* Crete */}
-              <path
-                d="M 120 420 L 300 420 L 290 460 L 110 460 Z"
-                fill={isRegionActive('crete') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('crete')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('crete')}
-              />
-
-              {/* Islands - Chios */}
-              <circle
-                cx="350"
-                cy="200"
-                r="15"
-                fill={isRegionActive('chios') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('chios')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('chios')}
-              />
-
-              {/* Islands - Syros */}
-              <circle
-                cx="300"
-                cy="240"
-                r="12"
-                fill={isRegionActive('syros') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('syros')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('syros')}
-              />
-
-              {/* Volos area */}
-              <circle
-                cx="200"
-                cy="180"
-                r="12"
-                fill={isRegionActive('volos') ? '#FF6B4A' : '#E5E7EB'}
-                stroke="#9CA3AF"
-                strokeWidth="2"
-                className="cursor-pointer transition-colors duration-300"
-                onMouseEnter={() => handleCityHover('volos')}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick('volos')}
-              />
-            </svg>
-
-            {/* Center Play Button Overlay (optional) */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <button className="pointer-events-auto w-16 h-16 rounded-full bg-charcoal/80 hover:bg-charcoal flex items-center justify-center transition-colors group">
-                <svg
-                  className="w-8 h-8 text-white ml-1"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
+              {/* Center Play Button Overlay */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <button className="pointer-events-auto w-16 h-16 rounded-full bg-charcoal/80 hover:bg-charcoal flex items-center justify-center transition-colors group">
+                  <svg
+                    className="w-8 h-8 text-white ml-1"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Right Cities List */}
           <div className="space-y-4">
-            {cities.right.map((city, index) => (
+            {cities.right.map((city, idx) => (
               <div
-                key={`${city.region}-${index}`}
-                className={`cursor-pointer transition-colors duration-300 pb-3 border-b border-gray-300 text-right ${
-                  isRegionActive(city.region)
-                    ? 'text-coral border-coral'
-                    : 'text-charcoal hover:text-coral hover:border-coral'
+                key={`${city.name}-${idx}`}
+                className={`pb-3 border-b border-gray-300 text-right ${
+                  city.region
+                    ? `cursor-pointer transition-colors duration-300 ${
+                        isRegionActive(city.region)
+                          ? 'text-coral border-coral'
+                          : 'text-charcoal hover:text-coral hover:border-coral'
+                      }`
+                    : 'text-gray-400 cursor-not-allowed'
                 }`}
-                onMouseEnter={() => handleCityHover(city.region)}
-                onMouseLeave={() => handleCityHover(null)}
-                onClick={() => handleCityClick(city.region)}
+                onMouseEnter={() => city.region && handleCityHover(city.region)}
+                onMouseLeave={() => city.region && handleCityHover(null)}
+                onClick={() => city.region && handleRegionClick(city.region)}
               >
                 <span className="text-sm font-medium">{city.name}</span>
               </div>
