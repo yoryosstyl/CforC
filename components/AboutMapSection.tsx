@@ -1,75 +1,75 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Image from 'next/image'
 
-// All city regions as circles with positions based on actual map
-const cityCircles = {
+// Initial city positions
+const initialCityCircles = {
   thessaloniki: {
     name: 'ΘΕΣΣΑΛΟΝΙΚΗ',
-    cx: '250',
-    cy: '100',
-    r: '20',
+    cx: 250,
+    cy: 100,
+    r: 20,
   },
   attiki: {
     name: 'ΑΤΤΙΚΗ',
-    cx: '270',
-    cy: '280',
-    r: '20',
+    cx: 270,
+    cy: 280,
+    r: 20,
   },
   athens: {
     name: 'ΑΘΗΝΑ',
-    cx: '270',
-    cy: '280',
-    r: '20',
+    cx: 270,
+    cy: 280,
+    r: 20,
   },
   kalamata: {
     name: 'ΚΑΛΑΜΑΤΑ',
-    cx: '180',
-    cy: '370',
-    r: '20',
+    cx: 180,
+    cy: 370,
+    r: 20,
   },
   volos: {
     name: 'ΒΟΛΟΣ',
-    cx: '270',
-    cy: '200',
-    r: '20',
+    cx: 270,
+    cy: 200,
+    r: 20,
   },
   messolonghi: {
     name: 'ΜΕΣΟΛΟΓΓΙ',
-    cx: '160',
-    cy: '250',
-    r: '20',
+    cx: 160,
+    cy: 250,
+    r: 20,
   },
   preveza: {
     name: 'ΠΡΕΒΕΖΑ',
-    cx: '130',
-    cy: '200',
-    r: '20',
+    cx: 130,
+    cy: 200,
+    r: 20,
   },
   crete: {
     name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ',
-    cx: '280',
-    cy: '520',
-    r: '20',
+    cx: 280,
+    cy: 520,
+    r: 20,
   },
   chios: {
     name: 'ΧΙΟΣ',
-    cx: '420',
-    cy: '300',
-    r: '20',
+    cx: 420,
+    cy: 300,
+    r: 20,
   },
   syros: {
     name: 'ΣΥΡΟΣ',
-    cx: '330',
-    cy: '350',
-    r: '20',
+    cx: 330,
+    cy: 350,
+    r: 20,
   },
   skopelos: {
     name: 'ΣΚΟΠΕΛΟΣ',
-    cx: '310',
-    cy: '150',
-    r: '20',
+    cx: 310,
+    cy: 150,
+    r: 20,
   },
 }
 
@@ -100,6 +100,9 @@ const cities = {
 export default function AboutMapSection() {
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null)
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
+  const [cityPositions, setCityPositions] = useState(initialCityCircles)
+  const [draggingCity, setDraggingCity] = useState<string | null>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
 
   const handleCityHover = (region: string | null) => {
     setHoveredRegion(region)
@@ -111,6 +114,34 @@ export default function AboutMapSection() {
 
   const isRegionActive = (region: string) => {
     return hoveredRegion === region || selectedRegion === region
+  }
+
+  const handleMouseDown = (regionKey: string, e: React.MouseEvent) => {
+    e.preventDefault()
+    setDraggingCity(regionKey)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!draggingCity || !svgRef.current) return
+
+    const svg = svgRef.current
+    const point = svg.createSVGPoint()
+    point.x = e.clientX
+    point.y = e.clientY
+    const svgPoint = point.matrixTransform(svg.getScreenCTM()?.inverse())
+
+    setCityPositions(prev => ({
+      ...prev,
+      [draggingCity]: {
+        ...prev[draggingCity as keyof typeof prev],
+        cx: Math.round(svgPoint.x),
+        cy: Math.round(svgPoint.y),
+      },
+    }))
+  }
+
+  const handleMouseUp = () => {
+    setDraggingCity(null)
   }
 
   return (
@@ -145,7 +176,14 @@ export default function AboutMapSection() {
                 onMouseLeave={() => city.region && handleCityHover(null)}
                 onClick={() => city.region && handleRegionClick(city.region)}
               >
-                <span className="text-sm font-medium">{city.name}</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">{city.name}</span>
+                  {city.region && (
+                    <span className="text-xs text-gray-500 font-mono">
+                      ({cityPositions[city.region as keyof typeof cityPositions].cx}, {cityPositions[city.region as keyof typeof cityPositions].cy})
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -163,25 +201,33 @@ export default function AboutMapSection() {
 
               {/* SVG Overlay for Interactive Regions */}
               <svg
+                ref={svgRef}
                 viewBox="0 0 500 600"
                 className="absolute inset-0 w-full h-full"
-                style={{ pointerEvents: 'none' }}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
               >
-                {/* All cities as circles */}
-                {Object.entries(cityCircles).map(([regionKey, city]) => (
+                {/* All cities as circles - always visible and draggable */}
+                {Object.entries(cityPositions).map(([regionKey, city]) => (
                   <circle
                     key={regionKey}
                     cx={city.cx}
                     cy={city.cy}
                     r={city.r}
-                    fill={isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent'}
-                    stroke="transparent"
-                    strokeWidth="0"
-                    className="cursor-pointer transition-all duration-300"
-                    style={{ pointerEvents: 'auto' }}
+                    fill={
+                      draggingCity === regionKey
+                        ? 'rgba(255, 107, 74, 0.8)'
+                        : isRegionActive(regionKey)
+                        ? 'rgba(255, 107, 74, 0.5)'
+                        : 'rgba(255, 107, 74, 0.3)'
+                    }
+                    stroke="rgba(255, 107, 74, 0.8)"
+                    strokeWidth="2"
+                    className="cursor-move transition-all duration-300"
+                    onMouseDown={(e) => handleMouseDown(regionKey, e)}
                     onMouseEnter={() => handleCityHover(regionKey)}
-                    onMouseLeave={() => handleCityHover(null)}
-                    onClick={() => handleRegionClick(regionKey)}
+                    onMouseLeave={() => !draggingCity && handleCityHover(null)}
                   />
                 ))}
               </svg>
@@ -206,7 +252,14 @@ export default function AboutMapSection() {
                 onMouseLeave={() => city.region && handleCityHover(null)}
                 onClick={() => city.region && handleRegionClick(city.region)}
               >
-                <span className="text-sm font-medium">{city.name}</span>
+                <div className="flex justify-between items-center">
+                  {city.region && (
+                    <span className="text-xs text-gray-500 font-mono">
+                      ({cityPositions[city.region as keyof typeof cityPositions].cx}, {cityPositions[city.region as keyof typeof cityPositions].cy})
+                    </span>
+                  )}
+                  <span className="text-sm font-medium">{city.name}</span>
+                </div>
               </div>
             ))}
           </div>
