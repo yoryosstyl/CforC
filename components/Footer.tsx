@@ -4,23 +4,23 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-12 mb-6">
           {/* Logo */}
           <div className="col-span-2 md:col-span-1">
             <Image
               src="/cforc_logo.svg"
               alt="Culture for Change Logo"
-              width={200}
-              height={80}
-              className="w-48"
+              width={160}
+              height={64}
+              className="w-40"
             />
           </div>
 
           {/* Sitemap */}
           <div>
-            <h3 className="font-bold mb-4 text-coral">SITEMAP</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-bold mb-3 text-coral text-xs">SITEMAP</h3>
+            <ul className="space-y-1.5 text-xs">
               <li><Link href="/find-members" className="hover:text-coral transition-colors">ΕΥΡΕΣΗ ΜΕΛΩΝ</Link></li>
               <li><Link href="/about" className="hover:text-coral transition-colors">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link></li>
               <li><Link href="/activities" className="hover:text-coral transition-colors">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link></li>
@@ -32,8 +32,8 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-bold mb-4 text-coral">ΕΠΙΚΟΙΝΩΝΙΑ</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-bold mb-3 text-coral text-xs">ΕΠΙΚΟΙΝΩΝΙΑ</h3>
+            <ul className="space-y-1.5 text-xs">
               <li>Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ</li>
               <li>
                 <a href="mailto:HELLO@CULTUREFORCHANGE.NET" className="hover:text-coral transition-colors">
@@ -50,8 +50,8 @@ export default function Footer() {
 
           {/* Policy */}
           <div>
-            <h3 className="font-bold mb-4 text-coral">ΠΟΛΙΤΙΚΗ</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-bold mb-3 text-coral text-xs">ΠΟΛΙΤΙΚΗ</h3>
+            <ul className="space-y-1.5 text-xs">
               <li><Link href="/terms" className="hover:text-coral transition-colors">ΟΡΟΙ & ΠΡΟΫΠΟΘΕΣΕΙΣ</Link></li>
               <li><Link href="/privacy" className="hover:text-coral transition-colors">ΠΟΛΙΤΙΚΗ ΑΠΟΡΡΗΤΟΥ</Link></li>
               <li><Link href="/cookies" className="hover:text-coral transition-colors">ΠΟΛΙΤΙΚΗ COOKIES</Link></li>
@@ -60,8 +60,8 @@ export default function Footer() {
 
           {/* Social Media */}
           <div>
-            <h3 className="font-bold mb-4 text-coral">SOCIAL MEDIA</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-bold mb-3 text-coral text-xs">SOCIAL MEDIA</h3>
+            <ul className="space-y-1.5 text-xs">
               <li>
                 <a href="https://www.linkedin.com/company/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
                   LINKED IN
@@ -92,10 +92,10 @@ export default function Footer() {
         </div>
 
         {/* Bottom section */}
-        <div className="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-800">
+        <div className="border-t border-gray-300 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-700">
           <p>ΠΝΕΥΜΑΤΙΚΑ ΔΙΚΑΙΩΜΑΤΑ © 2025 CULTURE FOR CHANGE</p>
           <p className="mt-2 md:mt-0">
-            DESIGN BY <span className="font-medium">NEKATIV</span> DEVELOPED BY <span className="font-medium">DIV&TONIC</span>
+            Developed by <a href="https://yoryosstyl.com" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-coral transition-colors">Yoryos Styl</a>
           </p>
         </div>
       </div>
