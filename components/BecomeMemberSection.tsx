@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function BecomeMemberSection() {
   return (
-    <section className="relative h-[30vh] min-h-[300px] w-full overflow-hidden">
+    <section className="relative h-[45vh] min-h-[400px] w-full overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
