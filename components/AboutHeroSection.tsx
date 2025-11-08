@@ -19,7 +19,7 @@ export default function AboutHeroSection() {
   }, [])
 
   return (
-    <section className="relative h-screen overflow-hidden bg-coral">
+    <section className="relative h-[50vh] min-h-[400px] overflow-hidden bg-coral">
       {/* Parallax Background Image */}
       <div
         className="absolute inset-0 z-0"
