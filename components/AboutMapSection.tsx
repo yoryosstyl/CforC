@@ -3,63 +3,70 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
-// Map regions for Greek cities only (excluding foreign cities)
+// Map regions for Greek cities with SVG path coordinates
 const greekRegions = {
   thessaloniki: {
     name: 'ΘΕΣΣΑΛΟΝΙΚΗ',
-    position: { top: '15%', left: '58%', width: '15%', height: '12%' },
-    type: 'region'
+    // Northern Macedonia region
+    path: 'M 200,40 L 350,40 L 360,80 L 340,120 L 280,130 L 200,120 Z',
   },
   attiki: {
     name: 'ΑΤΤΙΚΗ',
-    position: { top: '48%', left: '52%', width: '12%', height: '10%' },
-    type: 'region'
+    // Attica region around Athens
+    path: 'M 220,240 L 280,240 L 290,280 L 270,300 L 210,290 Z',
   },
   athens: {
     name: 'ΑΘΗΝΑ',
-    position: { top: '48%', left: '52%', width: '12%', height: '10%' },
-    type: 'region'
-  },
-  chios: {
-    name: 'ΧΙΟΣ',
-    position: { top: '35%', left: '80%', width: '8%', height: '6%' },
-    type: 'island'
+    // Same as Attiki
+    path: 'M 220,240 L 280,240 L 290,280 L 270,300 L 210,290 Z',
   },
   kalamata: {
     name: 'ΚΑΛΑΜΑΤΑ',
-    position: { top: '62%', left: '42%', width: '14%', height: '12%' },
-    type: 'region'
-  },
-  syros: {
-    name: 'ΣΥΡΟΣ',
-    position: { top: '52%', left: '68%', width: '6%', height: '5%' },
-    type: 'island'
+    // Southern Peloponnese
+    path: 'M 150,320 L 240,330 L 250,380 L 230,420 L 180,430 L 140,400 L 130,360 Z',
   },
   volos: {
     name: 'ΒΟΛΟΣ',
-    position: { top: '32%', left: '54%', width: '10%', height: '8%' },
-    type: 'region'
+    // Central Greece / Thessaly
+    path: 'M 230,150 L 290,160 L 300,200 L 280,220 L 220,210 L 210,170 Z',
   },
   messolonghi: {
     name: 'ΜΕΣΟΛΟΓΓΙ',
-    position: { top: '42%', left: '38%', width: '10%', height: '8%' },
-    type: 'region'
-  },
-  skopelos: {
-    name: 'ΣΚΟΠΕΛΟΣ',
-    position: { top: '28%', left: '64%', width: '6%', height: '5%' },
-    type: 'island'
+    // Western Central Greece
+    path: 'M 140,200 L 200,210 L 210,250 L 190,270 L 130,260 L 120,230 Z',
   },
   preveza: {
     name: 'ΠΡΕΒΕΖΑ',
-    position: { top: '35%', left: '35%', width: '10%', height: '8%' },
-    type: 'region'
+    // Epirus / Northwest
+    path: 'M 120,140 L 180,150 L 190,190 L 170,210 L 110,200 L 100,170 Z',
   },
   crete: {
     name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ',
-    position: { top: '82%', left: '48%', width: '28%', height: '12%' },
-    type: 'region'
-  }
+    // Crete island
+    path: 'M 180,480 L 360,470 L 370,510 L 360,540 L 180,530 L 170,500 Z',
+  },
+}
+
+// Island regions (will use circles)
+const islandRegions = {
+  chios: {
+    name: 'ΧΙΟΣ',
+    cx: '420',
+    cy: '180',
+    r: '25',
+  },
+  syros: {
+    name: 'ΣΥΡΟΣ',
+    cx: '340',
+    cy: '260',
+    r: '18',
+  },
+  skopelos: {
+    name: 'ΣΚΟΠΕΛΟΣ',
+    cx: '310',
+    cy: '130',
+    r: '18',
+  },
 }
 
 // City lists with region mappings
@@ -68,9 +75,9 @@ const cities = {
     { name: 'ΑΤΤΙΚΗ', region: 'attiki' },
     { name: 'ΧΙΟΣ', region: 'chios' },
     { name: 'ΚΑΛΑΜΑΤΑ', region: 'kalamata' },
-    { name: 'ΒΡΥΣΕΛΛΕΣ', region: null }, // Foreign city
-    { name: 'ΛΙΣΑΒΟΝΑ', region: null }, // Foreign city
-    { name: 'ΚΥΠΡΟΣ', region: null }, // Foreign/not on map
+    { name: 'ΒΡΥΣΕΛΛΕΣ', region: null },
+    { name: 'ΛΙΣΑΒΟΝΑ', region: null },
+    { name: 'ΚΥΠΡΟΣ', region: null },
     { name: 'ΣΥΡΟΣ', region: 'syros' },
     { name: 'ΒΟΛΟΣ', region: 'volos' },
   ],
@@ -82,7 +89,7 @@ const cities = {
     { name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ', region: 'crete' },
     { name: 'ΘΕΣΣΑΛΟΝΙΚΗ', region: 'thessaloniki' },
     { name: 'ΑΘΗΝΑ', region: 'athens' },
-    { name: 'ΠΟΡΤΟΓΑΛΙΑ', region: null }, // Foreign city
+    { name: 'ΠΟΡΤΟΓΑΛΙΑ', region: null },
   ],
 }
 
@@ -150,24 +157,46 @@ export default function AboutMapSection() {
                 className="object-contain"
               />
 
-              {/* Interactive Region Overlays */}
-              {Object.entries(greekRegions).map(([regionKey, region]) => (
-                <div
-                  key={regionKey}
-                  className="absolute cursor-pointer transition-all duration-300"
-                  style={{
-                    top: region.position.top,
-                    left: region.position.left,
-                    width: region.position.width,
-                    height: region.position.height,
-                    backgroundColor: isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent',
-                    borderRadius: region.type === 'island' ? '50%' : '8px',
-                  }}
-                  onMouseEnter={() => handleCityHover(regionKey)}
-                  onMouseLeave={() => handleCityHover(null)}
-                  onClick={() => handleRegionClick(regionKey)}
-                />
-              ))}
+              {/* SVG Overlay for Interactive Regions */}
+              <svg
+                viewBox="0 0 500 600"
+                className="absolute inset-0 w-full h-full"
+                style={{ pointerEvents: 'none' }}
+              >
+                {/* Mainland regions with path outlines */}
+                {Object.entries(greekRegions).map(([regionKey, region]) => (
+                  <path
+                    key={regionKey}
+                    d={region.path}
+                    fill={isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent'}
+                    stroke="transparent"
+                    strokeWidth="0"
+                    className="cursor-pointer transition-all duration-300"
+                    style={{ pointerEvents: 'auto' }}
+                    onMouseEnter={() => handleCityHover(regionKey)}
+                    onMouseLeave={() => handleCityHover(null)}
+                    onClick={() => handleRegionClick(regionKey)}
+                  />
+                ))}
+
+                {/* Island regions with circles */}
+                {Object.entries(islandRegions).map(([regionKey, island]) => (
+                  <circle
+                    key={regionKey}
+                    cx={island.cx}
+                    cy={island.cy}
+                    r={island.r}
+                    fill={isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent'}
+                    stroke="transparent"
+                    strokeWidth="0"
+                    className="cursor-pointer transition-all duration-300"
+                    style={{ pointerEvents: 'auto' }}
+                    onMouseEnter={() => handleCityHover(regionKey)}
+                    onMouseLeave={() => handleCityHover(null)}
+                    onClick={() => handleRegionClick(regionKey)}
+                  />
+                ))}
+              </svg>
 
               {/* Center Play Button Overlay */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
