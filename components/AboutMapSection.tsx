@@ -3,69 +3,73 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
-// Map regions for Greek cities with SVG path coordinates
-const greekRegions = {
+// All city regions as circles with positions based on actual map
+const cityCircles = {
   thessaloniki: {
     name: 'ΘΕΣΣΑΛΟΝΙΚΗ',
-    // Northern Macedonia region
-    path: 'M 200,40 L 350,40 L 360,80 L 340,120 L 280,130 L 200,120 Z',
+    cx: '250',
+    cy: '100',
+    r: '20',
   },
   attiki: {
     name: 'ΑΤΤΙΚΗ',
-    // Attica region around Athens
-    path: 'M 220,240 L 280,240 L 290,280 L 270,300 L 210,290 Z',
+    cx: '270',
+    cy: '280',
+    r: '20',
   },
   athens: {
     name: 'ΑΘΗΝΑ',
-    // Same as Attiki
-    path: 'M 220,240 L 280,240 L 290,280 L 270,300 L 210,290 Z',
+    cx: '270',
+    cy: '280',
+    r: '20',
   },
   kalamata: {
     name: 'ΚΑΛΑΜΑΤΑ',
-    // Southern Peloponnese
-    path: 'M 150,320 L 240,330 L 250,380 L 230,420 L 180,430 L 140,400 L 130,360 Z',
+    cx: '180',
+    cy: '370',
+    r: '20',
   },
   volos: {
     name: 'ΒΟΛΟΣ',
-    // Central Greece / Thessaly
-    path: 'M 230,150 L 290,160 L 300,200 L 280,220 L 220,210 L 210,170 Z',
+    cx: '270',
+    cy: '200',
+    r: '20',
   },
   messolonghi: {
     name: 'ΜΕΣΟΛΟΓΓΙ',
-    // Western Central Greece
-    path: 'M 140,200 L 200,210 L 210,250 L 190,270 L 130,260 L 120,230 Z',
+    cx: '160',
+    cy: '250',
+    r: '20',
   },
   preveza: {
     name: 'ΠΡΕΒΕΖΑ',
-    // Epirus / Northwest
-    path: 'M 120,140 L 180,150 L 190,190 L 170,210 L 110,200 L 100,170 Z',
+    cx: '130',
+    cy: '200',
+    r: '20',
   },
   crete: {
     name: 'ΚΡΗΤΗ/ΗΡΑΚΛΕΙΟ',
-    // Crete island
-    path: 'M 180,480 L 360,470 L 370,510 L 360,540 L 180,530 L 170,500 Z',
+    cx: '280',
+    cy: '520',
+    r: '20',
   },
-}
-
-// Island regions (will use circles)
-const islandRegions = {
   chios: {
     name: 'ΧΙΟΣ',
     cx: '420',
-    cy: '180',
-    r: '25',
+    cy: '300',
+    r: '20',
   },
   syros: {
     name: 'ΣΥΡΟΣ',
-    cx: '340',
-    cy: '260',
-    r: '18',
+    cx: '330',
+    cy: '350',
+    r: '20',
   },
   skopelos: {
     name: 'ΣΚΟΠΕΛΟΣ',
     cx: '310',
-    cy: '130',
-    r: '18',
+    cy: '150',
+    r: '20',
   },
 }
 
@@ -163,29 +167,13 @@ export default function AboutMapSection() {
                 className="absolute inset-0 w-full h-full"
                 style={{ pointerEvents: 'none' }}
               >
-                {/* Mainland regions with path outlines */}
-                {Object.entries(greekRegions).map(([regionKey, region]) => (
-                  <path
-                    key={regionKey}
-                    d={region.path}
-                    fill={isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent'}
-                    stroke="transparent"
-                    strokeWidth="0"
-                    className="cursor-pointer transition-all duration-300"
-                    style={{ pointerEvents: 'auto' }}
-                    onMouseEnter={() => handleCityHover(regionKey)}
-                    onMouseLeave={() => handleCityHover(null)}
-                    onClick={() => handleRegionClick(regionKey)}
-                  />
-                ))}
-
-                {/* Island regions with circles */}
-                {Object.entries(islandRegions).map(([regionKey, island]) => (
+                {/* All cities as circles */}
+                {Object.entries(cityCircles).map(([regionKey, city]) => (
                   <circle
                     key={regionKey}
-                    cx={island.cx}
-                    cy={island.cy}
-                    r={island.r}
+                    cx={city.cx}
+                    cy={city.cy}
+                    r={city.r}
                     fill={isRegionActive(regionKey) ? 'rgba(255, 107, 74, 0.5)' : 'transparent'}
                     stroke="transparent"
                     strokeWidth="0"
