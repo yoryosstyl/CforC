@@ -30,9 +30,9 @@ export default function Navigation() {
             <Link href="/open-calls" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ
             </Link>
-            <a href="#participate" className="text-sm font-medium hover:text-charcoal transition-colors">
+            <Link href="/participation" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΣΥΜΜΕΤΟΧΗ
-            </a>
+            </Link>
             <button className="bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </button>
@@ -66,7 +66,7 @@ export default function Navigation() {
             <Link href="/about" className="block text-sm font-medium py-2">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
             <Link href="/activities" className="block text-sm font-medium py-2">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
             <Link href="/open-calls" className="block text-sm font-medium py-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link>
-            <a href="#participate" className="block text-sm font-medium py-2">ΣΥΜΜΕΤΟΧΗ</a>
+            <Link href="/participation" className="block text-sm font-medium py-2">ΣΥΜΜΕΤΟΧΗ</Link>
             <button className="w-full bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </button>

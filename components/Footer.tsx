@@ -27,7 +27,7 @@ export default function Footer() {
               <li><Link href="/about" className="hover:text-coral transition-colors">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link></li>
               <li><Link href="/activities" className="hover:text-coral transition-colors">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link></li>
               <li><Link href="/open-calls" className="hover:text-coral transition-colors">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link></li>
-              <li><Link href="/membership" className="hover:text-coral transition-colors">ΣΥΜΜΕΤΟΧΗ</Link></li>
+              <li><Link href="/participation" className="hover:text-coral transition-colors">ΣΥΜΜΕΤΟΧΗ</Link></li>
               <li><Link href="/transparency" className="hover:text-coral transition-colors">ΔΙΑΦΑΝΕΙΑ</Link></li>
             </ul>
             </div>
