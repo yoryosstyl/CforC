@@ -43,13 +43,13 @@ export default function NewsletterSection() {
 
   return (
     <>
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left - Text */}
             <div>
               <p className="text-coral text-sm font-medium mb-4">ΟΛΑ TA NEA ΣTO EMAIL ΣΑΣ!</p>
-              <h2 className="text-2xl md:text-3xl font-bold leading-tight mb-6">
+              <h2 className="text-xl md:text-2xl font-bold leading-tight mb-6">
                 Γραφτείτε στο newsletter μας, για να<br />
                 λαμβάνετε τις δράσεις του Δικτύου,<br />
                 ευκαιρίες για επαγγελματίες και νέα από<br />
