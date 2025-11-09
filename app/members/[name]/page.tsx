@@ -105,6 +105,16 @@ export default function MemberDetailPage() {
         <div className="relative h-[25vh] flex items-center rounded-b-3xl overflow-hidden z-10">
           <div className="absolute inset-0 bg-coral opacity-20"></div>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
+            {/* Back Button */}
+            <Link
+              href="/members"
+              className="inline-flex items-center gap-2 text-sm font-medium mb-4 hover:text-coral transition-colors bg-white/90 px-4 py-2 rounded-full"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Πίσω στα Μέλη
+            </Link>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
               {member.Name}
             </h1>

@@ -158,7 +158,9 @@ export default function MembersPage() {
           {/* Info Box */}
           <div className="bg-white rounded-3xl p-8 mb-12 relative">
             <div className="absolute top-8 right-8 text-right">
-              <p className="text-sm text-gray-600">Μέλη: ({displayCount})</p>
+              <div className="bg-[#F5F0EB] px-6 py-3 rounded-full border-2 border-gray-300 shadow-sm">
+                <p className="text-sm font-bold text-gray-700">Μέλη: <span className="text-coral">{displayCount}</span></p>
+              </div>
             </div>
             <p className="text-gray-700 leading-relaxed max-w-4xl">
               Ένα αποτελεσματικό εξειδικευμένο δημιουργικών επαγγελματιών, έργων και ιδεών που προάγουν την κοινωνικοπολιτιστική καινοτομία μέσα πρωτοβουλιών με κινητήρια δύναμη τον άνθρωπο.
@@ -220,15 +222,15 @@ export default function MembersPage() {
               <Link
                 key={member.id}
                 href={`/members/${encodeURIComponent(member.Name)}`}
-                className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
+                className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 group"
               >
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (
-                  <div className="aspect-[4/5] relative bg-gray-200">
+                  <div className="aspect-[4/5] relative bg-gray-200 overflow-hidden">
                     <Image
                       src={member.Image[0].url}
                       alt={member.Image[0].alternativeText || member.Name}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                   </div>
                 ) : (
