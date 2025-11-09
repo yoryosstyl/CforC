@@ -60,6 +60,7 @@ export default function MembersPage() {
           }
         )
         const data = await response.json()
+        console.log('Members data:', data.data) // Debug log
         setAllMembers(data.data || [])
         setTotalCount(data.data?.length || 0)
       } catch (error) {
@@ -222,14 +223,19 @@ export default function MembersPage() {
                 href={`/members/${encodeURIComponent(member.Name)}`}
                 className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
               >
-                {member.ProfileImage && (
-                  <div className="aspect-[4/5] relative">
+                {member.ProfileImage && member.ProfileImage.url && (
+                  <div className="aspect-[4/5] relative bg-gray-200">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
                       alt={member.ProfileImage.alternativeText || member.Name}
                       fill
                       className="object-cover"
                     />
+                  </div>
+                )}
+                {(!member.ProfileImage || !member.ProfileImage.url) && (
+                  <div className="aspect-[4/5] bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-4xl">{member.Name.charAt(0)}</span>
                   </div>
                 )}
                 <div className="p-6">

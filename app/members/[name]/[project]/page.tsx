@@ -61,6 +61,7 @@ export default function ProjectDetailPage() {
           }
         )
         const data = await response.json()
+        console.log('Project member data:', data.data) // Debug log
         if (data.data && data.data.length > 0) {
           const memberData = data.data[0]
           setMember(memberData)
@@ -110,6 +111,22 @@ export default function ProjectDetailPage() {
     )
   }
 
+  // Safely extract description text (in case it's a rich text object)
+  const getDescriptionText = (description: any): string => {
+    if (typeof description === 'string') return description
+    if (Array.isArray(description)) {
+      return description.map(block => {
+        if (block.type === 'paragraph' && block.children) {
+          return block.children.map((child: any) => child.text || '').join('')
+        }
+        return ''
+      }).join('\n')
+    }
+    return ''
+  }
+
+  const descriptionText = getDescriptionText(projectData.description)
+
   return (
     <main className="min-h-screen bg-[#F5F0EB]">
       <Navigation variant="members" />
@@ -158,15 +175,21 @@ export default function ProjectDetailPage() {
             <div className="grid md:grid-cols-[120px,1fr] gap-8">
               {/* Member Thumbnail */}
               <div>
-                {member.ProfileImage && (
+                {member.ProfileImage && member.ProfileImage.url ? (
                   <Link href={`/members/${encodeURIComponent(member.Name)}`}>
-                    <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity">
+                    <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity bg-gray-200">
                       <Image
                         src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
                         alt={member.ProfileImage.alternativeText || member.Name}
                         fill
                         className="object-cover"
                       />
+                    </div>
+                  </Link>
+                ) : (
+                  <Link href={`/members/${encodeURIComponent(member.Name)}`}>
+                    <div className="aspect-square rounded-full bg-gray-200 flex items-center justify-center hover:opacity-80 transition-opacity">
+                      <span className="text-gray-400 text-4xl">{member.Name.charAt(0)}</span>
                     </div>
                   </Link>
                 )}
@@ -181,7 +204,7 @@ export default function ProjectDetailPage() {
               {/* Description */}
               <div>
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {projectData.description}
+                  {descriptionText}
                 </p>
               </div>
             </div>

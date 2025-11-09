@@ -57,6 +57,7 @@ export default function MemberDetailPage() {
           }
         )
         const data = await response.json()
+        console.log('Member data:', data.data) // Debug log
         if (data.data && data.data.length > 0) {
           setMember(data.data[0])
         }
@@ -79,6 +80,22 @@ export default function MemberDetailPage() {
   const fieldsOfWork = member.FieldsOfWork?.split(',').map((f) => f.trim()) || []
   const websites = member.Websites?.split(',').map((w) => w.trim()) || []
   const hasProjects = member.Project1Title || member.Project2Title
+
+  // Safely extract bio text (in case it's a rich text object)
+  const getBioText = (bio: any): string => {
+    if (typeof bio === 'string') return bio
+    if (Array.isArray(bio)) {
+      return bio.map(block => {
+        if (block.type === 'paragraph' && block.children) {
+          return block.children.map((child: any) => child.text || '').join('')
+        }
+        return ''
+      }).join('\n')
+    }
+    return ''
+  }
+
+  const bioText = getBioText(member.Bio)
 
   return (
     <main className="min-h-screen bg-[#F5F0EB]">
@@ -103,14 +120,19 @@ export default function MemberDetailPage() {
             <div className="grid md:grid-cols-[300px,1fr] gap-12">
               {/* Profile Image */}
               <div>
-                {member.ProfileImage && (
-                  <div className="aspect-[3/4] relative rounded-2xl overflow-hidden">
+                {member.ProfileImage && member.ProfileImage.url && (
+                  <div className="aspect-[3/4] relative rounded-2xl overflow-hidden bg-gray-200">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
                       alt={member.ProfileImage.alternativeText || member.Name}
                       fill
                       className="object-cover"
                     />
+                  </div>
+                )}
+                {(!member.ProfileImage || !member.ProfileImage.url) && (
+                  <div className="aspect-[3/4] bg-gray-200 rounded-2xl flex items-center justify-center">
+                    <span className="text-gray-400 text-6xl">{member.Name.charAt(0)}</span>
                   </div>
                 )}
               </div>
@@ -121,7 +143,7 @@ export default function MemberDetailPage() {
 
                 <div className="mb-8">
                   <h3 className="text-coral text-sm font-bold mb-4 uppercase">Βιογραφία</h3>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{member.Bio}</p>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{bioText}</p>
                 </div>
 
                 <div className="mb-8">
