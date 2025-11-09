@@ -53,10 +53,6 @@ export default function ParticipationPage() {
                   </Link>
                   {' '}όπως: Συμμετοχή, Δικτύωση, Ανάπτυξη Ικανοτήτων, Συνηγορία, Υποστήριξη, και ευκαιρίες Απασχόλησης.
                 </p>
-                <p className="text-gray-700 leading-relaxed">
-                  Δήλωσε το όνομα και το email σου, και θα επικοινωνήσουμε μαζί σου για τα επόμενα βήματα και περισσότερες πληροφορίες!
-                </p>
-
                 <Link
                   href="/OdigosTsepis2025.pdf"
                   target="_blank"
