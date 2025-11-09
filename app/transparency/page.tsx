@@ -4,6 +4,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import NewsletterSection from '@/components/NewsletterSection'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export default function TransparencyPage() {
   const handleOpenStatute = () => {
@@ -69,6 +70,7 @@ export default function TransparencyPage() {
       <NewsletterSection />
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import NewsletterSection from '@/components/NewsletterSection'
+import ScrollToTop from '@/components/ScrollToTop'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -313,6 +314,7 @@ export default function MemberDetailPage() {
       <NewsletterSection variant="members" />
       <Footer variant="members" />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

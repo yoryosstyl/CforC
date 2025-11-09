@@ -2,6 +2,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import NewsletterSection from '@/components/NewsletterSection'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export default function PrivacyPage() {
   return (
@@ -201,6 +202,7 @@ export default function PrivacyPage() {
       <NewsletterSection />
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

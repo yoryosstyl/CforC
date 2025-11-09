@@ -2,6 +2,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import NewsletterSection from '@/components/NewsletterSection'
+import ScrollToTop from '@/components/ScrollToTop'
 import Link from 'next/link'
 
 export default function TermsPage() {
@@ -132,6 +133,7 @@ export default function TermsPage() {
       <NewsletterSection />
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }
