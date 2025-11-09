@@ -12,10 +12,10 @@ interface Member {
   id: number
   documentId: string
   Name: string
-  ProfileImage?: {
+  Image?: Array<{
     url: string
     alternativeText?: string
-  }
+  }>
   Project1Title?: string
   Project1Description?: string
   Project1Pictures?: Array<{
@@ -61,7 +61,6 @@ export default function ProjectDetailPage() {
           }
         )
         const data = await response.json()
-        console.log('Project member data:', data.data) // Debug log
         if (data.data && data.data.length > 0) {
           const memberData = data.data[0]
           setMember(memberData)
@@ -175,12 +174,12 @@ export default function ProjectDetailPage() {
             <div className="grid md:grid-cols-[120px,1fr] gap-8">
               {/* Member Thumbnail */}
               <div>
-                {member.ProfileImage && member.ProfileImage.url ? (
+                {member.Image && member.Image.length > 0 && member.Image[0].url ? (
                   <Link href={`/members/${encodeURIComponent(member.Name)}`}>
                     <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity bg-gray-200">
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
-                        alt={member.ProfileImage.alternativeText || member.Name}
+                        src={member.Image[0].url}
+                        alt={member.Image[0].alternativeText || member.Name}
                         fill
                         className="object-cover"
                       />

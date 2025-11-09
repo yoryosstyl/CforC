@@ -18,10 +18,10 @@ interface Member {
   Email: string
   Phone: string
   Websites: string
-  ProfileImage?: {
+  Image?: Array<{
     url: string
     alternativeText?: string
-  }
+  }>
   Project1Title?: string
   Project1Description?: string
   Project1Pictures?: Array<{
@@ -60,11 +60,6 @@ export default function MembersPage() {
           }
         )
         const data = await response.json()
-        console.log('Members data:', data.data) // Debug log
-        if (data.data && data.data.length > 0) {
-          console.log('First member ProfileImage:', data.data[0].ProfileImage) // Debug log
-          console.log('Full first member:', JSON.stringify(data.data[0], null, 2)) // Debug log
-        }
         setAllMembers(data.data || [])
         setTotalCount(data.data?.length || 0)
       } catch (error) {
@@ -227,17 +222,16 @@ export default function MembersPage() {
                 href={`/members/${encodeURIComponent(member.Name)}`}
                 className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
               >
-                {member.ProfileImage && member.ProfileImage.url && (
+                {member.Image && member.Image.length > 0 && member.Image[0].url ? (
                   <div className="aspect-[4/5] relative bg-gray-200">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
-                      alt={member.ProfileImage.alternativeText || member.Name}
+                      src={member.Image[0].url}
+                      alt={member.Image[0].alternativeText || member.Name}
                       fill
                       className="object-cover"
                     />
                   </div>
-                )}
-                {(!member.ProfileImage || !member.ProfileImage.url) && (
+                ) : (
                   <div className="aspect-[4/5] bg-gray-200 flex items-center justify-center">
                     <span className="text-gray-400 text-4xl">{member.Name.charAt(0)}</span>
                   </div>

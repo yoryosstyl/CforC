@@ -13,17 +13,17 @@ interface Member {
   id: number
   documentId: string
   Name: string
-  Bio: string
+  Bio: any
   FieldsOfWork: string
   City: string
   Province: string
   Email: string
   Phone: string
   Websites: string
-  ProfileImage?: {
+  Image?: Array<{
     url: string
     alternativeText?: string
-  }
+  }>
   Project1Title?: string
   Project1Description?: string
   Project1Pictures?: Array<{
@@ -57,7 +57,6 @@ export default function MemberDetailPage() {
           }
         )
         const data = await response.json()
-        console.log('Member data:', data.data) // Debug log
         if (data.data && data.data.length > 0) {
           setMember(data.data[0])
         }
@@ -120,17 +119,16 @@ export default function MemberDetailPage() {
             <div className="grid md:grid-cols-[300px,1fr] gap-12">
               {/* Profile Image */}
               <div>
-                {member.ProfileImage && member.ProfileImage.url && (
+                {member.Image && member.Image.length > 0 && member.Image[0].url ? (
                   <div className="aspect-[3/4] relative rounded-2xl overflow-hidden bg-gray-200">
                     <Image
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${member.ProfileImage.url}`}
-                      alt={member.ProfileImage.alternativeText || member.Name}
+                      src={member.Image[0].url}
+                      alt={member.Image[0].alternativeText || member.Name}
                       fill
                       className="object-cover"
                     />
                   </div>
-                )}
-                {(!member.ProfileImage || !member.ProfileImage.url) && (
+                ) : (
                   <div className="aspect-[3/4] bg-gray-200 rounded-2xl flex items-center justify-center">
                     <span className="text-gray-400 text-6xl">{member.Name.charAt(0)}</span>
                   </div>
