@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { getActivities } from '@/lib/strapi'
 import type { StrapiResponse, StrapiData, Activity } from '@/lib/types'
@@ -101,9 +102,9 @@ export default function ActivitiesSection() {
               FOR CHANGE
             </h2>
           </div>
-          <button className="hidden md:block bg-coral text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors">
+          <Link href="/activities" className="hidden md:block bg-coral text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors">
             ΟΛΕΣ ΟΙ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
-          </button>
+          </Link>
         </div>
 
         {/* Carousel */}
@@ -220,9 +221,9 @@ export default function ActivitiesSection() {
           </div>
         </div>
 
-        <button className="md:hidden w-full mt-8 bg-coral text-white px-6 py-3 rounded-full font-medium">
+        <Link href="/activities" className="md:hidden w-full mt-8 bg-coral text-white px-6 py-3 rounded-full font-medium text-center block">
           ΟΛΕΣ ΟΙ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
-        </button>
+        </Link>
         </div>
       </div>
     </section>

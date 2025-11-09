@@ -24,12 +24,12 @@ export default function Navigation() {
             <Link href="/about" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ
             </Link>
-            <a href="#activities" className="text-sm font-medium hover:text-charcoal transition-colors">
+            <Link href="/activities" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
-            </a>
-            <a href="#open-calls" className="text-sm font-medium hover:text-charcoal transition-colors">
+            </Link>
+            <Link href="/open-calls" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ
-            </a>
+            </Link>
             <a href="#participate" className="text-sm font-medium hover:text-charcoal transition-colors">
               ΣΥΜΜΕΤΟΧΗ
             </a>
@@ -64,8 +64,8 @@ export default function Navigation() {
         <div className="md:hidden bg-coral border-t border-coral-dark">
           <div className="px-4 py-4 space-y-3">
             <Link href="/about" className="block text-sm font-medium py-2">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
-            <a href="#activities" className="block text-sm font-medium py-2">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</a>
-            <a href="#open-calls" className="block text-sm font-medium py-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</a>
+            <Link href="/activities" className="block text-sm font-medium py-2">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
+            <Link href="/open-calls" className="block text-sm font-medium py-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link>
             <a href="#participate" className="block text-sm font-medium py-2">ΣΥΜΜΕΤΟΧΗ</a>
             <button className="w-full bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
