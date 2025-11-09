@@ -36,7 +36,16 @@ export default function Footer() {
             <div>
               <h3 className="font-bold mb-3 text-coral text-xs">ΕΠΙΚΟΙΝΩΝΙΑ</h3>
             <ul className="space-y-1.5 text-xs">
-              <li>Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ</li>
+              <li>
+                <a
+                  href="https://www.google.com/maps/place/Leof.+Alexandras+48,+Athina+114+73/@37.9905657,23.7374602,1006m/data=!3m2!1e3!4b1!4m6!3m5!1s0x14a1bd3522c01fef:0x1734422b9fe058ad!8m2!3d37.9905657!4d23.7374602!16s%2Fg%2F11b8v65q35?entry=ttu&g_ep=EgoyMDI1MTEwNC4xIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-coral transition-colors"
+                >
+                  Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ
+                </a>
+              </li>
               <li>
                 <a href="mailto:HELLO@CULTUREFORCHANGE.NET" className="hover:text-coral transition-colors">
                   HELLO@CULTUREFORCHANGE.NET
@@ -65,7 +74,7 @@ export default function Footer() {
               <h3 className="font-bold mb-3 text-coral text-xs text-right">SOCIAL MEDIA</h3>
               <ul className="space-y-1.5 text-xs text-right">
                 <li>
-                  <a href="https://www.linkedin.com/company/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
+                  <a href="https://www.linkedin.com/company/culture-for-change-gr/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
                     LINKED IN
                   </a>
                 </li>
@@ -75,17 +84,17 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.instagram.com/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
+                  <a href="https://www.instagram.com/culture_for_change/" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
                     INSTAGRAM
                   </a>
                 </li>
                 <li>
-                  <a href="https://www.youtube.com/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
+                  <a href="https://www.youtube.com/channel/UCKFq7TQlenx36UPc3F63Opw" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
                     YOUTUBE
                   </a>
                 </li>
                 <li>
-                  <a href="https://vimeo.com/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
+                  <a href="https://vimeo.com/user165582483" target="_blank" rel="noopener noreferrer" className="hover:text-coral transition-colors">
                     VIMEO
                   </a>
                 </li>
