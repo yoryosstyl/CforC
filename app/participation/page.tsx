@@ -27,7 +27,7 @@ export default function ParticipationPage() {
       </section>
 
       {/* Main Content Section */}
-      <section className="py-24 bg-white">
+      <section className="pt-32 pb-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section 1: Two-column layout with text */}
           <div className="mb-20">
