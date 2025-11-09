@@ -61,6 +61,10 @@ export default function MembersPage() {
         )
         const data = await response.json()
         console.log('Members data:', data.data) // Debug log
+        if (data.data && data.data.length > 0) {
+          console.log('First member ProfileImage:', data.data[0].ProfileImage) // Debug log
+          console.log('Full first member:', JSON.stringify(data.data[0], null, 2)) // Debug log
+        }
         setAllMembers(data.data || [])
         setTotalCount(data.data?.length || 0)
       } catch (error) {
