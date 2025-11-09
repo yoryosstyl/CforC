@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
+import ScrollToTop from '@/components/ScrollToTop'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -258,6 +259,7 @@ export default function MembersPage() {
 
       <Footer variant="members" />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

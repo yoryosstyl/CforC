@@ -12,6 +12,7 @@ import BecomeMemberSection from '@/components/BecomeMemberSection'
 import NewsletterSection from '@/components/NewsletterSection'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export default function AboutPage() {
   return (
@@ -31,6 +32,7 @@ export default function AboutPage() {
 
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

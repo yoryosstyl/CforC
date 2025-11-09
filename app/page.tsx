@@ -7,6 +7,7 @@ import OpenCallsSection from '@/components/OpenCallsSection'
 import BecomeMemberSection from '@/components/BecomeMemberSection'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
+import ScrollToTop from '@/components/ScrollToTop'
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <BecomeMemberSection />
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }

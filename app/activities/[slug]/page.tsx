@@ -6,6 +6,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import NewsletterSection from '@/components/NewsletterSection'
+import ScrollToTop from '@/components/ScrollToTop'
 import Link from 'next/link'
 import Image from 'next/image'
 import { getActivityById, getActivities } from '@/lib/strapi'
@@ -380,6 +381,7 @@ export default function ActivityDetailPage() {
       <NewsletterSection />
       <Footer />
       <CookieConsent />
+      <ScrollToTop />
     </main>
   )
 }
