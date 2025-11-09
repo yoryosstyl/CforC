@@ -134,20 +134,12 @@ export default function AboutMapSection() {
     <section className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16 relative">
+        <div className="text-center mb-16">
           <p className="text-coral text-sm font-medium mb-4">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</p>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight">
             ΠΡΟΩΘΟΥΜΕ ΕΝΕΡΓΑ ΤΗΝ ΠΟΛΙΤΙΣΤΙΚΗ<br />
             ΑΛΛΑΓΗ ΣΕ ΟΛΟΚΛΗΡΗ ΤΗΝ ΕΛΛΑΔΑ
           </h2>
-          {/* Discrete toggle button */}
-          <button
-            onClick={() => setShowAllLocations(!showAllLocations)}
-            className="absolute top-0 right-0 text-xs text-gray-400 hover:text-coral transition-colors"
-            title={showAllLocations ? "Hide all locations" : "Show all locations"}
-          >
-            {showAllLocations ? '◉' : '○'}
-          </button>
         </div>
 
         {/* Map and Cities Grid */}
@@ -176,7 +168,7 @@ export default function AboutMapSection() {
           </div>
 
           {/* Map in Center */}
-          <div className="flex items-center justify-center relative">
+          <div className="flex items-start justify-center relative">
             <div className="relative w-full max-w-md aspect-[3/4]">
               {/* Greece Map Background */}
               <Image
@@ -214,6 +206,15 @@ export default function AboutMapSection() {
                   />
                 ))}
               </svg>
+
+              {/* Discrete toggle button - bottom right corner */}
+              <button
+                onClick={() => setShowAllLocations(!showAllLocations)}
+                className="absolute bottom-4 right-4 text-sm text-gray-400 hover:text-coral transition-colors z-10"
+                title={showAllLocations ? "Hide all locations" : "Show all locations"}
+              >
+                {showAllLocations ? '◉' : '○'}
+              </button>
             </div>
           </div>
 
