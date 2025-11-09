@@ -1,5 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 
 interface FooterProps {
   variant?: 'default' | 'members'
@@ -7,6 +10,8 @@ interface FooterProps {
 
 export default function Footer({ variant = 'default' }: FooterProps) {
   const bgColor = variant === 'members' ? 'bg-[#F5F0EB]' : 'bg-gray-100'
+  const locale = useLocale()
+  const t = useTranslations('footer')
 
   return (
     <footer className={bgColor}>
@@ -29,18 +34,18 @@ export default function Footer({ variant = 'default' }: FooterProps) {
             <div>
               <h3 className="font-bold mb-3 text-coral text-xs">SITEMAP</h3>
             <ul className="space-y-1.5 text-xs">
-              <li><Link href="/find-members" className="hover:text-coral transition-colors">ΕΥΡΕΣΗ ΜΕΛΩΝ</Link></li>
-              <li><Link href="/about" className="hover:text-coral transition-colors">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link></li>
-              <li><Link href="/activities" className="hover:text-coral transition-colors">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link></li>
-              <li><Link href="/open-calls" className="hover:text-coral transition-colors">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link></li>
-              <li><Link href="/participation" className="hover:text-coral transition-colors">ΣΥΜΜΕΤΟΧΗ</Link></li>
-              <li><Link href="/transparency" className="hover:text-coral transition-colors">ΔΙΑΦΑΝΕΙΑ</Link></li>
+              <li><Link href={`/${locale}/members`} className="hover:text-coral transition-colors">{t('findMembers').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/about`} className="hover:text-coral transition-colors">{t('about').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/activities`} className="hover:text-coral transition-colors">{t('activities').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/open-calls`} className="hover:text-coral transition-colors">{t('openCalls').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/participation`} className="hover:text-coral transition-colors">{t('participation').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/transparency`} className="hover:text-coral transition-colors">{t('transparency').toUpperCase()}</Link></li>
             </ul>
             </div>
 
             {/* Contact */}
             <div>
-              <h3 className="font-bold mb-3 text-coral text-xs">ΕΠΙΚΟΙΝΩΝΙΑ</h3>
+              <h3 className="font-bold mb-3 text-coral text-xs">{t('contact').toUpperCase()}</h3>
             <ul className="space-y-1.5 text-xs">
               <li>
                 <a
@@ -49,7 +54,7 @@ export default function Footer({ variant = 'default' }: FooterProps) {
                   rel="noopener noreferrer"
                   className="hover:text-coral transition-colors"
                 >
-                  Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ
+                  {t('address').toUpperCase()}
                 </a>
               </li>
               <li>
@@ -67,11 +72,11 @@ export default function Footer({ variant = 'default' }: FooterProps) {
 
             {/* Policy */}
             <div>
-              <h3 className="font-bold mb-3 text-coral text-xs">ΠΟΛΙΤΙΚΗ</h3>
+              <h3 className="font-bold mb-3 text-coral text-xs">{t('policies').toUpperCase()}</h3>
             <ul className="space-y-1.5 text-xs">
-              <li><Link href="/terms" className="hover:text-coral transition-colors">ΟΡΟΙ & ΠΡΟΫΠΟΘΕΣΕΙΣ</Link></li>
-              <li><Link href="/privacy" className="hover:text-coral transition-colors">ΠΟΛΙΤΙΚΗ ΑΠΟΡΡΗΤΟΥ</Link></li>
-              <li><Link href="/cookies" className="hover:text-coral transition-colors">ΠΟΛΙΤΙΚΗ COOKIES</Link></li>
+              <li><Link href={`/${locale}/terms`} className="hover:text-coral transition-colors">{t('terms').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/privacy`} className="hover:text-coral transition-colors">{t('privacy').toUpperCase()}</Link></li>
+              <li><Link href={`/${locale}/cookies`} className="hover:text-coral transition-colors">{t('cookies').toUpperCase()}</Link></li>
             </ul>
             </div>
 
@@ -111,7 +116,7 @@ export default function Footer({ variant = 'default' }: FooterProps) {
 
         {/* Bottom section */}
         <div className="border-t border-gray-300 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-700">
-          <p>ΠΝΕΥΜΑΤΙΚΑ ΔΙΚΑΙΩΜΑΤΑ © 2025 CULTURE FOR CHANGE</p>
+          <p>{t('copyright').toUpperCase()}</p>
           <p className="mt-2 md:mt-0">
             Developed by <a href="https://yoryosstyl.com" target="_blank" rel="noopener noreferrer" className="font-medium hover:text-coral transition-colors">Yoryos Styl</a>
           </p>

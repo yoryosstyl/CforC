@@ -8,6 +8,11 @@
     "contact": "CONTACT"
   },
   "footer": {
+    "findMembers": "Find Members",
+    "about": "About Us",
+    "activities": "Activities",
+    "openCalls": "Open Calls",
+    "contact": "Contact",
     "address": "ALEXANDRAS AVE 48, 11473, ATHENS",
     "phone": "TEL",
     "email": "EMAIL",
@@ -19,7 +24,7 @@
     "cookies": "COOKIES POLICY",
     "participation": "PARTICIPATION",
     "transparency": "TRANSPARENCY",
-    "copyright": "Copyright 2025 Culture for Change Hellas, all rights reserved"
+    "copyright": "Copyright © 2025 Culture for Change"
   },
   "home": {
     "hero": {

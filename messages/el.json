@@ -8,6 +8,11 @@
     "contact": "ΕΠΙΚΟΙΝΩΝΙΑ"
   },
   "footer": {
+    "findMembers": "Ευρεση Μελων",
+    "about": "Σχετικα με εμας",
+    "activities": "Δραστηριοτητες",
+    "openCalls": "Ανοιχτα Καλεσματα",
+    "contact": "Επικοινωνια",
     "address": "Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ",
     "phone": "ΤΗΛ",
     "email": "EMAIL",
@@ -19,7 +24,7 @@
     "cookies": "ΠΟΛΙΤΙΚΗ COOKIES",
     "participation": "ΣΥΜΜΕΤΟΧΗ",
     "transparency": "ΔΙΑΦΑΝΕΙΑ",
-    "copyright": "Copyright 2025 Culture for Change Hellas, all rights reserved"
+    "copyright": "Πνευματικα Δικαιωματα © 2025 Culture for Change"
   },
   "home": {
     "hero": {
