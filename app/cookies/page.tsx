@@ -24,7 +24,7 @@ export default function CookiesPage() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="prose prose-lg max-w-none text-gray-700">
-            <h2 className="text-3xl font-bold mb-8 text-charcoal">ΠΟΛΙΤΙΚΗ COOKIE</h2>
+            <h2 className="text-3xl font-bold mb-8 text-charcoal">ΠΟΛΙΤΙΚΗ COOKIES</h2>
 
             <h3 className="text-2xl font-bold mb-4 mt-12 text-charcoal">Αυτός ο ιστότοπος χρησιμοποιεί cookies</h3>
 
