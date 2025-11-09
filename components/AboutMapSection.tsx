@@ -168,7 +168,7 @@ export default function AboutMapSection() {
           </div>
 
           {/* Map in Center */}
-          <div className="flex justify-center">
+          <div className="flex justify-center" style={{ marginTop: '-75px' }}>
             <div className="relative w-full max-w-md aspect-[3/4]">
               {/* Greece Map Background */}
               <Image
@@ -210,7 +210,8 @@ export default function AboutMapSection() {
               {/* Discrete toggle button - ON TOP of map at bottom right */}
               <button
                 onClick={() => setShowAllLocations(!showAllLocations)}
-                className="absolute bottom-4 right-4 text-sm text-gray-400 hover:text-coral transition-colors z-20"
+                className="absolute right-4 text-sm text-gray-400 hover:text-coral transition-colors z-20"
+                style={{ bottom: '72px' }}
                 title={showAllLocations ? "Hide all locations" : "Show all locations"}
               >
                 {showAllLocations ? '◉' : '○'}
