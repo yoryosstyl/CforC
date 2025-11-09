@@ -1,0 +1,147 @@
+{
+  "navigation": {
+    "home": "HOME",
+    "about": "ABOUT US",
+    "activities": "WHAT WE DO",
+    "openCalls": "OPEN CALLS",
+    "findMembers": "FIND MEMBERS",
+    "contact": "CONTACT"
+  },
+  "footer": {
+    "address": "ALEXANDRAS AVE 48, 11473, ATHENS",
+    "phone": "TEL",
+    "email": "EMAIL",
+    "newsletter": "NEWSLETTER",
+    "followUs": "FOLLOW US",
+    "policies": "POLICIES",
+    "terms": "TERMS & CONDITIONS",
+    "privacy": "PRIVACY POLICY",
+    "cookies": "COOKIES POLICY",
+    "participation": "PARTICIPATION",
+    "transparency": "TRANSPARENCY",
+    "copyright": "Copyright 2025 Culture for Change Hellas, all rights reserved"
+  },
+  "home": {
+    "hero": {
+      "title": "CULTURE FOR CHANGE",
+      "subtitle": "Empowering Social Change through Culture"
+    },
+    "becomeMember": {
+      "title": "Ready to become a member?",
+      "description": "Fill out the registration form and we'll get back to you soon with the next steps!",
+      "button": "LEARN MORE"
+    }
+  },
+  "participation": {
+    "title": "PARTICIPATION",
+    "hero": {
+      "subtitle": "Become a member of CforC"
+    },
+    "intro": {
+      "title": "Would you like to become a member of Culture for Change?",
+      "description": "If you work in the cultural sector and are ready to join professionals who share a common vision for social change, CforC is your community!"
+    },
+    "why": {
+      "title": "Why become a member?",
+      "reason1": {
+        "title": "You believe in the power of collective impact.",
+        "description": "You believe that culture can be a force for change and want to contribute to a community that shares this belief."
+      },
+      "reason2": {
+        "title": "You value the community's collective expertise.",
+        "description": "You recognize the value of the shared journey and want to leverage the experience and knowledge of the collective."
+      },
+      "reason3": {
+        "title": "You support holistic innovation.",
+        "description": "You want to create and support solutions that promote social change through culture, with respect for different approaches."
+      },
+      "reason4": {
+        "title": "You respect different approaches.",
+        "description": "You appreciate and respect diversity in opinions and practices, creating an open and inclusive environment."
+      }
+    },
+    "cta": {
+      "title": "Ready to become a member?",
+      "button": "FILL OUT THE REGISTRATION FORM",
+      "terms": "By submitting you agree to our",
+      "and": "and",
+      "privacy": "conditions",
+      "suffix": "."
+    }
+  },
+  "transparency": {
+    "title": "TRANSPARENCY",
+    "intro": {
+      "title": "TRANSPARENCY",
+      "description": "Transparency is one of CforC's core values, which we implement by sharing our financial data and the organization's charter."
+    },
+    "statute": {
+      "title": "STATUTE",
+      "button": "STATUTE"
+    },
+    "financialReport": {
+      "title": "FINANCIAL REPORT 2024",
+      "button": "REPORT 2024"
+    }
+  },
+  "members": {
+    "title": "MEMBERS",
+    "count": "Members:",
+    "search": "Search members...",
+    "filters": {
+      "name": "Name",
+      "field": "Field of Work",
+      "city": "City",
+      "province": "Region",
+      "all": "All"
+    },
+    "backToSearch": "Back to search",
+    "backToMember": "Back to member",
+    "bio": "Biography",
+    "contact": "Contact",
+    "fieldsOfWork": "Fields of Practice",
+    "relatedProjects": "RELATED PROJECTS BY",
+    "noProjects": "No related projects found.",
+    "otherProjects": "PROJECTS BY THE SAME MEMBERS",
+    "noOtherProjects": "No other projects found from this member.",
+    "becomeMember": {
+      "title": "Ready to become a member?",
+      "description": "Fill out the registration form and we'll get back to you soon with the next steps!",
+      "button": "LEARN MORE"
+    }
+  },
+  "activities": {
+    "title": "ACTIVITIES",
+    "search": "Search activities...",
+    "sortBy": "Sort by:",
+    "date": "Date",
+    "name": "Name",
+    "category": "Category:",
+    "all": "All",
+    "loading": "Loading...",
+    "noActivities": "No activities found."
+  },
+  "openCalls": {
+    "title": "OPEN CALLS",
+    "search": "Search open calls...",
+    "sortBy": "Sort by:",
+    "deadline": "Deadline",
+    "dateAdded": "Date Added",
+    "loading": "Loading...",
+    "noCalls": "No open calls found."
+  },
+  "newsletter": {
+    "title": "Subscribe to Newsletter",
+    "description": "Stay informed about our news and activities",
+    "placeholder": "Your email",
+    "button": "SUBSCRIBE"
+  },
+  "common": {
+    "readMore": "READ MORE",
+    "loading": "Loading...",
+    "error": "Error",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  }
+}
