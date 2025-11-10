@@ -18,9 +18,6 @@ export default function ActivitiesSection() {
       try {
         setLoading(true)
 
-        // TESTING DELAY - Remove this line when done testing
-        await new Promise(resolve => setTimeout(resolve, 3000))
-
         console.log('Fetching activities from Strapi...')
         console.log('Strapi URL:', process.env.NEXT_PUBLIC_STRAPI_URL)
 
