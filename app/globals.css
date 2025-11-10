@@ -10,6 +10,31 @@
 body {
   color: var(--charcoal);
   font-family: system-ui, -apple-system, sans-serif;
+  top: 0 !important; /* Prevent Google Translate from shifting the page */
+}
+
+/* Hide Google Translate toolbar and elements */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-text-highlight {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Style the Google Translate widget if it appears */
+.skiptranslate {
+  display: none !important;
+}
+
+/* Remove Google Translate's iframe */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
 }
 
 @layer utilities {

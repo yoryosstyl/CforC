@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import LanguageSwitcher from './LanguageSwitcher'
 
 interface NavigationProps {
   variant?: 'default' | 'members'
@@ -56,11 +57,7 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
             <Link href="/members" className="bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition-colors">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
-            <button className="w-8 h-8 flex items-center justify-center">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-              </svg>
-            </button>
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile menu button */}
@@ -90,6 +87,9 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
             <Link href="/members" className="block w-full bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium text-center">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
+            <div className="pt-2">
+              <LanguageSwitcher />
+            </div>
             </div>
           </div>
         )}
