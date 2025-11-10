@@ -5,6 +5,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
 import ScrollToTop from '@/components/ScrollToTop'
+import LoadingIndicator from '@/components/LoadingIndicator'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -48,10 +49,12 @@ export default function MembersPage() {
   const [selectedProvince, setSelectedProvince] = useState('')
   const [totalCount, setTotalCount] = useState(0)
   const [displayCount, setDisplayCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchMembers = async () => {
       try {
+        setIsLoading(true)
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*`,
           {
@@ -65,6 +68,8 @@ export default function MembersPage() {
         setTotalCount(data.data?.length || 0)
       } catch (error) {
         console.error('Error fetching members:', error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -156,6 +161,9 @@ export default function MembersPage() {
       {/* Main Content */}
       <section className="pt-32 pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Loading Indicator */}
+          {isLoading && <LoadingIndicator />}
+
           {/* Info Box */}
           <div className="bg-white rounded-3xl p-8 mb-12 relative">
             <div className="absolute top-8 right-8 text-right">
