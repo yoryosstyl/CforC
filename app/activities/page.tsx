@@ -32,9 +32,6 @@ export default function ActivitiesPage() {
       try {
         setLoading(true)
 
-        // TESTING DELAY - Remove this line when done testing
-        await new Promise(resolve => setTimeout(resolve, 3000))
-
         const response: StrapiResponse<Activity[]> = await getActivities()
         setAllActivities(response.data)
         setFilteredActivities(response.data)

@@ -37,9 +37,6 @@ export default function OpenCallsSection() {
       try {
         setLoading(true)
 
-        // TESTING DELAY - Remove this line when done testing
-        await new Promise(resolve => setTimeout(resolve, 3000))
-
         console.log('Fetching open calls from Strapi...')
 
         const response: StrapiResponse<OpenCall[]> = await getOpenCalls()
