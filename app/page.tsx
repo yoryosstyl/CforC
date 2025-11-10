@@ -12,7 +12,7 @@ import ScrollToTop from '@/components/ScrollToTop'
 export default function Home() {
   return (
     <main className="min-h-screen">
-      <Navigation pageTitle="CULTURE FOR CHANGE" />
+      <Navigation />
       <HeroSection />
       <AboutSection />
       <ActivitiesSection />

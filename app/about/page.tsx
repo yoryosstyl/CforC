@@ -17,7 +17,11 @@ import ScrollToTop from '@/components/ScrollToTop'
 export default function AboutPage() {
   return (
     <main className="min-h-screen">
-      <Navigation pageTitle="ABOUT US" />
+      <Navigation
+        heroText="ABOUT US"
+        navbarText="ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ"
+        enableMorph={true}
+      />
       <AboutHeroSection />
       <AboutMapSection />
       <AboutVideoSection />
