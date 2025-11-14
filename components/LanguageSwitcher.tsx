@@ -102,7 +102,7 @@ export default function LanguageSwitcher() {
       {/* Globe Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-md hover:text-coral dark:hover:text-coral-light transition-colors"
+        className="flex items-center gap-2 px-3 py-2 rounded-md hover:text-white dark:hover:text-coral-light transition-colors"
         aria-label="Change language"
       >
         <svg
