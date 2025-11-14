@@ -106,8 +106,8 @@ export default function ProjectDetailPage() {
 
   if (!member || !projectData) {
     return (
-      <main className="min-h-screen bg-[#F5F0EB] flex items-center justify-center">
-        <p>Φόρτωση...</p>
+      <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900 flex items-center justify-center">
+        <p className="dark:text-gray-200">Φόρτωση...</p>
       </main>
     )
   }
@@ -129,15 +129,14 @@ export default function ProjectDetailPage() {
   const descriptionText = getDescriptionText(projectData.description)
 
   return (
-    <main className="min-h-screen bg-[#F5F0EB]">
+    <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900">
       <Navigation variant="members" />
 
       {/* Hero Section */}
       <section className="relative -bottom-20">
-        <div className="relative h-[25vh] flex items-center rounded-b-3xl overflow-hidden z-10">
-          <div className="absolute inset-0 bg-coral opacity-20"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
+        <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
               {projectData.title}
             </h1>
           </div>
@@ -149,7 +148,7 @@ export default function ProjectDetailPage() {
         <div className="flex gap-3">
           <Link
             href={`/members/${encodeURIComponent(memberName)}`}
-            className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral transition-colors bg-white/90 px-4 py-2 rounded-full"
+            className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral dark:hover:text-coral-light transition-colors bg-white/90 dark:bg-gray-800/90 dark:text-gray-200 px-4 py-2 rounded-full"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -158,7 +157,7 @@ export default function ProjectDetailPage() {
           </Link>
           <Link
             href="/members"
-            className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral transition-colors bg-white/90 px-4 py-2 rounded-full"
+            className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral dark:hover:text-coral-light transition-colors bg-white/90 dark:bg-gray-800/90 dark:text-gray-200 px-4 py-2 rounded-full"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -171,13 +170,13 @@ export default function ProjectDetailPage() {
       {/* Project Details Section */}
       <section className="pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-12">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-12">
             {/* Tags */}
             <div className="flex flex-wrap gap-2 mb-8">
               {projectData.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-4 py-2 bg-gray-100 rounded-full text-sm font-medium"
+                  className="px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-full text-sm font-medium dark:text-gray-200"
                 >
                   {tag}
                 </span>
@@ -187,7 +186,7 @@ export default function ProjectDetailPage() {
             {/* Project Image Carousel */}
             {projectData.pictures && projectData.pictures.length > 0 && (
               <div className="mb-12">
-                <div className="aspect-[16/9] relative rounded-3xl overflow-hidden bg-gray-200">
+                <div className="aspect-[16/9] relative rounded-3xl overflow-hidden bg-gray-200 dark:bg-gray-700">
                   <Image
                     src={projectData.pictures[currentImageIndex].url}
                     alt={projectData.pictures[currentImageIndex].alternativeText || projectData.title}
@@ -202,9 +201,9 @@ export default function ProjectDetailPage() {
                         onClick={() => setCurrentImageIndex((prev) =>
                           prev === 0 ? projectData.pictures!.length - 1 : prev - 1
                         )}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all z-10"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 rounded-full flex items-center justify-center shadow-lg transition-all z-10"
                       >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
                       </button>
@@ -212,15 +211,15 @@ export default function ProjectDetailPage() {
                         onClick={() => setCurrentImageIndex((prev) =>
                           prev === projectData.pictures!.length - 1 ? 0 : prev + 1
                         )}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all z-10"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-gray-800/90 hover:bg-white dark:hover:bg-gray-700 rounded-full flex items-center justify-center shadow-lg transition-all z-10"
                       >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
                       </button>
 
                       {/* Image Counter */}
-                      <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
+                      <div className="absolute bottom-4 right-4 bg-black/60 dark:bg-black/80 text-white px-3 py-1 rounded-full text-sm">
                         {currentImageIndex + 1} / {projectData.pictures.length}
                       </div>
                     </>
@@ -235,10 +234,10 @@ export default function ProjectDetailPage() {
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
                         className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                          index === currentImageIndex ? 'border-coral' : 'border-transparent opacity-60 hover:opacity-100'
+                          index === currentImageIndex ? 'border-coral dark:border-coral-light' : 'border-transparent opacity-60 hover:opacity-100'
                         }`}
                       >
-                        <div className="relative w-full h-full">
+                        <div className="relative w-full h-full bg-gray-200 dark:bg-gray-700">
                           <Image
                             src={picture.url}
                             alt={picture.alternativeText || `${projectData.title} ${index + 1}`}
@@ -259,7 +258,7 @@ export default function ProjectDetailPage() {
               <div>
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (
                   <Link href={`/members/${encodeURIComponent(member.Name)}`}>
-                    <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity bg-gray-200">
+                    <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity bg-gray-200 dark:bg-gray-700">
                       <Image
                         src={member.Image[0].url}
                         alt={member.Image[0].alternativeText || member.Name}
@@ -270,14 +269,14 @@ export default function ProjectDetailPage() {
                   </Link>
                 ) : (
                   <Link href={`/members/${encodeURIComponent(member.Name)}`}>
-                    <div className="aspect-square rounded-full bg-gray-200 flex items-center justify-center hover:opacity-80 transition-opacity">
-                      <span className="text-gray-400 text-4xl">{member.Name.charAt(0)}</span>
+                    <div className="aspect-square rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:opacity-80 transition-opacity">
+                      <span className="text-gray-400 dark:text-gray-500 text-4xl">{member.Name.charAt(0)}</span>
                     </div>
                   </Link>
                 )}
                 <Link
                   href={`/members/${encodeURIComponent(member.Name)}`}
-                  className="block text-center mt-2 text-sm font-bold hover:text-coral transition-colors"
+                  className="block text-center mt-2 text-sm font-bold hover:text-coral dark:hover:text-coral-light dark:text-gray-200 transition-colors"
                 >
                   {member.Name}
                 </Link>
@@ -285,7 +284,7 @@ export default function ProjectDetailPage() {
 
               {/* Description */}
               <div>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                   {descriptionText}
                 </p>
               </div>
@@ -298,8 +297,8 @@ export default function ProjectDetailPage() {
       <section className="pb-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <p className="text-coral text-sm mb-2 uppercase">Άλλα Έργα</p>
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <p className="text-coral dark:text-coral-light text-sm mb-2 uppercase">Άλλα Έργα</p>
+            <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
               ΕΡΓΑ ΑΠΟ ΤΑ ΙΔΙΑ ΜΕΛΗ
             </h2>
           </div>
@@ -308,10 +307,10 @@ export default function ProjectDetailPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <Link
                 href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(otherProject.title)}`}
-                className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
+                className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
               >
                 {otherProject.pictures && otherProject.pictures[0] && (
-                  <div className="aspect-[4/3] relative">
+                  <div className="aspect-[4/3] relative bg-gray-200 dark:bg-gray-700">
                     <Image
                       src={otherProject.pictures[0].url}
                       alt={otherProject.pictures[0].alternativeText || otherProject.title}
@@ -321,13 +320,13 @@ export default function ProjectDetailPage() {
                   </div>
                 )}
                 <div className="p-6">
-                  <h3 className="text-xl font-bold">{otherProject.title}</h3>
+                  <h3 className="text-xl font-bold dark:text-gray-100">{otherProject.title}</h3>
                 </div>
               </Link>
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-gray-600">Δεν βρέθηκαν άλλα έργα από αυτό το μέλος.</p>
+              <p className="text-gray-600 dark:text-gray-400">Δεν βρέθηκαν άλλα έργα από αυτό το μέλος.</p>
             </div>
           )}
         </div>

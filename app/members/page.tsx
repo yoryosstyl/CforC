@@ -8,7 +8,6 @@ import ScrollToTop from '@/components/ScrollToTop'
 import LoadingIndicator from '@/components/LoadingIndicator'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useScrollAnimation } from '@/lib/useScrollAnimation'
 
 interface Member {
   id: number
@@ -51,7 +50,6 @@ export default function MembersPage() {
   const [totalCount, setTotalCount] = useState(0)
   const [displayCount, setDisplayCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
-  const { isScrolled } = useScrollAnimation()
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -146,17 +144,14 @@ export default function MembersPage() {
   const uniqueProvinces = Array.from(new Set(allMembers.map((m) => m.Province).filter(Boolean)))
 
   return (
-    <main className="min-h-screen bg-[#F5F0EB]">
-      <Navigation variant="members" pageTitle="ΑΝΑΖΗΤΗΣΗ ΜΕΛΩΝ" />
+    <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900">
+      <Navigation variant="members" />
 
       {/* Hero Section */}
       <section className="relative -bottom-20">
-        <div className="relative h-[25vh] flex items-center rounded-b-3xl overflow-hidden z-10">
-          <div className="absolute inset-0 bg-coral opacity-20"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-            <h1 className={`text-5xl md:text-6xl lg:text-7xl font-bold leading-none transition-opacity duration-500 ${
-              isScrolled ? 'opacity-0' : 'opacity-100'
-            }`}>
+        <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
               ΑΝΑΖΗΤΗΣΗ<br />ΜΕΛΩΝ
             </h1>
           </div>
@@ -170,31 +165,31 @@ export default function MembersPage() {
           {isLoading && <LoadingIndicator />}
 
           {/* Info Box */}
-          <div className="bg-white rounded-3xl p-8 mb-12 relative">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 mb-12 relative">
             <div className="absolute top-8 right-8 text-right">
-              <div className="bg-[#F5F0EB] px-6 py-3 rounded-full border-2 border-gray-300 shadow-sm">
-                <p className="text-sm font-bold text-gray-700">Μέλη: <span className="text-coral">{displayCount}</span></p>
+              <div className="bg-[#F5F0EB] dark:bg-gray-700 px-6 py-3 rounded-full border-2 border-gray-300 dark:border-gray-600 shadow-sm">
+                <p className="text-sm font-bold text-gray-700 dark:text-gray-200">Μέλη: <span className="text-coral dark:text-coral-light">{displayCount}</span></p>
               </div>
             </div>
-            <p className="text-gray-700 leading-relaxed max-w-4xl">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed max-w-4xl">
               Ένα αποτελεσματικό εξειδικευμένο δημιουργικών επαγγελματιών, έργων και ιδεών που προάγουν την κοινωνικοπολιτιστική καινοτομία μέσα πρωτοβουλιών με κινητήρια δύναμη τον άνθρωπο.
             </p>
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-3xl p-8 mb-12">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 mb-12">
             <div className="grid md:grid-cols-4 gap-4">
               <input
                 type="text"
                 placeholder="Αναζήτηση ονόματος..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral"
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
               />
               <select
                 value={selectedField}
                 onChange={(e) => setSelectedField(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral"
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
               >
                 <option value="">Όλα τα πεδία εργασίας</option>
                 {uniqueFields.map((field) => (
@@ -206,7 +201,7 @@ export default function MembersPage() {
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral"
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
               >
                 <option value="">Όλες οι πόλεις</option>
                 {uniqueCities.map((city) => (
@@ -218,7 +213,7 @@ export default function MembersPage() {
               <select
                 value={selectedProvince}
                 onChange={(e) => setSelectedProvince(e.target.value)}
-                className="px-4 py-3 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral"
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
               >
                 <option value="">Όλες οι επαρχίες</option>
                 {uniqueProvinces.map((province) => (
@@ -236,10 +231,10 @@ export default function MembersPage() {
               <Link
                 key={member.id}
                 href={`/members/${encodeURIComponent(member.Name)}`}
-                className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-all duration-300 group"
+                className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-all duration-300 group"
               >
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (
-                  <div className="aspect-[4/5] relative bg-gray-200 overflow-hidden">
+                  <div className="aspect-[4/5] relative bg-gray-200 dark:bg-gray-700 overflow-hidden">
                     <Image
                       src={member.Image[0].url}
                       alt={member.Image[0].alternativeText || member.Name}
@@ -248,15 +243,15 @@ export default function MembersPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-[4/5] bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-400 text-4xl">{member.Name.charAt(0)}</span>
+                  <div className="aspect-[4/5] bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                    <span className="text-gray-400 dark:text-gray-500 text-4xl">{member.Name.charAt(0)}</span>
                   </div>
                 )}
                 <div className="p-6">
-                  <p className="text-coral text-xs mb-2 uppercase">
+                  <p className="text-coral dark:text-coral-light text-xs mb-2 uppercase">
                     {member.FieldsOfWork}
                   </p>
-                  <h3 className="text-xl font-bold">{member.Name}</h3>
+                  <h3 className="text-xl font-bold dark:text-gray-100">{member.Name}</h3>
                 </div>
               </Link>
             ))}
@@ -264,7 +259,7 @@ export default function MembersPage() {
 
           {filteredMembers.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-600">Δεν βρέθηκαν μέλη με τα επιλεγμένα κριτήρια.</p>
+              <p className="text-gray-600 dark:text-gray-400">Δεν βρέθηκαν μέλη με τα επιλεγμένα κριτήρια.</p>
             </div>
           )}
         </div>

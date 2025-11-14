@@ -11,6 +11,12 @@ body {
   color: var(--charcoal);
   font-family: system-ui, -apple-system, sans-serif;
   top: 0 !important; /* Prevent Google Translate from shifting the page */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark body {
+  background-color: #1a1a1a;
+  color: #e5e5e5;
 }
 
 /* Hide Google Translate toolbar and elements */

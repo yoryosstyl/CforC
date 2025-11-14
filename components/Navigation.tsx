@@ -4,101 +4,77 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LanguageSwitcher from './LanguageSwitcher'
-import { useScrollAnimation } from '@/lib/useScrollAnimation'
+import { useTheme } from './ThemeProvider'
 
 interface NavigationProps {
   variant?: 'default' | 'members'
-  pageTitle?: string | React.ReactNode
 }
 
-export default function Navigation({ variant = 'default', pageTitle }: NavigationProps) {
+export default function Navigation({ variant = 'default' }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const { isScrolled } = useScrollAnimation()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const { theme, toggleTheme } = useTheme()
   const pathname = usePathname()
 
-  // Determine active menu item
-  const isActive = (path: string) => {
-    if (path === '/' && pathname === '/') return true
-    if (path !== '/' && pathname?.startsWith(path)) return true
-    return false
-  }
+  useEffect(() => {
+    const handleScroll = () => {
+      // Detect if scrolled past hero section (approximately 25vh)
+      const scrollPosition = window.scrollY
+      setIsScrolled(scrollPosition > 150)
+    }
 
-  const bgColor = variant === 'members' ? 'bg-[#F5F0EB]' : 'bg-coral'
-  const bgOpacity = isScrolled ? (variant === 'members' ? 'bg-[#F5F0EB]/95' : 'bg-coral/95') : bgColor
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const bgColor = variant === 'members' ? 'bg-[#F5F0EB] dark:bg-gray-800' : 'bg-coral dark:bg-gray-900'
+  const bgOpacity = isScrolled ? (variant === 'members' ? 'bg-[#F5F0EB]/90 dark:bg-gray-800/90' : 'bg-coral/90 dark:bg-gray-900/90') : bgColor
 
   return (
-    <nav className={`fixed ${isScrolled ? 'top-2' : 'top-0'} w-full z-50 shadow-sm transition-all duration-500 ${isScrolled ? 'px-4' : ''}`}>
-      <div className={`${bgOpacity} ${isScrolled ? 'rounded-2xl' : ''} transition-all duration-500 backdrop-blur-sm`}>
+    <nav className={`fixed ${isScrolled ? 'top-2' : 'top-0'} w-full z-50 shadow-sm dark:shadow-gray-700 transition-all duration-300 ${isScrolled ? 'px-4' : ''}`}>
+      <div className={`${bgOpacity} ${isScrolled ? 'rounded-2xl scale-90' : ''} transition-all duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20 relative">
+        <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
               src="/cforc_logo.svg"
               alt="Culture for Change"
-              className="h-12"
+              className="h-12 dark:invert"
             />
           </Link>
 
-          {/* Flying Title - appears when scrolled */}
-          {isScrolled && pageTitle && (
-            <div className="absolute left-24 md:left-32 top-1/2 -translate-y-1/2 pointer-events-none">
-              <div className="text-xl md:text-2xl font-bold animate-flyIn">
-                {pageTitle}
-              </div>
-            </div>
-          )}
-
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-2">
-            <Link
-              href="/about"
-              className={`text-sm font-medium hover:text-charcoal transition-all duration-300 px-3 py-2 ${
-                isActive('/about') && isScrolled
-                  ? 'scale-125 font-extrabold'
-                  : ''
-              }`}
+          <div className="hidden md:flex items-center space-x-8">
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-full hover:bg-white/20 transition-colors"
+              aria-label="Toggle dark mode"
             >
+              {theme === 'light' ? (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              )}
+            </button>
+            <Link href="/about" className={`text-sm transition-all ${pathname === '/about' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ
             </Link>
-            <Link
-              href="/activities"
-              className={`text-sm font-medium hover:text-charcoal transition-all duration-300 px-3 py-2 ${
-                isActive('/activities') && isScrolled
-                  ? 'scale-125 font-extrabold'
-                  : ''
-              }`}
-            >
+            <Link href="/activities" className={`text-sm transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
             </Link>
-            <Link
-              href="/open-calls"
-              className={`text-sm font-medium hover:text-charcoal transition-all duration-300 px-3 py-2 ${
-                isActive('/open-calls') && isScrolled
-                  ? 'scale-125 font-extrabold'
-                  : ''
-              }`}
-            >
+            <Link href="/open-calls" className={`text-sm transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ
             </Link>
-            <Link
-              href="/participation"
-              className={`text-sm font-medium hover:text-charcoal transition-all duration-300 px-3 py-2 ${
-                isActive('/participation') && isScrolled
-                  ? 'scale-125 font-extrabold'
-                  : ''
-              }`}
-            >
+            <Link href="/participation" className={`text-sm transition-all ${pathname === '/participation' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΣΥΜΜΕΤΟΧΗ
             </Link>
-            <Link
-              href="/members"
-              className={`bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-100 transition-all duration-300 ${
-                isActive('/members') && isScrolled
-                  ? 'scale-125 font-extrabold'
-                  : ''
-              }`}
-            >
+            <Link href="/members" className="bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
             <LanguageSwitcher />
@@ -107,7 +83,7 @@ export default function Navigation({ variant = 'default', pageTitle }: Navigatio
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2"
+            className="md:hidden p-2 dark:text-gray-200"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isOpen ? (
@@ -122,13 +98,34 @@ export default function Navigation({ variant = 'default', pageTitle }: Navigatio
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className={`md:hidden ${bgColor} border-t ${variant === 'members' ? 'border-gray-300' : 'border-coral-dark'}`}>
+          <div className={`md:hidden ${bgColor} dark:bg-gray-800 border-t ${variant === 'members' ? 'border-gray-300 dark:border-gray-700' : 'border-coral-dark dark:border-gray-700'}`}>
           <div className="px-4 py-4 space-y-3">
-            <Link href="/about" className="block text-sm font-medium py-2">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
-            <Link href="/activities" className="block text-sm font-medium py-2">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
-            <Link href="/open-calls" className="block text-sm font-medium py-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link>
-            <Link href="/participation" className="block text-sm font-medium py-2">ΣΥΜΜΕΤΟΧΗ</Link>
-            <Link href="/members" className="block w-full bg-white text-charcoal px-6 py-2 rounded-full text-sm font-medium text-center">
+            {/* Dark Mode Toggle - Mobile */}
+            <button
+              onClick={toggleTheme}
+              className="flex items-center space-x-2 text-sm font-medium py-2"
+            >
+              {theme === 'light' ? (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                  </svg>
+                  <span>ΣΚΟΥΡΟ ΘΕΜΑ</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <span>ΑΝΟΙΧΤΟ ΘΕΜΑ</span>
+                </>
+              )}
+            </button>
+            <Link href="/about" className={`block text-sm py-2 transition-all ${pathname === '/about' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
+            <Link href="/activities" className={`block text-sm py-2 transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
+            <Link href="/open-calls" className={`block text-sm py-2 transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link>
+            <Link href="/participation" className={`block text-sm py-2 transition-all ${pathname === '/participation' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΥΜΜΕΤΟΧΗ</Link>
+            <Link href="/members" className="block w-full bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 px-6 py-2 rounded-full text-sm font-medium text-center">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
             <div className="pt-2">

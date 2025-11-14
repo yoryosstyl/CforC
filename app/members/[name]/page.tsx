@@ -71,8 +71,8 @@ export default function MemberDetailPage() {
 
   if (!member) {
     return (
-      <main className="min-h-screen bg-[#F5F0EB] flex items-center justify-center">
-        <p>Φόρτωση...</p>
+      <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900 flex items-center justify-center">
+        <p className="dark:text-gray-200">Φόρτωση...</p>
       </main>
     )
   }
@@ -98,15 +98,14 @@ export default function MemberDetailPage() {
   const bioText = getBioText(member.Bio)
 
   return (
-    <main className="min-h-screen bg-[#F5F0EB]">
+    <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900">
       <Navigation variant="members" />
 
       {/* Hero Section */}
       <section className="relative -bottom-20">
-        <div className="relative h-[25vh] flex items-center rounded-b-3xl overflow-hidden z-10">
-          <div className="absolute inset-0 bg-coral opacity-20"></div>
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
+        <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
               {member.Name}
             </h1>
           </div>
@@ -117,7 +116,7 @@ export default function MemberDetailPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-4">
         <Link
           href="/members"
-          className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral transition-colors bg-white/90 px-4 py-2 rounded-full"
+          className="inline-flex items-center gap-2 text-sm font-medium hover:text-coral dark:hover:text-coral-light transition-colors bg-white/90 dark:bg-gray-800/90 dark:text-gray-200 px-4 py-2 rounded-full"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -129,12 +128,12 @@ export default function MemberDetailPage() {
       {/* Member Info Section */}
       <section className="pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-white rounded-3xl p-12">
+          <div className="bg-white dark:bg-gray-800 rounded-3xl p-12">
             <div className="grid md:grid-cols-[300px,1fr] gap-12">
               {/* Profile Image */}
               <div>
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (
-                  <div className="aspect-[3/4] relative rounded-2xl overflow-hidden bg-gray-200">
+                  <div className="aspect-[3/4] relative rounded-2xl overflow-hidden bg-gray-200 dark:bg-gray-700">
                     <Image
                       src={member.Image[0].url}
                       alt={member.Image[0].alternativeText || member.Name}
@@ -143,55 +142,55 @@ export default function MemberDetailPage() {
                     />
                   </div>
                 ) : (
-                  <div className="aspect-[3/4] bg-gray-200 rounded-2xl flex items-center justify-center">
-                    <span className="text-gray-400 text-6xl">{member.Name.charAt(0)}</span>
+                  <div className="aspect-[3/4] bg-gray-200 dark:bg-gray-700 rounded-2xl flex items-center justify-center">
+                    <span className="text-gray-400 dark:text-gray-500 text-6xl">{member.Name.charAt(0)}</span>
                   </div>
                 )}
               </div>
 
               {/* Info */}
               <div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6">{member.Name}</h2>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 dark:text-gray-100">{member.Name}</h2>
 
                 <div className="mb-8">
-                  <h3 className="text-coral text-sm font-bold mb-4 uppercase">Βιογραφία</h3>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{bioText}</p>
+                  <h3 className="text-coral dark:text-coral-light text-sm font-bold mb-4 uppercase">Βιογραφία</h3>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">{bioText}</p>
                 </div>
 
                 <div className="mb-8">
-                  <h3 className="text-coral text-sm font-bold mb-4 uppercase">Επικοινωνία</h3>
+                  <h3 className="text-coral dark:text-coral-light text-sm font-bold mb-4 uppercase">Επικοινωνία</h3>
                   <div className="space-y-2">
                     {member.Email && (
-                      <p className="flex items-center gap-2">
-                        <span className="text-coral">✉</span>
-                        <a href={`mailto:${member.Email}`} className="hover:text-coral transition-colors">
+                      <p className="flex items-center gap-2 dark:text-gray-300">
+                        <span className="text-coral dark:text-coral-light">✉</span>
+                        <a href={`mailto:${member.Email}`} className="hover:text-coral dark:hover:text-coral-light transition-colors">
                           {member.Email}
                         </a>
                       </p>
                     )}
                     {member.Phone && (
-                      <p className="flex items-center gap-2">
-                        <span className="text-coral">📱</span>
-                        <a href={`tel:${member.Phone}`} className="hover:text-coral transition-colors">
+                      <p className="flex items-center gap-2 dark:text-gray-300">
+                        <span className="text-coral dark:text-coral-light">📱</span>
+                        <a href={`tel:${member.Phone}`} className="hover:text-coral dark:hover:text-coral-light transition-colors">
                           {member.Phone}
                         </a>
                       </p>
                     )}
                     {member.City && (
-                      <p className="flex items-center gap-2">
-                        <span className="text-coral">📍</span>
+                      <p className="flex items-center gap-2 dark:text-gray-300">
+                        <span className="text-coral dark:text-coral-light">📍</span>
                         {member.City}
                         {member.Province && `, ${member.Province}`}
                       </p>
                     )}
                     {websites.map((website, index) => (
-                      <p key={index} className="flex items-center gap-2">
-                        <span className="text-coral">🔗</span>
+                      <p key={index} className="flex items-center gap-2 dark:text-gray-300">
+                        <span className="text-coral dark:text-coral-light">🔗</span>
                         <a
                           href={website.startsWith('http') ? website : `https://${website}`}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="hover:text-coral transition-colors break-all"
+                          className="hover:text-coral dark:hover:text-coral-light transition-colors break-all"
                         >
                           {website}
                         </a>
@@ -201,12 +200,12 @@ export default function MemberDetailPage() {
                 </div>
 
                 <div>
-                  <h3 className="text-coral text-sm font-bold mb-4 uppercase">Πεδία Πρακτικής</h3>
+                  <h3 className="text-coral dark:text-coral-light text-sm font-bold mb-4 uppercase">Πεδία Πρακτικής</h3>
                   <div className="flex flex-wrap gap-2">
                     {fieldsOfWork.map((field, index) => (
                       <span
                         key={index}
-                        className="px-4 py-2 border border-gray-300 rounded-full text-sm"
+                        className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-full text-sm dark:text-gray-200"
                       >
                         {field}
                       </span>
@@ -224,8 +223,8 @@ export default function MemberDetailPage() {
         <section className="pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8">
-              <p className="text-coral text-sm mb-2 uppercase">Συναφή Έργα</p>
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <p className="text-coral dark:text-coral-light text-sm mb-2 uppercase">Συναφή Έργα</p>
+              <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
                 ΣΥΝΑΦΗ ΕΡΓΑ ΑΠΟ {member.Name.toUpperCase()}
               </h2>
             </div>
@@ -234,10 +233,10 @@ export default function MemberDetailPage() {
               {member.Project1Title && (
                 <Link
                   href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(member.Project1Title)}`}
-                  className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
                 >
                   {member.Project1Pictures && member.Project1Pictures[0] && (
-                    <div className="aspect-[4/3] relative">
+                    <div className="aspect-[4/3] relative bg-gray-200 dark:bg-gray-700">
                       <Image
                         src={member.Project1Pictures[0].url}
                         alt={member.Project1Pictures[0].alternativeText || member.Project1Title}
@@ -247,7 +246,7 @@ export default function MemberDetailPage() {
                     </div>
                   )}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold">{member.Project1Title}</h3>
+                    <h3 className="text-xl font-bold dark:text-gray-100">{member.Project1Title}</h3>
                   </div>
                 </Link>
               )}
@@ -255,10 +254,10 @@ export default function MemberDetailPage() {
               {member.Project2Title && (
                 <Link
                   href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(member.Project2Title)}`}
-                  className="bg-white rounded-3xl overflow-hidden hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
                 >
                   {member.Project2Pictures && member.Project2Pictures[0] && (
-                    <div className="aspect-[4/3] relative">
+                    <div className="aspect-[4/3] relative bg-gray-200 dark:bg-gray-700">
                       <Image
                         src={member.Project2Pictures[0].url}
                         alt={member.Project2Pictures[0].alternativeText || member.Project2Title}
@@ -268,7 +267,7 @@ export default function MemberDetailPage() {
                     </div>
                   )}
                   <div className="p-6">
-                    <h3 className="text-xl font-bold">{member.Project2Title}</h3>
+                    <h3 className="text-xl font-bold dark:text-gray-100">{member.Project2Title}</h3>
                   </div>
                 </Link>
               )}
@@ -279,13 +278,13 @@ export default function MemberDetailPage() {
         <section className="pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="mb-8">
-              <p className="text-coral text-sm mb-2 uppercase">Συναφή Έργα</p>
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <p className="text-coral dark:text-coral-light text-sm mb-2 uppercase">Συναφή Έργα</p>
+              <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
                 ΣΥΝΑΦΗ ΕΡΓΑ ΑΠΟ {member.Name.toUpperCase()}
               </h2>
             </div>
             <div className="text-center py-12">
-              <p className="text-gray-600">Δεν βρέθηκαν σχετικά έργα.</p>
+              <p className="text-gray-600 dark:text-gray-400">Δεν βρέθηκαν σχετικά έργα.</p>
             </div>
           </div>
         </section>
@@ -294,16 +293,16 @@ export default function MemberDetailPage() {
       {/* Become a Member Section */}
       <section className="pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-gradient-to-br from-coral to-orange-400 rounded-3xl p-12 text-white text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+          <div className="bg-gradient-to-br from-coral to-orange-400 dark:from-gray-700 dark:to-gray-800 rounded-3xl p-12 text-white text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-gray-100">
               Έτοιμος να γίνεις μέλος;
             </h2>
-            <p className="text-lg mb-8 max-w-2xl mx-auto">
+            <p className="text-lg mb-8 max-w-2xl mx-auto dark:text-gray-200">
               Συμπλήρωσε τη φόρμα εγγραφής και θα επικοινωνήσουμε μαζί σου σύντομα για τα επόμενα βήματα!
             </p>
             <Link
               href="/participation"
-              className="inline-block bg-white text-coral px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-block bg-white text-coral dark:bg-coral-light dark:text-gray-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 dark:hover:bg-coral transition-colors shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               ΜΑΘΕ ΠΕΡΙΣΣΟΤΕΡΑ
             </Link>

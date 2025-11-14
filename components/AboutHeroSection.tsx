@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useScrollAnimation } from '@/lib/useScrollAnimation'
 
 export default function AboutHeroSection() {
   const [scrollY, setScrollY] = useState(0)
-  const { isScrolled } = useScrollAnimation()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,11 +21,9 @@ export default function AboutHeroSection() {
   return (
     <section className="relative -bottom-20">
       {/* Orange Card with Title - 25% viewport height */}
-      <div className="bg-coral h-[25vh] flex items-center rounded-b-3xl relative z-10">
+      <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-          <h1 className={`text-5xl md:text-6xl lg:text-7xl font-bold leading-none transition-opacity duration-500 ${
-            isScrolled ? 'opacity-0' : 'opacity-100'
-          }`}>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
             <div>ABOUT US</div>
           </h1>
         </div>
