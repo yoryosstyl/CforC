@@ -93,11 +93,11 @@ export default function AboutSection() {
   }, [isStatsVisible])
 
   return (
-    <section id="about" className="py-24 bg-gray-50 -mt-[10%]">
+    <section id="about" className="py-24 bg-gray-50 dark:bg-gray-800 -mt-[10%]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
-          <p className="text-coral text-sm font-medium mb-2">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</p>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΠΟΙΟΙ ΕΙΜΑΣΤΕ</p>
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 dark:text-gray-100">
             ΤΟ CULTURE FOR CHANGE<br />ΜΕ ΜΙΑ ΜΑΤΙΑ
           </h2>
         </div>
@@ -126,12 +126,12 @@ export default function AboutSection() {
               isContentVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
-            <h3 className="text-3xl font-bold mb-6">
+            <h3 className="text-3xl font-bold mb-6 dark:text-gray-100">
               ΤΟ ΠΡΩΤΟ ΕΛΛΗΝΙΚΟ ΔΙΚΤΥΟ ΓΙΑ ΤΗΝ<br />
               ΚΟΙΝΩΝΙΚΗ ΚΑΙΝΟΤΟΜΙΑ ΣΤΗΝ<br />
               ΕΛΛΑΔΑ
             </h3>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               Μέσα από δράση του, το δίκτυο Culture for Change, αναπτύσσει την
               κοινωνική καινοτομία στην Ελλάδα υποστηρίζοντας τους επαγγελματίες
               του πολιτισμού που ιδρύουν ή διαχειρίζονται πολυσύλλεκτες καινοτόμες
@@ -148,12 +148,12 @@ export default function AboutSection() {
           }`}
         >
           <div>
-            <div className="text-8xl font-bold text-coral mb-2">{counter1}</div>
-            <p className="text-xl font-medium">ΕΡΓΑ</p>
+            <div className="text-8xl font-bold text-coral dark:text-coral-light mb-2">{counter1}</div>
+            <p className="text-xl font-medium dark:text-gray-200">ΕΡΓΑ</p>
           </div>
           <div>
-            <div className="text-8xl font-bold text-coral mb-2">{counter2}</div>
-            <p className="text-xl font-medium">ΜΕΛΗ</p>
+            <div className="text-8xl font-bold text-coral dark:text-coral-light mb-2">{counter2}</div>
+            <p className="text-xl font-medium dark:text-gray-200">ΜΕΛΗ</p>
           </div>
         </div>
       </div>

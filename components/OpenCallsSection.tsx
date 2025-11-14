@@ -65,7 +65,7 @@ export default function OpenCallsSection() {
 
   if (loading) {
     return (
-      <section id="open-calls" className="py-24 bg-orange-50">
+      <section id="open-calls" className="py-24 bg-orange-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <LoadingIndicator />
         </div>
@@ -75,19 +75,19 @@ export default function OpenCallsSection() {
 
   if (error || openCalls.length === 0) {
     return (
-      <section id="open-calls" className="py-24 bg-orange-50">
+      <section id="open-calls" className="py-24 bg-orange-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <p className="text-coral text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
+              <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
                 ΚΑΛΕΣΜΑΤΑ ΤΟΥ CULTURE<br />
                 FOR CHANGE
               </h2>
             </div>
           </div>
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 text-center">
-            <p className="text-orange-600 font-medium">
+          <div className="bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-gray-600 rounded-lg p-6 text-center">
+            <p className="text-orange-600 dark:text-orange-400 font-medium">
               {error || 'No open calls available at the moment'}
             </p>
           </div>
@@ -97,17 +97,17 @@ export default function OpenCallsSection() {
   }
 
   return (
-    <section id="open-calls" className="py-24 bg-orange-50">
+    <section id="open-calls" className="py-24 bg-orange-50 dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <p className="text-coral text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
+            <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
               ΚΑΛΕΣΜΑΤΑ ΤΟΥ CULTURE<br />
               FOR CHANGE
             </h2>
           </div>
-          <Link href="/open-calls" className="hidden md:block bg-coral text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors">
+          <Link href="/open-calls" className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors">
             ΟΛΑ ΤΑ ΚΑΛΕΣΜΑΤΑ
           </Link>
         </div>
@@ -132,17 +132,17 @@ export default function OpenCallsSection() {
 
             return (
               <div key={call.id}>
-                {index > 0 && <hr className="border-gray-300" />}
+                {index > 0 && <hr className="border-gray-300 dark:border-gray-600" />}
                 <Link
                   href={call.Link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group block py-12 hover:bg-white hover:shadow-xl transition-all duration-300 relative rounded-2xl"
+                  className="group block py-12 hover:bg-white dark:hover:bg-gray-700 hover:shadow-xl transition-all duration-300 relative rounded-2xl"
                 >
                   {/* Arrow Icon - Far Top Right Corner */}
                   <div className="absolute top-6 right-2">
                     <svg
-                      className="w-8 h-8 text-charcoal group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                      className="w-8 h-8 text-charcoal dark:text-gray-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -160,13 +160,13 @@ export default function OpenCallsSection() {
                     {/* Date and Priority Badges Section - Moved Right */}
                     <div className="flex flex-col gap-3 min-w-[140px] ml-8">
                       {/* Date Badge */}
-                      <span className="inline-block bg-charcoal text-white px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                      <span className="inline-block bg-charcoal dark:bg-gray-600 text-white px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
                         {new Date(call.Deadline).toLocaleDateString('el-GR')}
                       </span>
 
                       {/* Priority Badge */}
                       {call.Priority && (
-                        <span className="inline-block bg-white border-2 border-charcoal text-charcoal px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                        <span className="inline-block bg-white dark:bg-gray-700 border-2 border-charcoal dark:border-gray-400 text-charcoal dark:text-gray-200 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
                           PRIORITY
                         </span>
                       )}
@@ -175,11 +175,11 @@ export default function OpenCallsSection() {
                     {/* Title and Description Section */}
                     <div className="flex-1 flex gap-6">
                       <div className="flex-1">
-                        <h3 className="text-xl md:text-2xl font-bold mb-4 text-charcoal group-hover:text-coral transition-colors duration-300">
+                        <h3 className="text-xl md:text-2xl font-bold mb-4 text-charcoal dark:text-gray-100 group-hover:text-coral dark:group-hover:text-coral-light transition-colors duration-300">
                           {call.Title}
                         </h3>
 
-                        <p className="text-gray-600 leading-relaxed text-base mt-2">
+                        <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base mt-2">
                           {descriptionText}
                         </p>
                       </div>
@@ -187,7 +187,7 @@ export default function OpenCallsSection() {
                       {/* Circular image on right */}
                       {imageUrl && (
                         <div className="flex-shrink-0">
-                          <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-coral shadow-md">
+                          <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-coral dark:border-coral-light shadow-md">
                             <Image
                               src={imageUrl}
                               alt={(Array.isArray(call.Image) ? call.Image[0]?.alternativeText : call.Image?.alternativeText) || call.Title}
@@ -206,7 +206,7 @@ export default function OpenCallsSection() {
           })}
         </div>
 
-        <Link href="/open-calls" className="md:hidden w-full mt-8 bg-coral text-white px-6 py-3 rounded-full font-medium text-center block">
+        <Link href="/open-calls" className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors">
           ΟΛΑ ΤΑ ΚΑΛΕΣΜΑΤΑ
         </Link>
       </div>

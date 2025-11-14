@@ -53,7 +53,7 @@ export default function ActivitiesSection() {
 
   if (loading) {
     return (
-      <section id="activities" className="py-24 bg-white">
+      <section id="activities" className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <LoadingIndicator />
         </div>
@@ -63,19 +63,19 @@ export default function ActivitiesSection() {
 
   if (error || activities.length === 0) {
     return (
-      <section id="activities" className="py-24 bg-white">
+      <section id="activities" className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <p className="text-coral text-sm font-medium mb-2">ΠΡΟΣΦΑΤΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</p>
-              <h2 className="text-4xl md:text-5xl font-bold">
+              <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΠΡΟΣΦΑΤΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</p>
+              <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
                 ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ ΤΟΥ CULTURE<br />
                 FOR CHANGE
               </h2>
             </div>
           </div>
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 text-center">
-            <p className="text-orange-600 font-medium">
+          <div className="bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-gray-600 rounded-lg p-6 text-center">
+            <p className="text-orange-600 dark:text-orange-400 font-medium">
               {error || 'No activities available yet'}
             </p>
           </div>
@@ -85,18 +85,18 @@ export default function ActivitiesSection() {
   }
 
   return (
-    <section id="activities" className="py-24 bg-white">
+    <section id="activities" className="py-24 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gray-50 rounded-3xl py-12 px-4 sm:px-6 lg:px-8">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-3xl py-12 px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <p className="text-coral text-sm font-medium mb-2">ΠΡΟΣΦΑΤΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</p>
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΠΡΟΣΦΑΤΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</p>
+            <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
               ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ ΤΟΥ CULTURE<br />
               FOR CHANGE
             </h2>
           </div>
-          <Link href="/activities" className="hidden md:block bg-coral text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark transition-colors">
+          <Link href="/activities" className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors">
             ΟΛΕΣ ΟΙ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
           </Link>
         </div>
@@ -125,7 +125,7 @@ export default function ActivitiesSection() {
                         return (
                           <div
                             key={card.id}
-                            className="bg-orange-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform scale-105"
+                            className="bg-orange-50 dark:bg-gray-700 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform scale-105"
                           >
                             {/* Image with overlapping date */}
                             <div className="relative -mb-2">
@@ -140,25 +140,25 @@ export default function ActivitiesSection() {
                                   />
                                 </div>
                               ) : (
-                                <div className="aspect-video bg-gray-200 rounded-2xl mx-2 mt-2 flex items-center justify-center">
-                                  <span className="text-gray-400">No image</span>
+                                <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-2xl mx-2 mt-2 flex items-center justify-center">
+                                  <span className="text-gray-400 dark:text-gray-300">No image</span>
                                 </div>
                               )}
 
                               {/* Overlapping date badge */}
                               <div className="absolute top-2 left-4 z-10">
-                                <span className="inline-block bg-orange-50 px-2.5 py-0.5 rounded-full text-xs font-medium shadow-md">
+                                <span className="inline-block bg-orange-50 dark:bg-gray-600 dark:text-gray-200 px-2.5 py-0.5 rounded-full text-xs font-medium shadow-md">
                                   {new Date(card.Date).toLocaleDateString('el-GR')}
                                 </span>
                               </div>
                             </div>
 
                             <div className="p-7 pt-9 flex flex-col h-[200px]">
-                              <h3 className="text-lg font-bold mb-4 line-clamp-3 flex-grow">
+                              <h3 className="text-lg font-bold mb-4 line-clamp-3 flex-grow dark:text-gray-100">
                                 {card.Title}
                               </h3>
 
-                              <div className="flex items-center text-sm text-gray-600 mt-auto">
+                              <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-auto">
                                 <div className="w-8 h-8 mr-2 flex-shrink-0">
                                   <Image
                                     src="/cforc_logo_small.svg"
@@ -185,7 +185,7 @@ export default function ActivitiesSection() {
           <div className="flex justify-center items-center gap-4 mt-8">
             <button
               onClick={prevSlide}
-              className="w-10 h-10 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-charcoal dark:border-gray-400 dark:text-gray-200 flex items-center justify-center hover:bg-charcoal hover:text-white dark:hover:bg-gray-600 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -198,7 +198,7 @@ export default function ActivitiesSection() {
                   key={index}
                   onClick={() => setCurrentSlide(index)}
                   className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentSlide ? 'bg-coral' : 'bg-gray-300'
+                    index === currentSlide ? 'bg-coral dark:bg-coral-light' : 'bg-gray-300 dark:bg-gray-600'
                   }`}
                 />
               ))}
@@ -206,7 +206,7 @@ export default function ActivitiesSection() {
 
             <button
               onClick={nextSlide}
-              className="w-10 h-10 rounded-full border-2 border-charcoal flex items-center justify-center hover:bg-charcoal hover:text-white transition-colors"
+              className="w-10 h-10 rounded-full border-2 border-charcoal dark:border-gray-400 dark:text-gray-200 flex items-center justify-center hover:bg-charcoal hover:text-white dark:hover:bg-gray-600 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -215,7 +215,7 @@ export default function ActivitiesSection() {
           </div>
         </div>
 
-        <Link href="/activities" className="md:hidden w-full mt-8 bg-coral text-white px-6 py-3 rounded-full font-medium text-center block">
+        <Link href="/activities" className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors">
           ΟΛΕΣ ΟΙ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
         </Link>
         </div>

@@ -79,14 +79,14 @@ export default function ActivitiesPage() {
   }, [allActivities, searchQuery, sortBy, sortOrder, categoryFilter])
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen dark:bg-gray-900">
       <Navigation />
 
       {/* Hero Section */}
       <section className="relative -bottom-20">
-        <div className="bg-coral h-[25vh] flex items-center rounded-b-3xl relative z-10">
+        <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-gray-100">
               <div>ACTIVITIES</div>
             </h1>
           </div>
@@ -94,17 +94,17 @@ export default function ActivitiesPage() {
       </section>
 
       {/* Activities Section with Filtering */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Loading Indicator */}
           {loading && <LoadingIndicator />}
 
           {/* Filters Section */}
-          <div className="mb-12 bg-gray-50 rounded-2xl p-6 shadow-md">
+          <div className="mb-12 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-900">
             <div className="grid md:grid-cols-4 gap-4">
               {/* Search */}
               <div>
-                <label htmlFor="search" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Αναζήτηση
                 </label>
                 <input
@@ -113,20 +113,20 @@ export default function ActivitiesPage() {
                   placeholder="Αναζήτηση κατά τίτλο..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
                 />
               </div>
 
               {/* Category Filter */}
               <div>
-                <label htmlFor="category" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="category" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Κατηγορία
                 </label>
                 <select
                   id="category"
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
                 >
                   <option value="all">Όλες οι κατηγορίες</option>
                   {categories.filter(c => c !== 'all').map(category => (
@@ -137,14 +137,14 @@ export default function ActivitiesPage() {
 
               {/* Sort By */}
               <div>
-                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Ταξινόμηση κατά
                 </label>
                 <select
                   id="sortBy"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'date' | 'title')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
                 >
                   <option value="date">Ημερομηνία</option>
                   <option value="title">Τίτλος</option>
@@ -153,14 +153,14 @@ export default function ActivitiesPage() {
 
               {/* Sort Order */}
               <div>
-                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Σειρά
                 </label>
                 <select
                   id="sortOrder"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
                 >
                   <option value="desc">Φθίνουσα</option>
                   <option value="asc">Αύξουσα</option>
@@ -169,22 +169,22 @@ export default function ActivitiesPage() {
             </div>
 
             {/* Results count */}
-            <div className="mt-4 text-sm text-gray-600">
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
               Βρέθηκαν {filteredActivities.length} δραστηριότητες
             </div>
           </div>
 
           {/* Error State */}
           {error && !loading && (
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 text-center">
-              <p className="text-orange-600 font-medium">{error}</p>
+            <div className="bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-gray-600 rounded-lg p-6 text-center">
+              <p className="text-orange-600 dark:text-orange-400 font-medium">{error}</p>
             </div>
           )}
 
           {/* No Results */}
           {!loading && !error && filteredActivities.length === 0 && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-              <p className="text-gray-600 font-medium">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-6 text-center">
+              <p className="text-gray-600 dark:text-gray-300 font-medium">
                 Δεν βρέθηκαν δραστηριότητες με αυτά τα κριτήρια
               </p>
             </div>
@@ -203,7 +203,7 @@ export default function ActivitiesPage() {
                   <Link
                     key={activity.id}
                     href={`/activities/${activity.documentId || activity.id}`}
-                    className="bg-orange-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform hover:scale-105"
+                    className="bg-orange-50 dark:bg-gray-700 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform hover:scale-105"
                   >
                     {/* Image with overlapping date */}
                     <div className="relative -mb-2">
@@ -218,25 +218,25 @@ export default function ActivitiesPage() {
                           />
                         </div>
                       ) : (
-                        <div className="aspect-video bg-gray-200 rounded-2xl mx-2 mt-2 flex items-center justify-center">
-                          <span className="text-gray-400">No image</span>
+                        <div className="aspect-video bg-gray-200 dark:bg-gray-600 rounded-2xl mx-2 mt-2 flex items-center justify-center">
+                          <span className="text-gray-400 dark:text-gray-300">No image</span>
                         </div>
                       )}
 
                       {/* Overlapping date badge */}
                       <div className="absolute top-2 left-4 z-10">
-                        <span className="inline-block bg-orange-50 px-2.5 py-0.5 rounded-full text-xs font-medium shadow-md">
+                        <span className="inline-block bg-orange-50 dark:bg-gray-600 dark:text-gray-200 px-2.5 py-0.5 rounded-full text-xs font-medium shadow-md">
                           {new Date(activity.Date).toLocaleDateString('el-GR')}
                         </span>
                       </div>
                     </div>
 
                     <div className="p-7 pt-9 flex flex-col h-[200px]">
-                      <h3 className="text-lg font-bold mb-4 line-clamp-3 flex-grow">
+                      <h3 className="text-lg font-bold mb-4 line-clamp-3 flex-grow dark:text-gray-100">
                         {activity.Title}
                       </h3>
 
-                      <div className="flex items-center text-sm text-gray-600 mt-auto">
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-auto">
                         <div className="w-8 h-8 mr-2 flex-shrink-0">
                           <Image
                             src="/cforc_logo_small.svg"
