@@ -28,12 +28,12 @@ export default function ParticipationPage() {
       </section>
 
       {/* Main Content Section */}
-      <section className="pt-32 pb-24 bg-white">
+      <section className="pt-32 pb-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section 1: Two-column layout with text */}
           <div className="mb-20">
-            <p className="text-coral text-sm font-medium mb-2 uppercase">Γίνε Μέλος</p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-12">
+            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2 uppercase">Γίνε Μέλος</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-12 dark:text-gray-100">
               ΘΕΛΩ ΝΑ ΓΙΝΩ ΜΕΛΟΣ
             </h2>
 
