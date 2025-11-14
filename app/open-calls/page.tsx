@@ -90,7 +90,7 @@ export default function OpenCallsPage() {
   }, [allOpenCalls, searchQuery, sortBy, sortOrder])
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen dark:bg-gray-900">
       <Navigation />
 
       {/* Hero Section */}
@@ -105,17 +105,17 @@ export default function OpenCallsPage() {
       </section>
 
       {/* Open Calls Section with Filtering */}
-      <section className="py-24 bg-orange-50">
+      <section className="py-24 bg-orange-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Loading Indicator */}
           {loading && <LoadingIndicator />}
 
           {/* Filters Section */}
-          <div className="mb-12 bg-white rounded-2xl p-6 shadow-md">
+          <div className="mb-12 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-700/50">
             <div className="grid md:grid-cols-3 gap-4">
               {/* Search */}
               <div>
-                <label htmlFor="search" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Αναζήτηση
                 </label>
                 <input
@@ -124,20 +124,20 @@ export default function OpenCallsPage() {
                   placeholder="Αναζήτηση κατά τίτλο..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
                 />
               </div>
 
               {/* Sort By */}
               <div>
-                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Ταξινόμηση κατά
                 </label>
                 <select
                   id="sortBy"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as 'deadline' | 'dateAdded')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200"
                 >
                   <option value="deadline">Ημερομηνία λήξης</option>
                   <option value="dateAdded">Ημερομηνία προσθήκης</option>
@@ -146,14 +146,14 @@ export default function OpenCallsPage() {
 
               {/* Sort Order */}
               <div>
-                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal mb-2">
+                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
                   Σειρά
                 </label>
                 <select
                   id="sortOrder"
                   value={sortOrder}
                   onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200"
                 >
                   <option value="asc">Αύξουσα</option>
                   <option value="desc">Φθίνουσα</option>
@@ -162,22 +162,22 @@ export default function OpenCallsPage() {
             </div>
 
             {/* Results count */}
-            <div className="mt-4 text-sm text-gray-600">
+            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
               Βρέθηκαν {filteredCalls.length} καλέσματα
             </div>
           </div>
 
           {/* Error State */}
           {error && !loading && (
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-6 text-center">
-              <p className="text-orange-600 font-medium">{error}</p>
+            <div className="bg-orange-50 dark:bg-gray-700 border border-orange-200 dark:border-gray-600 rounded-lg p-6 text-center">
+              <p className="text-orange-600 dark:text-orange-400 font-medium">{error}</p>
             </div>
           )}
 
           {/* No Results */}
           {!loading && !error && filteredCalls.length === 0 && (
-            <div className="bg-white border border-gray-200 rounded-lg p-6 text-center">
-              <p className="text-gray-600 font-medium">
+            <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-6 text-center">
+              <p className="text-gray-600 dark:text-gray-400 font-medium">
                 Δεν βρέθηκαν καλέσματα με αυτά τα κριτήρια
               </p>
             </div>
@@ -203,17 +203,17 @@ export default function OpenCallsPage() {
 
                 return (
                   <div key={call.id}>
-                    {index > 0 && <hr className="border-gray-300" />}
+                    {index > 0 && <hr className="border-gray-300 dark:border-gray-600" />}
                     <Link
                       href={call.Link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group block py-12 hover:bg-white hover:shadow-xl transition-all duration-300 relative rounded-2xl"
+                      className="group block py-12 hover:bg-white dark:hover:bg-gray-700 hover:shadow-xl transition-all duration-300 relative rounded-2xl"
                     >
                       {/* Arrow Icon - Far Top Right Corner */}
                       <div className="absolute top-6 right-2">
                         <svg
-                          className="w-8 h-8 text-charcoal group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
+                          className="w-8 h-8 text-charcoal dark:text-gray-300 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -231,13 +231,13 @@ export default function OpenCallsPage() {
                         {/* Date and Priority Badges Section */}
                         <div className="flex flex-col gap-3 min-w-[140px] ml-8">
                           {/* Date Badge */}
-                          <span className="inline-block bg-charcoal text-white px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                          <span className="inline-block bg-charcoal dark:bg-gray-600 text-white px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
                             {new Date(call.Deadline).toLocaleDateString('el-GR')}
                           </span>
 
                           {/* Priority Badge */}
                           {call.Priority && (
-                            <span className="inline-block bg-white border-2 border-charcoal text-charcoal px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                            <span className="inline-block bg-white dark:bg-gray-700 border-2 border-charcoal dark:border-gray-400 text-charcoal dark:text-gray-200 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
                               PRIORITY
                             </span>
                           )}
@@ -246,11 +246,11 @@ export default function OpenCallsPage() {
                         {/* Title and Description Section */}
                         <div className="flex-1 flex gap-6">
                           <div className="flex-1">
-                            <h3 className="text-xl md:text-2xl font-bold mb-4 text-charcoal group-hover:text-coral transition-colors duration-300">
+                            <h3 className="text-xl md:text-2xl font-bold mb-4 text-charcoal dark:text-gray-100 group-hover:text-coral dark:group-hover:text-coral-light transition-colors duration-300">
                               {call.Title}
                             </h3>
 
-                            <p className="text-gray-600 leading-relaxed text-base mt-2">
+                            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base mt-2">
                               {descriptionText}
                             </p>
                           </div>
@@ -258,7 +258,7 @@ export default function OpenCallsPage() {
                           {/* Circular image on right */}
                           {imageUrl && (
                             <div className="flex-shrink-0">
-                              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-coral shadow-md">
+                              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-coral dark:border-coral-light shadow-md">
                                 <Image
                                   src={imageUrl}
                                   alt={(Array.isArray(call.Image) ? call.Image[0]?.alternativeText : call.Image?.alternativeText) || call.Title}
