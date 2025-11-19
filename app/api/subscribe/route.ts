@@ -21,8 +21,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Use Resend test domain for testing: onboarding@resend.dev
-    const fromEmail = 'onboarding@resend.dev'
+    // Use verified domain
+    const fromEmail = 'no-reply@cultureforchange.gr'
 
     // Email to admin (notification)
     const adminEmailResponse = await fetch('https://api.resend.com/emails', {
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         from: fromEmail,
-        to: ['contact@yoryosstyl.com'],
+        to: ['hello@cultureforchange.net', 'finance@cultureforchange.net'],
         subject: 'Νέα Εγγραφή στο Newsletter - Culture for Change',
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
