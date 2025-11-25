@@ -9,6 +9,7 @@ interface NewsletterSectionProps {
 
 export default function NewsletterSection({ variant = 'default' }: NewsletterSectionProps) {
   const [email, setEmail] = useState('')
+  const [agreedToTerms, setAgreedToTerms] = useState(false)
   const [showPopup, setShowPopup] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -16,7 +17,7 @@ export default function NewsletterSection({ variant = 'default' }: NewsletterSec
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (email && !isSubmitting) {
+    if (email && agreedToTerms && !isSubmitting) {
       setIsSubmitting(true)
 
       try {
@@ -78,7 +79,7 @@ export default function NewsletterSection({ variant = 'default' }: NewsletterSec
                   />
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !agreedToTerms}
                     className="absolute right-2 top-1/2 -translate-y-1/2 w-12 h-12 bg-coral hover:bg-coral/90 rounded-full flex items-center justify-center transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
@@ -119,13 +120,21 @@ export default function NewsletterSection({ variant = 'default' }: NewsletterSec
                     )}
                   </button>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Με την υποβολή συμφωνείτε με τους{' '}
-                  <Link href="/terms" className="text-charcoal dark:text-gray-200 font-medium hover:text-coral transition-colors underline">
-                    όρους και τις προϋποθέσεις
-                  </Link>{' '}
-                  μας.
-                </p>
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="terms-checkbox"
+                    checked={agreedToTerms}
+                    onChange={(e) => setAgreedToTerms(e.target.checked)}
+                    className="mt-1 w-4 h-4 text-coral bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded focus:ring-coral focus:ring-2 cursor-pointer"
+                  />
+                  <label htmlFor="terms-checkbox" className="text-sm text-gray-600 dark:text-gray-300 cursor-pointer">
+                    Συμφωνώ με τους{' '}
+                    <Link href="/terms" className="text-charcoal dark:text-gray-200 font-medium hover:text-coral transition-colors underline">
+                      όρους και τις προϋποθέσεις
+                    </Link>
+                  </label>
+                </div>
               </form>
             </div>
           </div>
