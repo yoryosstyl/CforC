@@ -45,11 +45,14 @@ export default function OpenCallsSection() {
         console.log('Open calls data:', response.data)
         console.log('Number of open calls:', response.data?.length || 0)
 
-        // Sort by createdAt (submission date) in descending order (most recent first)
-        // Then take only the 4 most recent entries
+        // Filter out expired calls and sort by deadline (closest first)
+        const today = new Date()
+        today.setHours(0, 0, 0, 0) // Reset time to start of day
+
         const sortedCalls = response.data
-          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-          .slice(0, 4)
+          .filter(call => new Date(call.Deadline) >= today) // Only non-expired calls
+          .sort((a, b) => new Date(a.Deadline).getTime() - new Date(b.Deadline).getTime()) // Closest deadline first
+          .slice(0, 4) // Take top 4
 
         setOpenCalls(sortedCalls)
       } catch (err) {
@@ -79,9 +82,9 @@ export default function OpenCallsSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
+              <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</p>
               <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
-                ΚΑΛΕΣΜΑΤΑ ΤΟΥ CULTURE<br />
+                ΤΟΥ CULTURE<br />
                 FOR CHANGE
               </h2>
             </div>
@@ -101,14 +104,14 @@ export default function OpenCallsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-end mb-12">
           <div>
-            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</p>
+            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</p>
             <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
-              ΚΑΛΕΣΜΑΤΑ ΤΟΥ CULTURE<br />
+              ΤΟΥ CULTURE<br />
               FOR CHANGE
             </h2>
           </div>
           <Link href="/open-calls" className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors">
-            ΟΛΑ ΤΑ ΚΑΛΕΣΜΑΤΑ
+            ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
           </Link>
         </div>
 
@@ -207,7 +210,7 @@ export default function OpenCallsSection() {
         </div>
 
         <Link href="/open-calls" className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors">
-          ΟΛΑ ΤΑ ΚΑΛΕΣΜΑΤΑ
+          ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
         </Link>
       </div>
     </section>

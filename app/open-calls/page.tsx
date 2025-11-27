@@ -37,11 +37,26 @@ export default function OpenCallsPage() {
   const [filteredCalls, setFilteredCalls] = useState<OpenCall[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isGreek, setIsGreek] = useState(true)
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortBy, setSortBy] = useState<'deadline' | 'dateAdded'>('deadline')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc')
+  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current')
+
+  // Detect language changes (e.g., Google Translate)
+  useEffect(() => {
+    const checkLanguage = () => {
+      const lang = document.documentElement.lang
+      setIsGreek(lang === 'el' || lang === 'el-GR' || lang === '')
+    }
+
+    checkLanguage()
+
+    // Check periodically for language changes
+    const interval = setInterval(checkLanguage, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     async function fetchOpenCalls() {
@@ -64,30 +79,38 @@ export default function OpenCallsPage() {
 
   // Apply filters and sorting
   useEffect(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
     let result = [...allOpenCalls]
 
-    // Apply search filter
+    // Filter by deadline based on active tab
+    if (activeTab === 'current') {
+      // Current open calls: deadline is today or in the future
+      result = result.filter(call => new Date(call.Deadline) >= today)
+      // Sort by closest deadline first
+      result.sort((a, b) => new Date(a.Deadline).getTime() - new Date(b.Deadline).getTime())
+    } else {
+      // Previous open calls: deadline has passed
+      result = result.filter(call => new Date(call.Deadline) < today)
+      // Sort by closest to current date first (most recent deadline first)
+      result.sort((a, b) => new Date(b.Deadline).getTime() - new Date(a.Deadline).getTime())
+    }
+
+    // Apply search filter (search in both title and description)
     if (searchQuery) {
+      const descriptionTextMap = new Map(
+        result.map(call => [call.id, extractTextFromBlocks(call.Description)])
+      )
+
       result = result.filter(call =>
-        call.Title.toLowerCase().includes(searchQuery.toLowerCase())
+        call.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        descriptionTextMap.get(call.id)?.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
 
-    // Apply sorting
-    result.sort((a, b) => {
-      let comparison = 0
-
-      if (sortBy === 'deadline') {
-        comparison = new Date(a.Deadline).getTime() - new Date(b.Deadline).getTime()
-      } else {
-        comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      }
-
-      return sortOrder === 'asc' ? comparison : -comparison
-    })
-
     setFilteredCalls(result)
-  }, [allOpenCalls, searchQuery, sortBy, sortOrder])
+  }, [allOpenCalls, searchQuery, activeTab])
 
   return (
     <main className="min-h-screen dark:bg-gray-900">
@@ -98,7 +121,7 @@ export default function OpenCallsPage() {
         <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
-              <div>OPEN CALLS</div>
+              <div>ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</div>
             </h1>
           </div>
         </div>
@@ -110,61 +133,55 @@ export default function OpenCallsPage() {
           {/* Loading Indicator */}
           {loading && <LoadingIndicator />}
 
-          {/* Filters Section */}
-          <div className="mb-12 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-700/50">
-            <div className="grid md:grid-cols-3 gap-4">
-              {/* Search */}
-              <div>
-                <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Αναζήτηση
-                </label>
-                <input
-                  id="search"
-                  type="text"
-                  placeholder="Αναζήτηση κατά τίτλο..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-                />
-              </div>
-
-              {/* Sort By */}
-              <div>
-                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Ταξινόμηση κατά
-                </label>
-                <select
-                  id="sortBy"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as 'deadline' | 'dateAdded')}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200"
-                >
-                  <option value="deadline">Ημερομηνία λήξης</option>
-                  <option value="dateAdded">Ημερομηνία προσθήκης</option>
-                </select>
-              </div>
-
-              {/* Sort Order */}
-              <div>
-                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Σειρά
-                </label>
-                <select
-                  id="sortOrder"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200"
-                >
-                  <option value="asc">Αύξουσα</option>
-                  <option value="desc">Φθίνουσα</option>
-                </select>
-              </div>
+          {/* Tabs and Search Section */}
+          <div className="mb-12">
+            {/* Tabs */}
+            <div className="flex gap-4 mb-6 border-b border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setActiveTab('current')}
+                className={`px-6 py-3 font-medium transition-all ${
+                  activeTab === 'current'
+                    ? 'text-coral dark:text-coral-light border-b-2 border-coral dark:border-coral-light'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-coral dark:hover:text-coral-light'
+                }`}
+              >
+                Τρέχουσες
+              </button>
+              <button
+                onClick={() => setActiveTab('previous')}
+                className={`px-6 py-3 font-medium transition-all ${
+                  activeTab === 'previous'
+                    ? 'text-coral dark:text-coral-light border-b-2 border-coral dark:border-coral-light'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-coral dark:hover:text-coral-light'
+                }`}
+              >
+                Προηγούμενες
+              </button>
             </div>
 
-            {/* Results count */}
-            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-              Βρέθηκαν {filteredCalls.length} καλέσματα
-            </div>
+            {/* Search - Only show for Greek language */}
+            {isGreek && (
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-700/50">
+                <div className="max-w-xl">
+                  <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
+                    Αναζήτηση
+                  </label>
+                  <input
+                    id="search"
+                    type="text"
+                    placeholder="Αναζήτηση κατά λέξη..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-coral focus:border-transparent dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                  />
+                </div>
+
+                {/* Results count */}
+                <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+                  Βρέθηκαν {filteredCalls.length} προσκλήσεις
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Error State */}
@@ -178,7 +195,7 @@ export default function OpenCallsPage() {
           {!loading && !error && filteredCalls.length === 0 && (
             <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg p-6 text-center">
               <p className="text-gray-600 dark:text-gray-400 font-medium">
-                Δεν βρέθηκαν καλέσματα με αυτά τα κριτήρια
+                Δεν βρέθηκαν προσκλήσεις με αυτά τα κριτήρια
               </p>
             </div>
           )}

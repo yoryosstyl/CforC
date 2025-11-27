@@ -32,7 +32,7 @@ export default function Footer({ variant = 'default' }: FooterProps) {
               <li><Link href="/members" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΕΥΡΕΣΗ ΜΕΛΩΝ</Link></li>
               <li><Link href="/about" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link></li>
               <li><Link href="/activities" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link></li>
-              <li><Link href="/open-calls" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΑΝΟΙΧΤΑ ΚΑΛΕΣΜΑΤΑ</Link></li>
+              <li><Link href="/open-calls" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</Link></li>
               <li><Link href="/participation" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΣΥΜΜΕΤΟΧΗ</Link></li>
               <li><Link href="/transparency" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΔΙΑΦΑΝΕΙΑ</Link></li>
             </ul>
@@ -49,12 +49,12 @@ export default function Footer({ variant = 'default' }: FooterProps) {
                   rel="noopener noreferrer"
                   className="hover:text-coral dark:hover:text-coral-light transition-colors"
                 >
-                  Λ.ΑΛΕΞΑΝΔΡΑΣ 48, 11473, ΑΘΗΝΑ
+                  Λ. Αλεξάνδρας 48, 114 73, Αθήνα
                 </a>
               </li>
               <li>
-                <a href="mailto:HELLO@CULTUREFORCHANGE.NET" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                  HELLO@CULTUREFORCHANGE.NET
+                <a href="mailto:hello@cultureforchange.net" className="hover:text-coral dark:hover:text-coral-light transition-colors">
+                  hello@cultureforchange.net
                 </a>
               </li>
               <li>
@@ -69,42 +69,32 @@ export default function Footer({ variant = 'default' }: FooterProps) {
             <div>
               <h3 className="font-bold mb-3 text-coral dark:text-coral-light text-xs">ΠΟΛΙΤΙΚΗ</h3>
             <ul className="space-y-1.5 text-xs dark:text-gray-300">
-              <li><Link href="/terms" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΟΡΟΙ & ΠΡΟΫΠΟΘΕΣΕΙΣ</Link></li>
-              <li><Link href="/privacy" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΠΟΛΙΤΙΚΗ ΑΠΟΡΡΗΤΟΥ</Link></li>
-              <li><Link href="/cookies" className="hover:text-coral dark:hover:text-coral-light transition-colors">ΠΟΛΙΤΙΚΗ COOKIES</Link></li>
+              <li><Link href="/terms" className="hover:text-coral dark:hover:text-coral-light transition-colors">Όροι & Προϋποθέσεις</Link></li>
+              <li><Link href="/privacy" className="hover:text-coral dark:hover:text-coral-light transition-colors">Πολιτική Απορρήτου</Link></li>
+              <li><Link href="/cookies" className="hover:text-coral dark:hover:text-coral-light transition-colors">Πολιτική Cookies</Link></li>
             </ul>
             </div>
 
-            {/* Social Media - aligned with Yoryos Styl */}
+            {/* Social Media Icons */}
             <div className="relative" style={{marginRight: '-0.15em'}}>
               <h3 className="font-bold mb-3 text-coral dark:text-coral-light text-xs text-right">SOCIAL MEDIA</h3>
-              <ul className="space-y-1.5 text-xs text-right dark:text-gray-300">
-                <li>
-                  <a href="https://www.linkedin.com/company/culture-for-change-gr/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                    LINKED IN
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.facebook.com/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                    FACEBOOK
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.instagram.com/culture_for_change/" target="_blank" rel="noopener noreferrer" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                    INSTAGRAM
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.youtube.com/channel/UCKFq7TQlenx36UPc3F63Opw" target="_blank" rel="noopener noreferrer" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                    YOUTUBE
-                  </a>
-                </li>
-                <li>
-                  <a href="https://vimeo.com/user165582483" target="_blank" rel="noopener noreferrer" className="hover:text-coral dark:hover:text-coral-light transition-colors">
-                    VIMEO
-                  </a>
-                </li>
-              </ul>
+              <div className="grid grid-cols-2 gap-3 justify-items-end">
+                <a href="https://www.linkedin.com/company/culture-for-change-gr/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity w-6 h-6 flex items-center justify-center">
+                  <Image src="/linkedin-icon-lg.png" alt="LinkedIn" width={24} height={24} className="dark:invert w-full h-full object-contain" />
+                </a>
+                <a href="https://www.facebook.com/cultureforchange" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity w-6 h-6 flex items-center justify-center">
+                  <Image src="/facebook-icon-lg.png" alt="Facebook" width={24} height={24} className="dark:invert w-full h-full object-contain" />
+                </a>
+                <a href="https://www.instagram.com/culture_for_change/" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity w-6 h-6 flex items-center justify-center">
+                  <Image src="/instagram-icon-lg.png" alt="Instagram" width={24} height={24} className="dark:invert w-full h-full object-contain" />
+                </a>
+                <a href="https://www.youtube.com/channel/UCKFq7TQlenx36UPc3F63Opw" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity w-6 h-6 flex items-center justify-center">
+                  <Image src="/youtube-icon-lg.png" alt="YouTube" width={24} height={24} className="dark:invert w-full h-full object-contain" />
+                </a>
+                <a href="https://vimeo.com/user165582483" target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-opacity w-6 h-6 flex items-center justify-center">
+                  <Image src="/vimeo-square-icon-md.png" alt="Vimeo" width={24} height={24} className="dark:invert w-full h-full object-contain" />
+                </a>
+              </div>
             </div>
           </div>
         </div>

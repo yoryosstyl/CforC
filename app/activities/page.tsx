@@ -12,20 +12,51 @@ import Image from 'next/image'
 import { getActivities } from '@/lib/strapi'
 import type { StrapiResponse, Activity } from '@/lib/types'
 
+// Helper function to extract text from Strapi rich text blocks
+function extractTextFromBlocks(blocks: any): string {
+  if (!blocks) return ''
+  if (typeof blocks === 'string') return blocks
+
+  if (Array.isArray(blocks)) {
+    return blocks
+      .map((block: any) => {
+        if (block.type === 'paragraph' && block.children) {
+          return block.children.map((child: any) => child.text || '').join('')
+        }
+        return ''
+      })
+      .filter(Boolean)
+      .join(' ')
+  }
+
+  return ''
+}
+
 export default function ActivitiesPage() {
   const [allActivities, setAllActivities] = useState<Activity[]>([])
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isGreek, setIsGreek] = useState(true)
 
   // Filter states
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortBy, setSortBy] = useState<'date' | 'title'>('date')
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
-  const [categoryFilter, setCategoryFilter] = useState<string>('all')
+  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current')
 
-  // Get unique categories
-  const categories = ['all', ...new Set(allActivities.map(a => a.Category).filter(Boolean))]
+  // Detect language changes (e.g., Google Translate)
+  useEffect(() => {
+    const checkLanguage = () => {
+      const lang = document.documentElement.lang
+      setIsGreek(lang === 'el' || lang === 'el-GR' || lang === '')
+    }
+
+    checkLanguage()
+
+    // Check periodically for language changes
+    const interval = setInterval(checkLanguage, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     async function fetchActivities() {
@@ -48,35 +79,38 @@ export default function ActivitiesPage() {
 
   // Apply filters and sorting
   useEffect(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+
     let result = [...allActivities]
 
-    // Apply search filter
+    // Filter by date based on active tab
+    if (activeTab === 'current') {
+      // Current activities: date is today or in the future
+      result = result.filter(activity => new Date(activity.Date) >= today)
+      // Sort by closest date first
+      result.sort((a, b) => new Date(a.Date).getTime() - new Date(b.Date).getTime())
+    } else {
+      // Previous activities: date has passed
+      result = result.filter(activity => new Date(activity.Date) < today)
+      // Sort by closest to current date first (most recent date first)
+      result.sort((a, b) => new Date(b.Date).getTime() - new Date(a.Date).getTime())
+    }
+
+    // Apply search filter (search in both title and description)
     if (searchQuery) {
+      const descriptionTextMap = new Map(
+        result.map(activity => [activity.id, extractTextFromBlocks(activity.Description)])
+      )
+
       result = result.filter(activity =>
-        activity.Title.toLowerCase().includes(searchQuery.toLowerCase())
+        activity.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        descriptionTextMap.get(activity.id)?.toLowerCase().includes(searchQuery.toLowerCase())
       )
     }
 
-    // Apply category filter
-    if (categoryFilter !== 'all') {
-      result = result.filter(activity => activity.Category === categoryFilter)
-    }
-
-    // Apply sorting
-    result.sort((a, b) => {
-      let comparison = 0
-
-      if (sortBy === 'date') {
-        comparison = new Date(a.Date).getTime() - new Date(b.Date).getTime()
-      } else {
-        comparison = a.Title.localeCompare(b.Title)
-      }
-
-      return sortOrder === 'asc' ? comparison : -comparison
-    })
-
     setFilteredActivities(result)
-  }, [allActivities, searchQuery, sortBy, sortOrder, categoryFilter])
+  }, [allActivities, searchQuery, activeTab])
 
   return (
     <main className="min-h-screen dark:bg-gray-900">
@@ -87,7 +121,7 @@ export default function ActivitiesPage() {
         <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
-              <div>ACTIVITIES</div>
+              <div>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</div>
             </h1>
           </div>
         </div>
@@ -99,79 +133,55 @@ export default function ActivitiesPage() {
           {/* Loading Indicator */}
           {loading && <LoadingIndicator />}
 
-          {/* Filters Section */}
-          <div className="mb-12 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-900">
-            <div className="grid md:grid-cols-4 gap-4">
-              {/* Search */}
-              <div>
-                <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Αναζήτηση
-                </label>
-                <input
-                  id="search"
-                  type="text"
-                  placeholder="Αναζήτηση κατά τίτλο..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
-                />
-              </div>
-
-              {/* Category Filter */}
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Κατηγορία
-                </label>
-                <select
-                  id="category"
-                  value={categoryFilter}
-                  onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
-                >
-                  <option value="all">Όλες οι κατηγορίες</option>
-                  {categories.filter(c => c !== 'all').map(category => (
-                    <option key={category} value={category}>{category}</option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Sort By */}
-              <div>
-                <label htmlFor="sortBy" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Ταξινόμηση κατά
-                </label>
-                <select
-                  id="sortBy"
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as 'date' | 'title')}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
-                >
-                  <option value="date">Ημερομηνία</option>
-                  <option value="title">Τίτλος</option>
-                </select>
-              </div>
-
-              {/* Sort Order */}
-              <div>
-                <label htmlFor="sortOrder" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
-                  Σειρά
-                </label>
-                <select
-                  id="sortOrder"
-                  value={sortOrder}
-                  onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
-                >
-                  <option value="desc">Φθίνουσα</option>
-                  <option value="asc">Αύξουσα</option>
-                </select>
-              </div>
+          {/* Tabs and Search Section */}
+          <div className="mb-12">
+            {/* Tabs */}
+            <div className="flex gap-4 mb-6 border-b border-gray-200 dark:border-gray-700">
+              <button
+                onClick={() => setActiveTab('current')}
+                className={`px-6 py-3 font-medium transition-all ${
+                  activeTab === 'current'
+                    ? 'text-coral dark:text-coral-light border-b-2 border-coral dark:border-coral-light'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-coral dark:hover:text-coral-light'
+                }`}
+              >
+                Τρέχουσες
+              </button>
+              <button
+                onClick={() => setActiveTab('previous')}
+                className={`px-6 py-3 font-medium transition-all ${
+                  activeTab === 'previous'
+                    ? 'text-coral dark:text-coral-light border-b-2 border-coral dark:border-coral-light'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-coral dark:hover:text-coral-light'
+                }`}
+              >
+                Προηγούμενες
+              </button>
             </div>
 
-            {/* Results count */}
-            <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
-              Βρέθηκαν {filteredActivities.length} δραστηριότητες
-            </div>
+            {/* Search - Only show for Greek language */}
+            {isGreek && (
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 shadow-md dark:shadow-gray-900">
+                <div className="max-w-xl">
+                  <label htmlFor="search" className="block text-sm font-medium text-charcoal dark:text-gray-200 mb-2">
+                    Αναζήτηση
+                  </label>
+                  <input
+                    id="search"
+                    type="text"
+                    placeholder="Αναζήτηση κατά λέξη..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent"
+                  />
+                </div>
+
+                {/* Results count */}
+                <div className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+                  Βρέθηκαν {filteredActivities.length} δραστηριότητες
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Error State */}

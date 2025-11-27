@@ -24,7 +24,7 @@ export default function ParticipationPage() {
         <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
-              GET INVOLVED
+              ΘΕΛΩ ΝΑ ΓΙΝΩ ΜΕΛΟΣ
             </h1>
           </div>
         </div>
@@ -35,10 +35,6 @@ export default function ParticipationPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section 1: Two-column layout with text */}
           <div className="mb-20">
-            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2 uppercase">Γίνε Μέλος</p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-12 dark:text-gray-100">
-              ΘΕΛΩ ΝΑ ΓΙΝΩ ΜΕΛΟΣ
-            </h2>
 
             <div className="grid md:grid-cols-2 gap-12">
               {/* Left Column */}
@@ -62,7 +58,7 @@ export default function ParticipationPage() {
                   target="_blank"
                   className="inline-block text-coral dark:text-coral-light hover:underline font-medium mt-4"
                 >
-                  Διάβασε τις Οδηγίες μας
+                  Οδηγός Τσέπης (χρήσιμες πληροφορίες για τη συμμετοχή των μελλών)
                 </Link>
               </div>
 
@@ -150,11 +146,11 @@ export default function ParticipationPage() {
               <label htmlFor="participation-terms-checkbox" className="text-sm dark:text-gray-200 cursor-pointer">
                 Συμφωνώ με τους{' '}
                 <Link href="/terms" className="underline hover:no-underline dark:text-coral-light">
-                  όρους
+                  όρους/προϋποθέσεις
                 </Link>
-                {' '}και τις{' '}
+                {' '}και την{' '}
                 <Link href="/privacy" className="underline hover:no-underline dark:text-coral-light">
-                  προϋποθέσεις
+                  πολιτική απορρήτου
                 </Link>
               </label>
             </div>

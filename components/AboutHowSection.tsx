@@ -82,7 +82,6 @@ export default function AboutHowSection() {
             isHeaderVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
           }`}
         >
-          <p className="text-coral dark:text-coral-light text-sm font-medium mb-4">ΠΩΣ ΤΟ ΚΑΝΟΥΜΕ</p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight dark:text-gray-100">
             ΠΩΣ ΤΟ CFORC<br />
             ΠΡΟΩΘΕΙ ΤΗΝ ΑΛΛΑΓΗ;
