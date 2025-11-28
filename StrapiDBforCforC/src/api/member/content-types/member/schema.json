@@ -101,19 +101,19 @@
       "type": "string",
       "required": false
     },
-    "password": {
+    "authHash": {
       "type": "string",
       "required": false
     },
-    "magicLinkToken": {
+    "verificationCode": {
       "type": "string",
       "required": false
     },
-    "magicLinkExpiry": {
+    "verificationExpiry": {
       "type": "datetime",
       "required": false
     },
-    "lastLoginAt": {
+    "lastAccessAt": {
       "type": "datetime",
       "required": false
     }
