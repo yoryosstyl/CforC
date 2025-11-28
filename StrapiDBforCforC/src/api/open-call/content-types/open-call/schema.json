@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "open_calls",
+  "info": {
+    "singularName": "open-call",
+    "pluralName": "open-calls",
+    "displayName": "Open Calls"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 500
+    },
+    "Deadline": {
+      "type": "date",
+      "required": true
+    },
+    "Description": {
+      "type": "blocks",
+      "required": true
+    },
+    "Priority": {
+      "type": "boolean",
+      "default": false
+    },
+    "Link": {
+      "type": "string",
+      "required": true,
+      "maxLength": 2000
+    },
+    "Image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    }
+  }
+}

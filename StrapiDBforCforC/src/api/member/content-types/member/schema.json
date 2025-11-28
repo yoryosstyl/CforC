@@ -1,0 +1,121 @@
+{
+  "kind": "collectionType",
+  "collectionName": "members",
+  "info": {
+    "singularName": "member",
+    "pluralName": "members",
+    "displayName": "Member"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string",
+      "required": true
+    },
+    "Bio": {
+      "type": "blocks",
+      "required": true
+    },
+    "FieldsOfWork": {
+      "type": "string",
+      "required": true
+    },
+    "City": {
+      "type": "string",
+      "required": true
+    },
+    "Province": {
+      "type": "string",
+      "required": true
+    },
+    "Email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "Phone": {
+      "type": "string",
+      "required": false
+    },
+    "Websites": {
+      "type": "text",
+      "required": false
+    },
+    "Image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Project1Title": {
+      "type": "string",
+      "required": false
+    },
+    "Project1Description": {
+      "type": "blocks",
+      "required": false
+    },
+    "Project1Pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Project1Tags": {
+      "type": "string",
+      "required": false
+    },
+    "Project2Title": {
+      "type": "string",
+      "required": false
+    },
+    "Project2Description": {
+      "type": "blocks",
+      "required": false
+    },
+    "Project2Pictures": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "Project2Tags": {
+      "type": "string",
+      "required": false
+    },
+    "password": {
+      "type": "string",
+      "required": false
+    },
+    "magicLinkToken": {
+      "type": "string",
+      "required": false
+    },
+    "magicLinkExpiry": {
+      "type": "datetime",
+      "required": false
+    },
+    "lastLoginAt": {
+      "type": "datetime",
+      "required": false
+    }
+  }
+}
