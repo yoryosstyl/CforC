@@ -5,6 +5,8 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LanguageSwitcher from './LanguageSwitcher'
 import { useTheme } from './ThemeProvider'
+import { useAuth } from './AuthProvider'
+import ConfirmationModal from './ConfirmationModal'
 
 interface NavigationProps {
   variant?: 'default' | 'members'
@@ -13,7 +15,9 @@ interface NavigationProps {
 export default function Navigation({ variant = 'default' }: NavigationProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const { user, isAuthenticated, logout } = useAuth()
   const pathname = usePathname()
 
   useEffect(() => {
@@ -26,6 +30,11 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = async () => {
+    await logout()
+    setIsLogoutModalOpen(false)
+  }
 
   const bgColor = variant === 'members' ? 'bg-[#F5F0EB] dark:bg-gray-800' : 'bg-coral dark:bg-gray-900'
   const bgOpacity = isScrolled ? (variant === 'members' ? 'bg-[#F5F0EB]/90 dark:bg-gray-800/90' : 'bg-coral/90 dark:bg-gray-900/90') : bgColor
@@ -45,7 +54,7 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className={`hidden md:flex items-center ${isAuthenticated ? 'space-x-4' : 'space-x-8'}`}>
             {/* Dark Mode Toggle */}
             <button
               onClick={toggleTheme}
@@ -68,15 +77,34 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
             <Link href="/activities" className={`text-sm transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
             </Link>
-            <Link href="/open-calls" className={`text-sm transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
-              ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ
-            </Link>
+            {isAuthenticated && (
+              <Link href="/open-calls" className={`text-sm transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
+                ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ
+              </Link>
+            )}
             <Link href="/participation" className={`text-sm transition-all ${pathname === '/participation' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
               ΣΥΜΜΕΤΟΧΗ
             </Link>
-            <Link href="/members" className="bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 px-6 py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+            <Link href="/members" className={`bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 ${isAuthenticated ? 'px-4' : 'px-6'} py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors`}>
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
+            {isAuthenticated ? (
+              <>
+                <Link href="/profile" className={`text-sm transition-all ${pathname === '/profile' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
+                  ΠΡΟΦΙΛ
+                </Link>
+                <button
+                  onClick={() => setIsLogoutModalOpen(true)}
+                  className="text-sm font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light transition-all"
+                >
+                  ΑΠΟΣΥΝΔΕΣΗ
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className={`text-sm transition-all ${pathname === '/login' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
+                ΣΥΝΔΕΣΗ
+              </Link>
+            )}
             <LanguageSwitcher />
           </div>
 
@@ -123,11 +151,26 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
             </button>
             <Link href="/about" className={`block text-sm py-2 transition-all ${pathname === '/about' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
             <Link href="/activities" className={`block text-sm py-2 transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
-            <Link href="/open-calls" className={`block text-sm py-2 transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</Link>
+            {isAuthenticated && (
+              <Link href="/open-calls" className={`block text-sm py-2 transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</Link>
+            )}
             <Link href="/participation" className={`block text-sm py-2 transition-all ${pathname === '/participation' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΥΜΜΕΤΟΧΗ</Link>
             <Link href="/members" className="block w-full bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 px-6 py-2 rounded-full text-sm font-medium text-center">
               ΕΥΡΕΣΗ ΜΕΛΩΝ
             </Link>
+            {isAuthenticated ? (
+              <>
+                <Link href="/profile" className={`block text-sm py-2 transition-all ${pathname === '/profile' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΠΡΟΦΙΛ</Link>
+                <button
+                  onClick={() => setIsLogoutModalOpen(true)}
+                  className="block text-sm py-2 font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light transition-all text-left"
+                >
+                  ΑΠΟΣΥΝΔΕΣΗ
+                </button>
+              </>
+            ) : (
+              <Link href="/login" className={`block text-sm py-2 transition-all ${pathname === '/login' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΥΝΔΕΣΗ</Link>
+            )}
             <div className="pt-2">
               <LanguageSwitcher />
             </div>
@@ -135,6 +178,18 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
           </div>
         )}
       </div>
+
+      {/* Logout Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isLogoutModalOpen}
+        title="Αποσύνδεση"
+        message="Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;"
+        confirmText="Αποσύνδεση"
+        cancelText="Ακύρωση"
+        onConfirm={handleLogout}
+        onCancel={() => setIsLogoutModalOpen(false)}
+        variant="info"
+      />
     </nav>
   )
 }
