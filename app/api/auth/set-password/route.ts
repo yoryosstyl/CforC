@@ -102,9 +102,9 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hashPassword(password)
 
-    // Update member record: set password and last login time
+    // Update auth token record: set password, clear magic link fields, update last login
     const updateResponse = await fetch(
-      `${STRAPI_URL}/api/members/${decoded.memberId}`,
+      `${STRAPI_URL}/api/auth-tokens/${authToken.documentId || authToken.id}`,
       {
         method: 'PUT',
         headers: {
@@ -113,7 +113,10 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           data: {
-            password: hashedPassword,
+            passwordHash: hashedPassword,
+            tokenHash: null,
+            tokenExpiry: null,
+            tokenType: null,
             lastLoginAt: new Date().toISOString()
           }
         })
@@ -121,23 +124,12 @@ export async function POST(request: NextRequest) {
     )
 
     if (!updateResponse.ok) {
-      console.error('Failed to update member password:', await updateResponse.text())
+      console.error('Failed to update password:', await updateResponse.text())
       return NextResponse.json(
         { error: 'Σφάλμα κατά την αποθήκευση του κωδικού' },
         { status: 500 }
       )
     }
-
-    // Delete the used auth token
-    await fetch(
-      `${STRAPI_URL}/api/auth-tokens/${authToken.documentId || authToken.id}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${STRAPI_API_TOKEN}`
-        }
-      }
-    )
 
     // Generate session token
     const sessionToken = generateSessionToken(decoded.memberId, decoded.email)

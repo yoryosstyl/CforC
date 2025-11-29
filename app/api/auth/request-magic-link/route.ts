@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     const expiryTime = new Date()
     expiryTime.setHours(expiryTime.getHours() + 6)
 
-    // Delete any existing auth tokens for this email
+    // Check if auth token record exists for this email
     const existingTokensResponse = await fetch(
       `${STRAPI_URL}/api/auth-tokens?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
@@ -79,45 +79,77 @@ export async function POST(request: NextRequest) {
       }
     )
 
+    let tokenResponse
+
     if (existingTokensResponse.ok) {
       const existingTokens = await existingTokensResponse.json()
-      // Delete old tokens
-      for (const token of existingTokens.data || []) {
-        await fetch(
-          `${STRAPI_URL}/api/auth-tokens/${token.documentId || token.id}`,
+
+      if (existingTokens.data && existingTokens.data.length > 0) {
+        // Update existing record (preserves passwordHash)
+        const existingToken = existingTokens.data[0]
+        tokenResponse = await fetch(
+          `${STRAPI_URL}/api/auth-tokens/${existingToken.documentId || existingToken.id}`,
           {
-            method: 'DELETE',
+            method: 'PUT',
             headers: {
+              'Content-Type': 'application/json',
               Authorization: `Bearer ${STRAPI_API_TOKEN}`
-            }
+            },
+            body: JSON.stringify({
+              data: {
+                tokenHash: tokenHash,
+                tokenExpiry: expiryTime.toISOString(),
+                tokenType: 'magic-link'
+              }
+            })
+          }
+        )
+      } else {
+        // Create new auth token record
+        tokenResponse = await fetch(
+          `${STRAPI_URL}/api/auth-tokens`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${STRAPI_API_TOKEN}`
+            },
+            body: JSON.stringify({
+              data: {
+                email: email,
+                tokenHash: tokenHash,
+                tokenExpiry: expiryTime.toISOString(),
+                tokenType: 'magic-link'
+              }
+            })
           }
         )
       }
+    } else {
+      // Create new auth token record
+      tokenResponse = await fetch(
+        `${STRAPI_URL}/api/auth-tokens`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${STRAPI_API_TOKEN}`
+          },
+          body: JSON.stringify({
+            data: {
+              email: email,
+              tokenHash: tokenHash,
+              tokenExpiry: expiryTime.toISOString(),
+              tokenType: 'magic-link'
+            }
+          })
+        }
+      )
     }
 
-    // Create new auth token record
-    const createTokenResponse = await fetch(
-      `${STRAPI_URL}/api/auth-tokens`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${STRAPI_API_TOKEN}`
-        },
-        body: JSON.stringify({
-          data: {
-            email: email,
-            tokenHash: tokenHash,
-            tokenExpiry: expiryTime.toISOString(),
-            tokenType: 'magic-link'
-          }
-        })
-      }
-    )
-
-    if (!createTokenResponse.ok) {
-      const errorText = await createTokenResponse.text()
-      console.error('Failed to create auth token:', errorText)
+    if (!tokenResponse.ok) {
+      const errorText = await tokenResponse.text()
+      console.error('Failed to save auth token:', errorText)
       return NextResponse.json(
         { error: 'Σφάλμα κατά την αποθήκευση του συνδέσμου' },
         { status: 500 }

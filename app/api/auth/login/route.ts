@@ -65,16 +65,38 @@ export async function POST(request: NextRequest) {
 
     const member = membersData.data[0]
 
-    // Check if member has set a password
-    if (!member.password) {
+    // Look up auth credentials from auth-tokens collection
+    const authTokenResponse = await fetch(
+      `${STRAPI_URL}/api/auth-tokens?filters[email][$eq]=${encodeURIComponent(email)}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`
+        }
+      }
+    )
+
+    if (!authTokenResponse.ok) {
+      console.error('Auth token fetch failed:', await authTokenResponse.text())
+      return NextResponse.json(
+        { error: 'Σφάλμα σύνδεσης' },
+        { status: 500 }
+      )
+    }
+
+    const authTokenData = await authTokenResponse.json()
+
+    if (!authTokenData.data || authTokenData.data.length === 0 || !authTokenData.data[0].passwordHash) {
       return NextResponse.json(
         { error: 'Δεν έχετε ορίσει κωδικό. Παρακαλώ ζητήστε σύνδεσμο σύνδεσης.' },
         { status: 401 }
       )
     }
 
+    const authToken = authTokenData.data[0]
+
     // Verify password
-    const isPasswordValid = await verifyPassword(password, member.password)
+    const isPasswordValid = await verifyPassword(password, authToken.passwordHash)
     if (!isPasswordValid) {
       return NextResponse.json(
         { error: 'Λάθος email ή κωδικός' },
@@ -82,9 +104,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Update last login time
+    // Update last login time in auth-tokens
     await fetch(
-      `${STRAPI_URL}/api/members/${member.documentId || member.id}`,
+      `${STRAPI_URL}/api/auth-tokens/${authToken.documentId || authToken.id}`,
       {
         method: 'PUT',
         headers: {
