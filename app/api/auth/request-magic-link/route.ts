@@ -68,48 +68,9 @@ export async function POST(request: NextRequest) {
     const expiryTime = new Date()
     expiryTime.setHours(expiryTime.getHours() + 6)
 
-    // Update member record with magic link token and expiry
-    console.log('Attempting to update member:', {
-      memberId: member.documentId || member.id,
-      url: `${STRAPI_URL}/api/members/${member.documentId || member.id}`,
-      tokenHashPreview: tokenHash.substring(0, 20) + '...',
-      expiry: expiryTime.toISOString()
-    })
-
-    const updateResponse = await fetch(
-      `${STRAPI_URL}/api/members/${member.documentId || member.id}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${STRAPI_API_TOKEN}`
-        },
-        body: JSON.stringify({
-          data: {
-            magicLinkToken: tokenHash,
-            magicLinkExpiry: expiryTime.toISOString()
-          }
-        })
-      }
-    )
-
-    console.log('Update response status:', updateResponse.status)
-
-    if (!updateResponse.ok) {
-      const errorText = await updateResponse.text()
-      console.error('Failed to update member:', errorText)
-      return NextResponse.json(
-        { error: 'Σφάλμα κατά την αποθήκευση του συνδέσμου' },
-        { status: 500 }
-      )
-    }
-
-    const updateResult = await updateResponse.json()
-    console.log('Update result - allFields:', Object.keys(updateResult.data || {}))
-
-    // Verify if the data was actually saved by fetching it again
-    const verifyResponse = await fetch(
-      `${STRAPI_URL}/api/members/${member.documentId || member.id}`,
+    // Delete any existing auth tokens for this email
+    const existingTokensResponse = await fetch(
+      `${STRAPI_URL}/api/auth-tokens?filters[email][$eq]=${encodeURIComponent(email)}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -117,10 +78,51 @@ export async function POST(request: NextRequest) {
         }
       }
     )
-    const verifyData = await verifyResponse.json()
-    console.log('Verification fetch - allFields:', Object.keys(verifyData.data || {}))
-    console.log('Verification - has verificationCode:', !!verifyData.data?.verificationCode)
-    console.log('Verification - has verificationExpiry:', !!verifyData.data?.verificationExpiry)
+
+    if (existingTokensResponse.ok) {
+      const existingTokens = await existingTokensResponse.json()
+      // Delete old tokens
+      for (const token of existingTokens.data || []) {
+        await fetch(
+          `${STRAPI_URL}/api/auth-tokens/${token.documentId || token.id}`,
+          {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${STRAPI_API_TOKEN}`
+            }
+          }
+        )
+      }
+    }
+
+    // Create new auth token record
+    const createTokenResponse = await fetch(
+      `${STRAPI_URL}/api/auth-tokens`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`
+        },
+        body: JSON.stringify({
+          data: {
+            email: email,
+            tokenHash: tokenHash,
+            tokenExpiry: expiryTime.toISOString(),
+            tokenType: 'magic-link'
+          }
+        })
+      }
+    )
+
+    if (!createTokenResponse.ok) {
+      const errorText = await createTokenResponse.text()
+      console.error('Failed to create auth token:', errorText)
+      return NextResponse.json(
+        { error: 'Σφάλμα κατά την αποθήκευση του συνδέσμου' },
+        { status: 500 }
+      )
+    }
 
     // Create magic link URL
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.nextUrl.origin

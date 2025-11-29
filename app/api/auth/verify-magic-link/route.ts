@@ -29,9 +29,9 @@ export async function POST(request: NextRequest) {
     // Hash the token to compare with database
     const tokenHash = hashToken(token)
 
-    // Fetch member from database
-    const memberResponse = await fetch(
-      `${STRAPI_URL}/api/members/${decoded.memberId}`,
+    // Look up the auth token in the auth-tokens collection
+    const authTokenResponse = await fetch(
+      `${STRAPI_URL}/api/auth-tokens?filters[email][$eq]=${encodeURIComponent(decoded.email)}&filters[tokenHash][$eq]=${tokenHash}&filters[tokenType][$eq]=magic-link`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -40,35 +40,28 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    if (!memberResponse.ok) {
-      console.error('Member fetch failed:', await memberResponse.text())
+    if (!authTokenResponse.ok) {
+      console.error('Auth token fetch failed:', await authTokenResponse.text())
       return NextResponse.json(
-        { error: 'Μέλος δεν βρέθηκε' },
-        { status: 404 }
+        { error: 'Σφάλμα επαλήθευσης συνδέσμου' },
+        { status: 500 }
       )
     }
 
-    const memberData = await memberResponse.json()
-    const member = memberData.data
+    const authTokenData = await authTokenResponse.json()
 
-    // Check if token matches and hasn't expired
-    console.log('Token comparison:', {
-      hasStoredToken: !!member.magicLinkToken,
-      tokensMatch: member.magicLinkToken === tokenHash,
-      storedToken: member.magicLinkToken?.substring(0, 20) + '...',
-      computedHash: tokenHash.substring(0, 20) + '...'
-    })
-
-    if (!member.magicLinkToken || member.magicLinkToken !== tokenHash) {
+    if (!authTokenData.data || authTokenData.data.length === 0) {
       return NextResponse.json(
         { error: 'Μη έγκυρος σύνδεσμος' },
         { status: 401 }
       )
     }
 
+    const authToken = authTokenData.data[0]
+
     // Check expiry
-    if (member.magicLinkExpiry) {
-      const expiryDate = new Date(member.magicLinkExpiry)
+    if (authToken.tokenExpiry) {
+      const expiryDate = new Date(authToken.tokenExpiry)
       if (expiryDate < new Date()) {
         return NextResponse.json(
           { error: 'Ο σύνδεσμος έχει λήξει. Παρακαλώ ζητήστε έναν νέο.' },

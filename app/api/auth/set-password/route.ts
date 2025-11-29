@@ -38,6 +38,46 @@ export async function POST(request: NextRequest) {
     // Hash the token to compare with database
     const tokenHash = hashToken(token)
 
+    // Look up the auth token in the auth-tokens collection
+    const authTokenResponse = await fetch(
+      `${STRAPI_URL}/api/auth-tokens?filters[email][$eq]=${encodeURIComponent(decoded.email)}&filters[tokenHash][$eq]=${tokenHash}&filters[tokenType][$eq]=magic-link`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`
+        }
+      }
+    )
+
+    if (!authTokenResponse.ok) {
+      return NextResponse.json(
+        { error: 'Σφάλμα επαλήθευσης συνδέσμου' },
+        { status: 500 }
+      )
+    }
+
+    const authTokenData = await authTokenResponse.json()
+
+    if (!authTokenData.data || authTokenData.data.length === 0) {
+      return NextResponse.json(
+        { error: 'Μη έγκυρος σύνδεσμος' },
+        { status: 401 }
+      )
+    }
+
+    const authToken = authTokenData.data[0]
+
+    // Check expiry
+    if (authToken.tokenExpiry) {
+      const expiryDate = new Date(authToken.tokenExpiry)
+      if (expiryDate < new Date()) {
+        return NextResponse.json(
+          { error: 'Ο σύνδεσμος έχει λήξει' },
+          { status: 401 }
+        )
+      }
+    }
+
     // Fetch member from database
     const memberResponse = await fetch(
       `${STRAPI_URL}/api/members/${decoded.memberId}?populate=Image`,
@@ -59,28 +99,10 @@ export async function POST(request: NextRequest) {
     const memberData = await memberResponse.json()
     const member = memberData.data
 
-    // Verify token matches and hasn't expired
-    if (!member.magicLinkToken || member.magicLinkToken !== tokenHash) {
-      return NextResponse.json(
-        { error: 'Μη έγκυρος σύνδεσμος' },
-        { status: 401 }
-      )
-    }
-
-    if (member.magicLinkExpiry) {
-      const expiryDate = new Date(member.magicLinkExpiry)
-      if (expiryDate < new Date()) {
-        return NextResponse.json(
-          { error: 'Ο σύνδεσμος έχει λήξει' },
-          { status: 401 }
-        )
-      }
-    }
-
     // Hash password
     const hashedPassword = await hashPassword(password)
 
-    // Update member record: set password, clear magic link token
+    // Update member record: set password and last login time
     const updateResponse = await fetch(
       `${STRAPI_URL}/api/members/${decoded.memberId}`,
       {
@@ -92,8 +114,6 @@ export async function POST(request: NextRequest) {
         body: JSON.stringify({
           data: {
             password: hashedPassword,
-            magicLinkToken: null,
-            magicLinkExpiry: null,
             lastLoginAt: new Date().toISOString()
           }
         })
@@ -107,6 +127,17 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Delete the used auth token
+    await fetch(
+      `${STRAPI_URL}/api/auth-tokens/${authToken.documentId || authToken.id}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${STRAPI_API_TOKEN}`
+        }
+      }
+    )
 
     // Generate session token
     const sessionToken = generateSessionToken(decoded.memberId, decoded.email)
