@@ -7,6 +7,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import EditableField from '@/components/profile/EditableField'
 import EditableImage from '@/components/profile/EditableImage'
+import EditableMultipleImages from '@/components/profile/EditableMultipleImages'
 import ConfirmationModal from '@/components/ConfirmationModal'
 
 export default function ProfilePage() {
@@ -21,11 +22,23 @@ export default function ProfilePage() {
     City: '',
     Province: '',
     Phone: '',
-    Websites: ''
+    Websites: '',
+    Project1Title: '',
+    Project1Tags: '',
+    Project1Description: '',
+    Project2Title: '',
+    Project2Tags: '',
+    Project2Description: ''
   })
 
   const [originalData, setOriginalData] = useState(formData)
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const [project1Images, setProject1Images] = useState<File[]>([])
+  const [project2Images, setProject2Images] = useState<File[]>([])
+  const [project1KeptImageIds, setProject1KeptImageIds] = useState<number[]>([])
+  const [project2KeptImageIds, setProject2KeptImageIds] = useState<number[]>([])
+  const [originalProject1ImageIds, setOriginalProject1ImageIds] = useState<number[]>([])
+  const [originalProject2ImageIds, setOriginalProject2ImageIds] = useState<number[]>([])
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [showUnsavedModal, setShowUnsavedModal] = useState(false)
@@ -49,18 +62,40 @@ export default function ProfilePage() {
         City: user.City || '',
         Province: user.Province || '',
         Phone: user.Phone || '',
-        Websites: user.Websites || ''
+        Websites: user.Websites || '',
+        Project1Title: user.Project1Title || '',
+        Project1Tags: user.Project1Tags || '',
+        Project1Description: user.Project1Description || '',
+        Project2Title: user.Project2Title || '',
+        Project2Tags: user.Project2Tags || '',
+        Project2Description: user.Project2Description || ''
       }
       setFormData(data)
       setOriginalData(data)
+
+      // Store original image IDs and initialize kept IDs with the same values
+      const project1Ids = (user.Project1Pictures || []).map(img => img.id).filter((id): id is number => id !== undefined)
+      const project2Ids = (user.Project2Pictures || []).map(img => img.id).filter((id): id is number => id !== undefined)
+      setOriginalProject1ImageIds(project1Ids)
+      setOriginalProject2ImageIds(project2Ids)
+      setProject1KeptImageIds(project1Ids)
+      setProject2KeptImageIds(project2Ids)
     }
   }, [user])
 
   // Check if there are unsaved changes
   const hasUnsavedChanges = () => {
+    // Check if kept image IDs have changed
+    const project1IdsChanged = JSON.stringify(project1KeptImageIds.sort()) !== JSON.stringify(originalProject1ImageIds.sort())
+    const project2IdsChanged = JSON.stringify(project2KeptImageIds.sort()) !== JSON.stringify(originalProject2ImageIds.sort())
+
     return (
       JSON.stringify(formData) !== JSON.stringify(originalData) ||
-      imageFile !== null
+      imageFile !== null ||
+      project1Images.length > 0 ||
+      project2Images.length > 0 ||
+      project1IdsChanged ||
+      project2IdsChanged
     )
   }
 
@@ -84,28 +119,58 @@ export default function ProfilePage() {
     setSaveMessage(null)
 
     try {
+      // Exclude Email from update (it's not editable)
+      const { Email, ...dataToUpdate } = formData
       let response
 
-      if (imageFile) {
-        // Use FormData if there's an image
-        const formDataWithImage = new FormData()
-        Object.entries(formData).forEach(([key, value]) => {
-          formDataWithImage.append(key, value)
+      // Check if image IDs have changed
+      const project1IdsChanged = JSON.stringify(project1KeptImageIds.sort()) !== JSON.stringify(originalProject1ImageIds.sort())
+      const project2IdsChanged = JSON.stringify(project2KeptImageIds.sort()) !== JSON.stringify(originalProject2ImageIds.sort())
+
+      if (imageFile || project1Images.length > 0 || project2Images.length > 0 || project1IdsChanged || project2IdsChanged) {
+        // Use FormData if there are any images
+        const formDataWithImages = new FormData()
+        Object.entries(dataToUpdate).forEach(([key, value]) => {
+          formDataWithImages.append(key, value)
         })
-        formDataWithImage.append('image', imageFile)
+
+        // Add profile image
+        if (imageFile) {
+          formDataWithImages.append('image', imageFile)
+        }
+
+        // Add project 1 images
+        project1Images.forEach((file) => {
+          formDataWithImages.append('project1Images', file)
+        })
+
+        // Add project 1 kept existing image IDs
+        project1KeptImageIds.forEach((id) => {
+          formDataWithImages.append('project1KeptImageIds', id.toString())
+        })
+
+        // Add project 2 images
+        project2Images.forEach((file) => {
+          formDataWithImages.append('project2Images', file)
+        })
+
+        // Add project 2 kept existing image IDs
+        project2KeptImageIds.forEach((id) => {
+          formDataWithImages.append('project2KeptImageIds', id.toString())
+        })
 
         response = await fetch('/api/members/update', {
           method: 'POST',
-          body: formDataWithImage
+          body: formDataWithImages
         })
       } else {
-        // Use JSON if no image
+        // Use JSON if no images
         response = await fetch('/api/members/update', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(dataToUpdate)
         })
       }
 
@@ -115,9 +180,13 @@ export default function ProfilePage() {
         setSaveMessage({ type: 'success', text: 'Οι αλλαγές αποθηκεύτηκαν επιτυχώς' })
         setOriginalData(formData)
         setImageFile(null)
+        setProject1Images([])
+        setProject2Images([])
 
         // Refresh session to update user data
         await refreshSession()
+
+        // After refresh, the new original IDs and kept IDs will be set by the useEffect that watches user data
       } else {
         setSaveMessage({ type: 'error', text: data.error || 'Αποτυχία αποθήκευσης' })
       }
@@ -132,6 +201,10 @@ export default function ProfilePage() {
   const handleDiscard = () => {
     setFormData(originalData)
     setImageFile(null)
+    setProject1Images([])
+    setProject2Images([])
+    setProject1KeptImageIds(originalProject1ImageIds)
+    setProject2KeptImageIds(originalProject2ImageIds)
     setSaveMessage(null)
     setShowUnsavedModal(false)
 
@@ -237,6 +310,8 @@ export default function ProfilePage() {
                 type="email"
                 onChange={(value) => handleFieldChange('Email', value)}
                 required
+                disabled
+                helperText="Επικοινωνήστε με τον διαχειριστή για να αλλάξετε το email σας"
               />
 
               <EditableField
@@ -245,7 +320,6 @@ export default function ProfilePage() {
                 placeholder="Γράψτε μια σύντομη περιγραφή για εσάς..."
                 type="textarea"
                 onChange={(value) => handleFieldChange('Bio', value)}
-                maxLength={500}
               />
 
               <EditableField
@@ -290,6 +364,91 @@ export default function ProfilePage() {
                 type="url"
                 onChange={(value) => handleFieldChange('Websites', value)}
               />
+            </div>
+
+            {/* Projects Section */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-charcoal dark:text-gray-100">
+                Έργα
+              </h2>
+
+              {/* Project 1 */}
+              <div className="space-y-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl">
+                <h3 className="text-lg font-semibold text-charcoal dark:text-gray-100">
+                  Έργο 1
+                </h3>
+
+                <EditableField
+                  label="Τίτλος Έργου"
+                  value={formData.Project1Title}
+                  placeholder="Τίτλος του πρώτου έργου σας"
+                  onChange={(value) => handleFieldChange('Project1Title', value)}
+                />
+
+                <EditableField
+                  label="Tags/Κατηγορίες"
+                  value={formData.Project1Tags}
+                  placeholder="Design, Development, Art"
+                  onChange={(value) => handleFieldChange('Project1Tags', value)}
+                />
+
+                <EditableField
+                  label="Περιγραφή"
+                  value={formData.Project1Description}
+                  placeholder="Περιγράψτε το έργο σας..."
+                  type="textarea"
+                  onChange={(value) => handleFieldChange('Project1Description', value)}
+                />
+
+                <EditableMultipleImages
+                  label="Εικόνες Έργου"
+                  existingImages={user?.Project1Pictures}
+                  keptImageIds={project1KeptImageIds}
+                  onImagesChange={(files, keptIds) => {
+                    setProject1Images(files)
+                    setProject1KeptImageIds(keptIds)
+                  }}
+                />
+              </div>
+
+              {/* Project 2 */}
+              <div className="space-y-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl">
+                <h3 className="text-lg font-semibold text-charcoal dark:text-gray-100">
+                  Έργο 2
+                </h3>
+
+                <EditableField
+                  label="Τίτλος Έργου"
+                  value={formData.Project2Title}
+                  placeholder="Τίτλος του δεύτερου έργου σας"
+                  onChange={(value) => handleFieldChange('Project2Title', value)}
+                />
+
+                <EditableField
+                  label="Tags/Κατηγορίες"
+                  value={formData.Project2Tags}
+                  placeholder="Design, Development, Art"
+                  onChange={(value) => handleFieldChange('Project2Tags', value)}
+                />
+
+                <EditableField
+                  label="Περιγραφή"
+                  value={formData.Project2Description}
+                  placeholder="Περιγράψτε το έργο σας..."
+                  type="textarea"
+                  onChange={(value) => handleFieldChange('Project2Description', value)}
+                />
+
+                <EditableMultipleImages
+                  label="Εικόνες Έργου"
+                  existingImages={user?.Project2Pictures}
+                  keptImageIds={project2KeptImageIds}
+                  onImagesChange={(files, keptIds) => {
+                    setProject2Images(files)
+                    setProject2KeptImageIds(keptIds)
+                  }}
+                />
+              </div>
             </div>
 
             {/* Save Message */}

@@ -14,6 +14,23 @@ interface Member {
   Phone?: string
   Websites?: string
   Image?: Array<{
+    id?: number
+    url: string
+    alternativeText?: string
+  }>
+  Project1Title?: string
+  Project1Tags?: string
+  Project1Description?: string
+  Project1Pictures?: Array<{
+    id?: number
+    url: string
+    alternativeText?: string
+  }>
+  Project2Title?: string
+  Project2Tags?: string
+  Project2Description?: string
+  Project2Pictures?: Array<{
+    id?: number
     url: string
     alternativeText?: string
   }>

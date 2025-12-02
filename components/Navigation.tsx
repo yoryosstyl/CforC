@@ -75,7 +75,7 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
               ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ
             </Link>
             <Link href="/activities" className={`text-sm transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
-              ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ
+              {isAuthenticated ? 'ΔΡΑΣΕΙΣ' : 'ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ'}
             </Link>
             {isAuthenticated && (
               <Link href="/open-calls" className={`text-sm transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>
@@ -86,7 +86,7 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
               ΣΥΜΜΕΤΟΧΗ
             </Link>
             <Link href="/members" className={`bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 ${isAuthenticated ? 'px-4' : 'px-6'} py-2 rounded-full text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors`}>
-              ΕΥΡΕΣΗ ΜΕΛΩΝ
+              {isAuthenticated ? 'ΜΕΛΗ' : 'ΕΥΡΕΣΗ ΜΕΛΩΝ'}
             </Link>
             {isAuthenticated ? (
               <>
@@ -150,13 +150,13 @@ export default function Navigation({ variant = 'default' }: NavigationProps) {
               )}
             </button>
             <Link href="/about" className={`block text-sm py-2 transition-all ${pathname === '/about' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΧΕΤΙΚΑ ΜΕ ΕΜΑΣ</Link>
-            <Link href="/activities" className={`block text-sm py-2 transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</Link>
+            <Link href="/activities" className={`block text-sm py-2 transition-all ${pathname?.startsWith('/activities') ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>{isAuthenticated ? 'ΔΡΑΣΕΙΣ' : 'ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ'}</Link>
             {isAuthenticated && (
               <Link href="/open-calls" className={`block text-sm py-2 transition-all ${pathname === '/open-calls' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</Link>
             )}
             <Link href="/participation" className={`block text-sm py-2 transition-all ${pathname === '/participation' ? 'text-white dark:text-coral-light font-bold' : 'font-medium hover:text-white dark:text-gray-200 dark:hover:text-coral-light'}`}>ΣΥΜΜΕΤΟΧΗ</Link>
             <Link href="/members" className="block w-full bg-white dark:bg-gray-700 text-charcoal dark:text-gray-200 px-6 py-2 rounded-full text-sm font-medium text-center">
-              ΕΥΡΕΣΗ ΜΕΛΩΝ
+              {isAuthenticated ? 'ΜΕΛΗ' : 'ΕΥΡΕΣΗ ΜΕΛΩΝ'}
             </Link>
             {isAuthenticated ? (
               <>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface EditableFieldProps {
   label: string
@@ -10,6 +10,8 @@ interface EditableFieldProps {
   onChange: (value: string) => void
   maxLength?: number
   required?: boolean
+  disabled?: boolean
+  helperText?: string
 }
 
 export default function EditableField({
@@ -19,10 +21,17 @@ export default function EditableField({
   type = 'text',
   onChange,
   maxLength,
-  required = false
+  required = false,
+  disabled = false,
+  helperText
 }: EditableFieldProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [tempValue, setTempValue] = useState(value)
+
+  // Sync tempValue with value prop changes
+  useEffect(() => {
+    setTempValue(value)
+  }, [value])
 
   const handleSave = () => {
     onChange(tempValue)
@@ -51,7 +60,14 @@ export default function EditableField({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
 
-      {isEditing ? (
+      {/* Helper Text */}
+      {helperText && (
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {helperText}
+        </p>
+      )}
+
+      {isEditing && !disabled ? (
         <div className="space-y-2">
           {/* Input Field */}
           {type === 'textarea' ? (
@@ -103,8 +119,12 @@ export default function EditableField({
         </div>
       ) : (
         <div
-          onClick={() => setIsEditing(true)}
-          className="group cursor-pointer flex items-start gap-2 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+          onClick={() => !disabled && setIsEditing(true)}
+          className={`group flex items-start gap-2 px-4 py-3 rounded-2xl transition-colors ${
+            disabled
+              ? 'bg-gray-100 dark:bg-gray-800 cursor-not-allowed opacity-60'
+              : 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
         >
           {/* Display Value */}
           <div className="flex-1">
@@ -119,20 +139,39 @@ export default function EditableField({
             )}
           </div>
 
-          {/* Edit Icon */}
-          <svg
-            className="w-5 h-5 text-gray-400 group-hover:text-coral dark:group-hover:text-coral-light transition-colors flex-shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-            />
-          </svg>
+          {/* Edit Icon - only show if not disabled */}
+          {!disabled && (
+            <svg
+              className="w-5 h-5 text-gray-400 group-hover:text-coral dark:group-hover:text-coral-light transition-colors flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+          )}
+
+          {/* Lock Icon - show when disabled */}
+          {disabled && (
+            <svg
+              className="w-5 h-5 text-gray-400 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
+            </svg>
+          )}
         </div>
       )}
     </div>

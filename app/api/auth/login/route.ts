@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
 
     // Set session cookie
     const cookieStore = await cookies()
-    cookieStore.set('cforc_session', sessionToken, {
+    cookieStore.set('session', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
