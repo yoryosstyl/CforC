@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
 
     // Fetch member from database
     const memberResponse = await fetch(
-      `${STRAPI_URL}/api/members/${decoded.memberId}?populate=Image`,
+      `${STRAPI_URL}/api/members/${decoded.memberId}?populate[0]=Image&populate[1]=Project1Pictures&populate[2]=Project2Pictures`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -98,6 +98,28 @@ export async function POST(request: NextRequest) {
 
     const memberData = await memberResponse.json()
     const member = memberData.data
+
+    // Helper function to convert Blocks format to plain text
+    const convertBlocksToText = (blocks: any) => {
+      if (!blocks || !Array.isArray(blocks)) return ''
+      return blocks
+        .map((block: any) => {
+          if (block.children && Array.isArray(block.children)) {
+            return block.children
+              .map((child: any) => child.text || '')
+              .join('')
+          }
+          return ''
+        })
+        .join('\n')
+    }
+
+    // Convert Bio from Blocks format to plain text
+    const bioText = convertBlocksToText(member.Bio)
+
+    // Convert Project descriptions from Blocks format to plain text
+    const project1DescriptionText = convertBlocksToText(member.Project1Description)
+    const project2DescriptionText = convertBlocksToText(member.Project2Description)
 
     // Hash password
     const hashedPassword = await hashPassword(password)
@@ -136,7 +158,7 @@ export async function POST(request: NextRequest) {
 
     // Set session cookie
     const cookieStore = await cookies()
-    cookieStore.set('cforc_session', sessionToken, {
+    cookieStore.set('session', sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
@@ -144,21 +166,26 @@ export async function POST(request: NextRequest) {
       path: '/'
     })
 
-    // Return member data (excluding sensitive and blocks fields)
+    // Return member data (excluding sensitive fields but including converted text fields)
     const {
       password: _,
       magicLinkToken: __,
       magicLinkExpiry: ___,
-      Bio,
-      Project1Description,
-      Project2Description,
+      Bio: ____,
+      Project1Description: _____,
+      Project2Description: ______,
       ...safeMemberData
     } = member
 
     return NextResponse.json({
       success: true,
       message: 'Ο κωδικός ορίστηκε επιτυχώς',
-      member: safeMemberData
+      member: {
+        ...safeMemberData,
+        Bio: bioText,
+        Project1Description: project1DescriptionText,
+        Project2Description: project2DescriptionText
+      }
     })
 
   } catch (error) {
