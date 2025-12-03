@@ -22,6 +22,12 @@ export default function LoginPage() {
   const [isMagicLoading, setIsMagicLoading] = useState(false)
   const [magicMessage, setMagicMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
+  // Password reset state
+  const [showResetPassword, setShowResetPassword] = useState(false)
+  const [resetEmail, setResetEmail] = useState('')
+  const [isResetLoading, setIsResetLoading] = useState(false)
+  const [resetMessage, setResetMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+
   const handlePasswordLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginMessage(null)
@@ -64,6 +70,32 @@ export default function LoginPage() {
       setMagicMessage({ type: 'error', text: 'Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξανά.' })
     } finally {
       setIsMagicLoading(false)
+    }
+  }
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setResetMessage(null)
+    setIsResetLoading(true)
+
+    try {
+      const result = await requestMagicLink(resetEmail)
+
+      if (result.success) {
+        setResetMessage({ type: 'success', text: 'Ελέγξτε το email σας για τον σύνδεσμο επαναφοράς κωδικού' })
+        setResetEmail('')
+        // Close modal after 3 seconds
+        setTimeout(() => {
+          setShowResetPassword(false)
+          setResetMessage(null)
+        }, 3000)
+      } else {
+        setResetMessage({ type: 'error', text: result.message })
+      }
+    } catch (error) {
+      setResetMessage({ type: 'error', text: 'Κάτι πήγε στραβά. Παρακαλώ δοκιμάστε ξανά.' })
+    } finally {
+      setIsResetLoading(false)
     }
   }
 
@@ -119,6 +151,17 @@ export default function LoginPage() {
                     className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm text-charcoal dark:text-gray-200 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
                     disabled={isLoginLoading}
                   />
+                </div>
+
+                {/* Forgot Password Link */}
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={() => setShowResetPassword(true)}
+                    className="text-xs text-coral dark:text-coral-light hover:underline"
+                  >
+                    Ξεχάσατε τον κωδικό σας;
+                  </button>
                 </div>
 
                 {/* Login Message */}
@@ -243,6 +286,93 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      {/* Password Reset Modal */}
+      {showResetPassword && (
+        <div className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 max-w-md w-full">
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-charcoal dark:text-gray-100">
+                Επαναφορά Κωδικού
+              </h3>
+              <button
+                onClick={() => {
+                  setShowResetPassword(false)
+                  setResetMessage(null)
+                  setResetEmail('')
+                }}
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              Εισάγετε το email σας και θα σας στείλουμε έναν σύνδεσμο για να επαναφέρετε τον κωδικό σας.
+            </p>
+
+            {/* Reset Form */}
+            <form onSubmit={handleResetPassword} className="space-y-4">
+              <div>
+                <label htmlFor="reset-email" className="block text-xs font-medium text-charcoal dark:text-gray-200 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="reset-email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  placeholder="to-email-sas@example.com"
+                  required
+                  className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-full text-sm text-charcoal dark:text-gray-200 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-coral dark:focus:ring-coral-light focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+                  disabled={isResetLoading}
+                />
+              </div>
+
+              {/* Reset Message */}
+              {resetMessage && (
+                <div
+                  className={`p-3 rounded-xl text-xs ${
+                    resetMessage.type === 'success'
+                      ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200 border border-green-200 dark:border-green-800'
+                      : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                  }`}
+                >
+                  {resetMessage.text}
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={isResetLoading}
+                className="w-full bg-coral hover:bg-coral/90 dark:bg-coral-light dark:hover:bg-coral-light/90 text-white py-2.5 rounded-full text-sm font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isResetLoading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Αποστολή...
+                  </span>
+                ) : (
+                  'Αποστολή Συνδέσμου'
+                )}
+              </button>
+
+              <div className="p-2.5 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                <p className="text-[11px] text-gray-600 dark:text-gray-400 text-center">
+                  Ο σύνδεσμος θα σας επιτρέψει να ορίσετε νέο κωδικό πρόσβασης. Λήγει σε 6 ώρες.
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </main>
