@@ -164,8 +164,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate session token using the actual member ID from the fetched member
-    const sessionToken = generateSessionToken(member.id.toString(), authToken.email)
+    // Generate session token using the documentId (required for Strapi v5)
+    const sessionToken = generateSessionToken(member.documentId, authToken.email)
 
     // Set session cookie
     const cookieStore = await cookies()

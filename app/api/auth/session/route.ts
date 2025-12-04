@@ -41,9 +41,9 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Fetch member from database
+    // Fetch member from database using documentId
     const memberResponse = await fetch(
-      `${STRAPI_URL}/api/members/${decoded.memberId}?populate[0]=Image&populate[1]=Project1Pictures&populate[2]=Project2Pictures`,
+      `${STRAPI_URL}/api/members?filters[documentId][$eq]=${decoded.memberId}&populate[0]=Image&populate[1]=Project1Pictures&populate[2]=Project2Pictures`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,16 @@ export async function GET(request: NextRequest) {
     }
 
     const memberData = await memberResponse.json()
-    const member = memberData.data
+
+    if (!memberData.data || memberData.data.length === 0) {
+      cookieStore.delete('session')
+      return NextResponse.json(
+        { error: 'Member not found' },
+        { status: 404 }
+      )
+    }
+
+    const member = memberData.data[0]
 
     // Helper function to convert Blocks format to plain text
     const convertBlocksToText = (blocks: any) => {
