@@ -179,6 +179,76 @@ export default function AnnouncementsPage() {
           </div>
         </div>
 
+        {/* Timeline Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-xl p-8 md:p-12 mb-8">
+          <h2 className="text-2xl font-bold text-coral dark:text-coral-light mb-8 text-center flex items-center justify-center">
+            <span className="text-3xl mr-3">📅</span>
+            Χρονοδιάγραμμα Ανάπτυξης
+          </h2>
+
+          <div className="space-y-6">
+            {/* Alpha Testing */}
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-32 font-bold text-charcoal dark:text-gray-100">
+                18/11 - 10/12
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-bold text-charcoal dark:text-gray-100 mb-2">
+                  Alpha Testing
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  3.5 εβδομάδες τεστάρισμα από τα μέλη της ΟΣ και την ομάδα της ιστοσελίδας για παρατηρήσεις και διορθώσεις.
+                </p>
+              </div>
+            </div>
+
+            {/* Beta Testing */}
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-32 font-bold text-charcoal dark:text-gray-100">
+                10/12 - 6/1
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-bold text-charcoal dark:text-gray-100 mb-2">
+                  Beta Testing
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  Ενημέρωση στο newsletter (10/12) για την επικείμενη αλλαγή και προτροπή των μελών να πάνε στην ιστοσελίδα, να την ελέγξουν και να μας δώσουν feedback για λειτουργικότητα, bugs και θέματα λειτουργίας.
+                </p>
+              </div>
+            </div>
+
+            {/* Official Release */}
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-32 font-bold text-coral dark:text-coral-light">
+                6/1
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-bold text-coral dark:text-coral-light mb-2">
+                  Official Release 🎉
+                </h3>
+                <p className="text-gray-700 dark:text-gray-300">
+                  Μεταφορά της διαχείρισης των domain στο CforC. Αλλαγή και μεταφορά της νέας ιστοσελίδας στο domain cultureforchange.net και της παλιάς ιστοσελίδας στο domain cultureforchange.gr.
+                </p>
+              </div>
+            </div>
+
+            {/* End of Old Site */}
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0 w-32 font-bold text-gray-500 dark:text-gray-400">
+                26/3
+              </div>
+              <div className="flex-grow">
+                <h3 className="font-bold text-gray-600 dark:text-gray-400 mb-2">
+                  Τέλος Παλιάς Σελίδας
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Η παλιά σελίδα θα λήξει με τη λήξη της σύμβασης με Νεκατιβ. Μεταφορά του κώδικά τους σε δικό μας λογαριασμό.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* CTA Button */}
         <div className="text-center">
           <Link
