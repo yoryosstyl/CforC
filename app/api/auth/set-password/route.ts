@@ -78,9 +78,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Fetch member from database
+    // Fetch member from database using the email from auth-token
+    // We use the email because the auth-token already has the correct email
     const memberResponse = await fetch(
-      `${STRAPI_URL}/api/members/${decoded.memberId}?populate[0]=Image&populate[1]=Project1Pictures&populate[2]=Project2Pictures`,
+      `${STRAPI_URL}/api/members?filters[Email][$eq]=${encodeURIComponent(authToken.email)}&populate[0]=Image&populate[1]=Project1Pictures&populate[2]=Project2Pictures`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -90,6 +91,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (!memberResponse.ok) {
+      console.error('[set-password] Member fetch failed:', await memberResponse.text())
       return NextResponse.json(
         { error: 'Μέλος δεν βρέθηκε' },
         { status: 404 }
@@ -97,7 +99,16 @@ export async function POST(request: NextRequest) {
     }
 
     const memberData = await memberResponse.json()
-    const member = memberData.data
+
+    if (!memberData.data || memberData.data.length === 0) {
+      console.error('[set-password] No member found with email:', authToken.email)
+      return NextResponse.json(
+        { error: 'Μέλος δεν βρέθηκε' },
+        { status: 404 }
+      )
+    }
+
+    const member = memberData.data[0]
 
     // Helper function to convert Blocks format to plain text
     const convertBlocksToText = (blocks: any) => {
@@ -153,8 +164,8 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate session token
-    const sessionToken = generateSessionToken(decoded.memberId, decoded.email)
+    // Generate session token using the actual member ID from the fetched member
+    const sessionToken = generateSessionToken(member.id.toString(), authToken.email)
 
     // Set session cookie
     const cookieStore = await cookies()
