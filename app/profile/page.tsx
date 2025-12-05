@@ -153,6 +153,8 @@ export default function ProfilePage() {
     // If there are validation errors, show them
     if (errors.length > 0) {
       setValidationErrors(errors)
+      // Scroll to top to show errors
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
@@ -314,6 +316,34 @@ export default function ProfilePage() {
             Επεξεργαστείτε τις πληροφορίες του προφίλ σας
           </p>
         </div>
+
+        {/* Validation Errors - Show at top */}
+        {validationErrors.length > 0 && (
+          <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-400 dark:border-red-600 rounded-2xl p-6 mb-8">
+            <div className="flex items-start gap-4">
+              <span className="text-3xl flex-shrink-0">❌</span>
+              <div className="flex-1">
+                <h3 className="font-bold text-red-900 dark:text-red-200 mb-2 text-lg">
+                  Σφάλματα Επικύρωσης
+                </h3>
+                <p className="text-sm text-red-800 dark:text-red-300 mb-3">
+                  Παρακαλώ διορθώστε τα παρακάτω προβλήματα πριν αποθηκεύσετε:
+                </p>
+                <ul className="text-sm text-red-800 dark:text-red-300 space-y-1">
+                  {validationErrors.map((error, index) => (
+                    <li key={index}>• {error}</li>
+                  ))}
+                </ul>
+                <button
+                  onClick={() => setValidationErrors([])}
+                  className="mt-4 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-sm font-medium transition-colors"
+                >
+                  Κλείσιμο
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Placeholder Data Warning */}
         {(user.Name === 'Νέο Μέλος' || user.FieldsOfWork === 'Προς Συμπλήρωση' || user.City === '-' || user.Province === '-') && (
@@ -520,34 +550,6 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
-
-            {/* Validation Errors */}
-            {validationErrors.length > 0 && (
-              <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-400 dark:border-red-600 rounded-2xl p-6">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl flex-shrink-0">❌</span>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-red-900 dark:text-red-200 mb-2 text-lg">
-                      Σφάλματα Επικύρωσης
-                    </h3>
-                    <p className="text-sm text-red-800 dark:text-red-300 mb-3">
-                      Παρακαλώ διορθώστε τα παρακάτω προβλήματα πριν αποθηκεύσετε:
-                    </p>
-                    <ul className="text-sm text-red-800 dark:text-red-300 space-y-1">
-                      {validationErrors.map((error, index) => (
-                        <li key={index}>• {error}</li>
-                      ))}
-                    </ul>
-                    <button
-                      onClick={() => setValidationErrors([])}
-                      className="mt-4 text-sm text-red-800 dark:text-red-300 underline hover:no-underline"
-                    >
-                      Κλείσιμο
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
 
             {/* Save Message */}
             {saveMessage && (
