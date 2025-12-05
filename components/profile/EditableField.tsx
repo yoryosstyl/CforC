@@ -60,9 +60,9 @@ export default function EditableField({
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
 
-      {/* Helper Text */}
-      {helperText && (
-        <p className="text-xs text-gray-500 dark:text-gray-400">
+      {/* Helper Text - Only show when editing */}
+      {isEditing && helperText && (
+        <p className="text-xs text-gray-400 dark:text-gray-500 italic">
           {helperText}
         </p>
       )}

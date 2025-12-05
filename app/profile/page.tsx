@@ -43,6 +43,7 @@ export default function ProfilePage() {
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
   const [showUnsavedModal, setShowUnsavedModal] = useState(false)
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null)
+  const [validationErrors, setValidationErrors] = useState<string[]>([])
 
   // Check authentication
   useEffect(() => {
@@ -127,20 +128,37 @@ export default function ProfilePage() {
   const handleSave = async () => {
     if (!hasUnsavedChanges()) return
 
+    // Collect validation errors
+    const errors: string[] = []
+
     // Validate email format
     if (formData.Email && !validateEmail(formData.Email)) {
-      setSaveMessage({ type: 'error', text: 'Μη έγκυρη μορφή email' })
-      return
+      errors.push('Μη έγκυρη μορφή email')
     }
 
     // Validate phone format
     if (formData.Phone && formData.Phone.trim() !== '' && formData.Phone !== '-' && !validatePhone(formData.Phone)) {
-      setSaveMessage({ type: 'error', text: 'Το τηλέφωνο μπορεί να περιέχει μόνο αριθμούς και το σύμβολο +' })
+      errors.push('Το τηλέφωνο μπορεί να περιέχει μόνο αριθμούς, κενά και το σύμβολο +')
+    }
+
+    // Check required fields
+    if (!formData.Name || formData.Name.trim() === '' || formData.Name === 'Νέο Μέλος') {
+      errors.push('Το όνομα είναι υποχρεωτικό')
+    }
+
+    if (!formData.Email || formData.Email.trim() === '') {
+      errors.push('Το email είναι υποχρεωτικό')
+    }
+
+    // If there are validation errors, show them
+    if (errors.length > 0) {
+      setValidationErrors(errors)
       return
     }
 
     setIsSaving(true)
     setSaveMessage(null)
+    setValidationErrors([])
 
     try {
       // Exclude Email from update (it's not editable)
@@ -502,6 +520,34 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
+
+            {/* Validation Errors */}
+            {validationErrors.length > 0 && (
+              <div className="bg-red-50 dark:bg-red-900/20 border-2 border-red-400 dark:border-red-600 rounded-2xl p-6">
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl flex-shrink-0">❌</span>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-red-900 dark:text-red-200 mb-2 text-lg">
+                      Σφάλματα Επικύρωσης
+                    </h3>
+                    <p className="text-sm text-red-800 dark:text-red-300 mb-3">
+                      Παρακαλώ διορθώστε τα παρακάτω προβλήματα πριν αποθηκεύσετε:
+                    </p>
+                    <ul className="text-sm text-red-800 dark:text-red-300 space-y-1">
+                      {validationErrors.map((error, index) => (
+                        <li key={index}>• {error}</li>
+                      ))}
+                    </ul>
+                    <button
+                      onClick={() => setValidationErrors([])}
+                      className="mt-4 text-sm text-red-800 dark:text-red-300 underline hover:no-underline"
+                    >
+                      Κλείσιμο
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Save Message */}
             {saveMessage && (
