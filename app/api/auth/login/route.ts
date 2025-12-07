@@ -173,11 +173,11 @@ export async function POST(request: NextRequest) {
 
     // Return member data (excluding sensitive fields and complex Blocks fields)
     const {
-      password,
-      magicLinkToken,
-      magicLinkExpiry,
-      verificationCode,
-      verificationExpiry,
+      password: _pwd,
+      magicLinkToken: _mlt,
+      magicLinkExpiry: _mle,
+      verificationCode: _vc,
+      verificationExpiry: _ve,
       Bio: _,
       Project1Description: _1,
       Project2Description: _2,
