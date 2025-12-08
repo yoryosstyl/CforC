@@ -48,6 +48,7 @@ export default function MembersPage() {
   const [selectedField, setSelectedField] = useState('')
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedProvince, setSelectedProvince] = useState('')
+  const [sortMode, setSortMode] = useState<'none' | 'alpha-asc' | 'alpha-desc' | 'random'>('random')
   const [totalCount, setTotalCount] = useState(0)
   const [displayCount, setDisplayCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
@@ -105,8 +106,17 @@ export default function MembersPage() {
       )
     }
 
+    // Apply sorting
+    if (sortMode === 'alpha-asc') {
+      result.sort((a, b) => a.Name.localeCompare(b.Name, 'el'))
+    } else if (sortMode === 'alpha-desc') {
+      result.sort((a, b) => b.Name.localeCompare(a.Name, 'el'))
+    } else if (sortMode === 'random') {
+      result.sort(() => Math.random() - 0.5)
+    }
+
     setFilteredMembers(result)
-  }, [allMembers, searchQuery, selectedField, selectedCity, selectedProvince])
+  }, [allMembers, searchQuery, selectedField, selectedCity, selectedProvince, sortMode])
 
   // Animated counter
   useEffect(() => {
@@ -179,50 +189,67 @@ export default function MembersPage() {
 
           {/* Filters */}
           <div className="bg-white dark:bg-gray-800 rounded-3xl p-8 mb-12">
-            <div className="grid md:grid-cols-4 gap-4">
-              <input
-                type="text"
-                placeholder="Αναζήτηση ονόματος..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
-              />
-              <select
-                value={selectedField}
-                onChange={(e) => setSelectedField(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
-              >
-                <option value="">Όλα τα πεδία εργασίας</option>
-                {uniqueFields.map((field) => (
-                  <option key={field} value={field}>
-                    {field}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
-              >
-                <option value="">Όλες οι πόλεις</option>
-                {uniqueCities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={selectedProvince}
-                onChange={(e) => setSelectedProvince(e.target.value)}
-                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200"
-              >
-                <option value="">Όλες οι επαρχίες</option>
-                {uniqueProvinces.map((province) => (
-                  <option key={province} value={province}>
-                    {province}
-                  </option>
-                ))}
-              </select>
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              {/* Search + basic filters */}
+              <div className="flex-1 flex flex-wrap gap-4">
+                <input
+                  type="text"
+                  placeholder="Αναζήτηση ονόματος..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 min-w-[220px] px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 dark:placeholder-gray-400"
+                />
+                <select
+                  value={selectedField}
+                  onChange={(e) => setSelectedField(e.target.value)}
+                  className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-auto"
+                >
+                  <option value="">Όλα τα πεδία εργασίας</option>
+                  {uniqueFields.map((field) => (
+                    <option key={field} value={field}>
+                      {field}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-auto"
+                >
+                  <option value="">Όλες οι πόλεις</option>
+                  {uniqueCities.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={selectedProvince}
+                  onChange={(e) => setSelectedProvince(e.target.value)}
+                  className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-auto"
+                >
+                  <option value="">Όλες οι επαρχίες</option>
+                  {uniqueProvinces.map((province) => (
+                    <option key={province} value={province}>
+                      {province}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sort dropdown */}
+              <div className="md:w-auto md:ml-auto">
+                <select
+                  value={sortMode}
+                  onChange={(e) => setSortMode(e.target.value as typeof sortMode)}
+                  className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-auto"
+                >
+                  <option value="random">Τυχαία σειρά</option>
+                  <option value="alpha-asc">Α → Ω</option>
+                  <option value="alpha-desc">Ω → Α</option>
+                  <option value="none">Χωρίς ταξινόμηση</option>
+                </select>
+              </div>
             </div>
           </div>
 
