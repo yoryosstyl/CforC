@@ -154,6 +154,11 @@ export default function MembersPage() {
   const uniqueCities = Array.from(new Set(allMembers.map((m) => m.City).filter(Boolean)))
   const uniqueProvinces = Array.from(new Set(allMembers.map((m) => m.Province).filter(Boolean)))
 
+  const truncateLabel = (label: string, maxLength: number = 32) => {
+    if (!label) return ''
+    return label.length > maxLength ? `${label.slice(0, maxLength - 3)}...` : label
+  }
+
   return (
     <main className="min-h-screen bg-[#F5F0EB] dark:bg-gray-900">
       <Navigation variant="members" />
@@ -203,12 +208,12 @@ export default function MembersPage() {
               <select
                 value={selectedField}
                 onChange={(e) => setSelectedField(e.target.value)}
-                className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-auto min-w-0 whitespace-nowrap"
+                className="px-3 py-3 border border-gray-300 dark:border-gray-600 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-coral dark:bg-gray-700 dark:text-gray-200 w-44 md:w-56 whitespace-nowrap"
               >
                 <option value="">Όλα τα πεδία εργασίας</option>
                 {uniqueFields.map((field) => (
                   <option key={field} value={field}>
-                    {field}
+                    {truncateLabel(field)}
                   </option>
                 ))}
               </select>
