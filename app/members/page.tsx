@@ -58,7 +58,7 @@ export default function MembersPage() {
         setIsLoading(true)
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*`,
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*&pagination[limit]=1000`,
           {
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_API_TOKEN}`,
