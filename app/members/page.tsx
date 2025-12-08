@@ -13,6 +13,7 @@ interface Member {
   id: number
   documentId: string
   Name: string
+  Slug: string
   Bio: string
   FieldsOfWork: string
   City: string
@@ -230,7 +231,7 @@ export default function MembersPage() {
             {filteredMembers.map((member) => (
               <Link
                 key={member.id}
-                href={`/members/${encodeURIComponent(member.Name)}`}
+                href={`/members/${member.Slug}`}
                 className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-all duration-300 group border-l-4 border-transparent hover:border-coral dark:hover:border-coral-light"
               >
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (

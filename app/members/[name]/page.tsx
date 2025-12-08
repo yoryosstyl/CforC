@@ -14,6 +14,7 @@ interface Member {
   id: number
   documentId: string
   Name: string
+  Slug: string
   Bio: any
   FieldsOfWork: string
   City: string
@@ -44,13 +45,13 @@ interface Member {
 export default function MemberDetailPage() {
   const params = useParams()
   const [member, setMember] = useState<Member | null>(null)
-  const memberName = decodeURIComponent(params.name as string)
+  const memberSlug = params.name as string
 
   useEffect(() => {
     const fetchMember = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*&filters[Name][$eq]=${encodeURIComponent(memberName)}`,
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*&filters[Slug][$eq]=${memberSlug}`,
           {
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_API_TOKEN}`,
@@ -67,7 +68,7 @@ export default function MemberDetailPage() {
     }
 
     fetchMember()
-  }, [memberName])
+  }, [memberSlug])
 
   if (!member) {
     return (
@@ -232,7 +233,7 @@ export default function MemberDetailPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {member.Project1Title && (
                 <Link
-                  href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(member.Project1Title)}`}
+                  href={`/members/${member.Slug}/${encodeURIComponent(member.Project1Title)}`}
                   className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
                 >
                   {member.Project1Pictures && member.Project1Pictures[0] && (
@@ -253,7 +254,7 @@ export default function MemberDetailPage() {
 
               {member.Project2Title && (
                 <Link
-                  href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(member.Project2Title)}`}
+                  href={`/members/${member.Slug}/${encodeURIComponent(member.Project2Title)}`}
                   className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
                 >
                   {member.Project2Pictures && member.Project2Pictures[0] && (

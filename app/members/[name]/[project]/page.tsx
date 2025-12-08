@@ -13,6 +13,7 @@ interface Member {
   id: number
   documentId: string
   Name: string
+  Slug: string
   Image?: Array<{
     url: string
     alternativeText?: string
@@ -48,14 +49,14 @@ export default function ProjectDetailPage() {
   } | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
 
-  const memberName = decodeURIComponent(params.name as string)
+  const memberSlug = params.name as string
   const projectName = decodeURIComponent(params.project as string)
 
   useEffect(() => {
     const fetchMemberAndProject = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*&filters[Name][$eq]=${encodeURIComponent(memberName)}`,
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/members?populate=*&filters[Slug][$eq]=${memberSlug}`,
           {
             headers: {
               Authorization: `Bearer ${process.env.NEXT_PUBLIC_STRAPI_API_TOKEN}`,
@@ -102,7 +103,7 @@ export default function ProjectDetailPage() {
     }
 
     fetchMemberAndProject()
-  }, [memberName, projectName])
+  }, [memberSlug, projectName])
 
   if (!member || !projectData) {
     return (
@@ -257,7 +258,7 @@ export default function ProjectDetailPage() {
               {/* Member Thumbnail */}
               <div>
                 {member.Image && member.Image.length > 0 && member.Image[0].url ? (
-                  <Link href={`/members/${encodeURIComponent(member.Name)}`}>
+                  <Link href={`/members/${member.Slug}`}>
                     <div className="aspect-square relative rounded-full overflow-hidden hover:opacity-80 transition-opacity bg-gray-200 dark:bg-gray-700">
                       <Image
                         src={member.Image[0].url}
@@ -268,14 +269,14 @@ export default function ProjectDetailPage() {
                     </div>
                   </Link>
                 ) : (
-                  <Link href={`/members/${encodeURIComponent(member.Name)}`}>
+                  <Link href={`/members/${member.Slug}`}>
                     <div className="aspect-square rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center hover:opacity-80 transition-opacity">
                       <span className="text-gray-400 dark:text-gray-500 text-4xl">{member.Name.charAt(0)}</span>
                     </div>
                   </Link>
                 )}
                 <Link
-                  href={`/members/${encodeURIComponent(member.Name)}`}
+                  href={`/members/${member.Slug}`}
                   className="block text-center mt-2 text-sm font-bold hover:text-coral dark:hover:text-coral-light dark:text-gray-200 transition-colors"
                 >
                   {member.Name}
@@ -306,7 +307,7 @@ export default function ProjectDetailPage() {
           {otherProject ? (
             <div className="grid md:grid-cols-2 gap-8">
               <Link
-                href={`/members/${encodeURIComponent(member.Name)}/${encodeURIComponent(otherProject.title)}`}
+                href={`/members/${member.Slug}/${encodeURIComponent(otherProject.title)}`}
                 className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-xl dark:hover:shadow-gray-700/50 transition-shadow"
               >
                 {otherProject.pictures && otherProject.pictures[0] && (
