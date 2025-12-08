@@ -179,7 +179,7 @@ export default function AnnouncementsPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-coral dark:text-coral-light flex-shrink-0">•</span>
-                  <span>Μπαίνοντας στο προφίλ σου θα χρειαστεί ν' αλλάξεις το όνομα σε μικρά αντί κεφαλαία γράμματα.</span>
+                  <span>Μπαίνοντας στο προφίλ σου θα χρειαστεί να προσθέσεις τόνους στο όνομά σου.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-coral dark:text-coral-light flex-shrink-0">•</span>
