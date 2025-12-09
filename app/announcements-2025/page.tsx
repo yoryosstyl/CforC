@@ -187,6 +187,10 @@ export default function AnnouncementsPage() {
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 text-coral dark:text-coral-light flex-shrink-0">•</span>
+                  <span>Δες τι δεν υπάρχει (π.χ. πόλη, περιφέρεια κ.λπ.) και πρόσθεσέ τα.</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2 text-coral dark:text-coral-light flex-shrink-0">•</span>
                   <span>Χρειάζεται να προσθέσεις τίτλο, περιγραφή και φωτογραφίες για τα πρότζεκτ σου. Μπορείς να κάνεις copy paste την πληροφορία απ'τη σελίδα <a href="https://cultureforchange.net" target="_blank" rel="noopener noreferrer" className="text-coral dark:text-coral-light underline hover:no-underline">cultureforchange.net</a>.</span>
                 </li>
                 <li className="flex items-start">
