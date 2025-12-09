@@ -6,6 +6,7 @@ import Image from 'next/image'
 import LoadingIndicator from './LoadingIndicator'
 import { getOpenCalls } from '@/lib/strapi'
 import type { StrapiResponse, OpenCall } from '@/lib/types'
+import { useAuth } from '@/lib/AuthContext'
 
 // Helper function to extract text from Strapi rich text blocks
 function extractTextFromBlocks(blocks: any): string {
@@ -28,9 +29,13 @@ function extractTextFromBlocks(blocks: any): string {
 }
 
 export default function OpenCallsSection() {
+  const { user, loading: authLoading } = useAuth()
   const [openCalls, setOpenCalls] = useState<OpenCall[]>([])
+  const [expiredCalls, setExpiredCalls] = useState<OpenCall[]>([])
+  const [totalActiveCalls, setTotalActiveCalls] = useState(0)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showMemberModal, setShowMemberModal] = useState(false)
 
   useEffect(() => {
     async function fetchOpenCalls() {
@@ -45,16 +50,22 @@ export default function OpenCallsSection() {
         console.log('Open calls data:', response.data)
         console.log('Number of open calls:', response.data?.length || 0)
 
-        // Filter out expired calls and sort by deadline (closest first)
+        // Separate active and expired calls
         const today = new Date()
         today.setHours(0, 0, 0, 0) // Reset time to start of day
 
-        const sortedCalls = response.data
-          .filter(call => new Date(call.Deadline) >= today) // Only non-expired calls
-          .sort((a, b) => new Date(a.Deadline).getTime() - new Date(b.Deadline).getTime()) // Closest deadline first
-          .slice(0, 4) // Take top 4
+        const activeCalls = response.data
+          .filter(call => new Date(call.Deadline) >= today)
+          .sort((a, b) => new Date(a.Deadline).getTime() - new Date(b.Deadline).getTime())
 
-        setOpenCalls(sortedCalls)
+        const expiredCallsList = response.data
+          .filter(call => new Date(call.Deadline) < today)
+          .sort((a, b) => new Date(b.Deadline).getTime() - new Date(a.Deadline).getTime())
+          .slice(0, 3) // Take 3 most recent expired
+
+        setTotalActiveCalls(activeCalls.length)
+        setOpenCalls(activeCalls.slice(0, 4)) // Show top 4 active for logged-in users
+        setExpiredCalls(expiredCallsList)
       } catch (err) {
         setError('Failed to load open calls from Strapi')
         console.error('Error fetching open calls:', err)
@@ -99,21 +110,81 @@ export default function OpenCallsSection() {
     )
   }
 
+  const handleViewAllClick = (e: React.MouseEvent) => {
+    if (!user) {
+      e.preventDefault()
+      setShowMemberModal(true)
+    }
+  }
+
   return (
-    <section id="open-calls" className="py-24 bg-orange-50 dark:bg-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</p>
-            <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
-              ΤΟΥ CULTURE<br />
-              FOR CHANGE
-            </h2>
+    <>
+      {/* Member-Only Modal */}
+      {showMemberModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-8 relative">
+            <button
+              onClick={() => setShowMemberModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center">
+              <div className="mb-4">
+                <svg className="w-16 h-16 text-coral dark:text-coral-light mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl font-bold mb-4 dark:text-gray-100">Περιεχόμενο Μελών</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Οι ανοιχτές προσκλήσεις είναι διαθέσιμες μόνο για εγγεγραμμένα μέλη. Εγγραφείτε δωρεάν για πρόσβαση.
+              </p>
+              <div className="flex flex-col gap-3">
+                <Link
+                  href="/signup"
+                  className="bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors"
+                  onClick={() => setShowMemberModal(false)}
+                >
+                  Εγγραφή Δωρεάν
+                </Link>
+                <button
+                  onClick={() => setShowMemberModal(false)}
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                >
+                  Κλείσιμο
+                </button>
+              </div>
+            </div>
           </div>
-          <Link href="/open-calls" className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors">
-            ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
-          </Link>
         </div>
+      )}
+
+      <section id="open-calls" className="py-24 bg-orange-50 dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-end mb-12">
+            <div>
+              <p className="text-coral dark:text-coral-light text-sm font-medium mb-2">ΑΝΟΙΧΤΕΣ ΠΡΟΣΚΛΗΣΕΙΣ</p>
+              <h2 className="text-4xl md:text-5xl font-bold dark:text-gray-100">
+                ΤΟΥ CULTURE<br />
+                FOR CHANGE
+              </h2>
+            </div>
+            {user ? (
+              <Link href="/open-calls" className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors">
+                ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+              </Link>
+            ) : (
+              <button
+                onClick={handleViewAllClick}
+                className="hidden md:block bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors"
+              >
+                ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+              </button>
+            )}
+          </div>
 
         <div className="space-y-0">
           {openCalls.map((call, index) => {
@@ -209,10 +280,158 @@ export default function OpenCallsSection() {
           })}
         </div>
 
-        <Link href="/open-calls" className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors">
-          ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
-        </Link>
+        {user ? (
+          <Link href="/open-calls" className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors">
+            ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+          </Link>
+        ) : (
+          <button
+            onClick={handleViewAllClick}
+            className="md:hidden w-full mt-8 bg-coral dark:bg-coral-light text-white px-6 py-3 rounded-full font-medium text-center block hover:bg-coral-dark dark:hover:bg-coral transition-colors"
+          >
+            ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+          </button>
+        )}
+
+        {/* Teaser Banner for Non-Logged-In Users */}
+        {!user && (
+          <div className="mt-16 bg-gradient-to-r from-coral to-coral-dark dark:from-coral-light dark:to-coral rounded-3xl p-12 text-white text-center">
+            <div className="max-w-3xl mx-auto">
+              <div className="mb-6">
+                <div className="inline-block bg-white bg-opacity-20 backdrop-blur-sm px-6 py-2 rounded-full text-sm font-medium mb-4">
+                  Αποκλειστικό Περιεχόμενο Μελών
+                </div>
+                <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                  {totalActiveCalls} Ενεργές Ανοιχτές Προσκλήσεις
+                </h3>
+                <p className="text-lg text-white text-opacity-90 mb-8">
+                  Αποκτήστε πρόσβαση σε ευκαιρίες χρηματοδότησης, υποτροφίες, residencies και διαγωνισμούς από όλη την Ευρώπη
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6 mb-8 text-left">
+                <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+                  <div className="text-3xl mb-2">🇪🇺</div>
+                  <div className="font-semibold mb-1">Ευρωπαϊκά Προγράμματα</div>
+                  <div className="text-sm text-white text-opacity-80">Creative Europe, Horizon, CERV</div>
+                </div>
+                <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+                  <div className="text-3xl mb-2">💰</div>
+                  <div className="font-semibold mb-1">Χρηματοδότηση</div>
+                  <div className="text-sm text-white text-opacity-80">Grants & Funding Opportunities</div>
+                </div>
+                <div className="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-6">
+                  <div className="text-3xl mb-2">🎨</div>
+                  <div className="font-semibold mb-1">Residencies</div>
+                  <div className="text-sm text-white text-opacity-80">Καλλιτεχνικές Υποτροφίες</div>
+                </div>
+              </div>
+
+              <Link
+                href="/signup"
+                className="inline-block bg-white text-coral px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
+              >
+                Εγγραφή Δωρεάν
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {/* Expired Open Calls Section - Show 3 Recent Expired */}
+        {expiredCalls.length > 0 && (
+          <div className="mt-16">
+            <div className="flex justify-between items-end mb-8">
+              <div>
+                <h3 className="text-2xl md:text-3xl font-bold dark:text-gray-100">
+                  Πρόσφατες Προσκλήσεις
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                  Δείτε παραδείγματα προηγούμενων ευκαιριών
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-0">
+              {expiredCalls.map((call, index) => {
+                const descriptionText = extractTextFromBlocks(call.Description)
+
+                let imageUrl = null
+                if (call.Image) {
+                  if (Array.isArray(call.Image) && call.Image.length > 0) {
+                    const url = call.Image[0].url
+                    imageUrl = url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`
+                  } else if (typeof call.Image === 'object' && !Array.isArray(call.Image) && 'url' in call.Image) {
+                    const url = call.Image.url
+                    imageUrl = url.startsWith('http') ? url : `${process.env.NEXT_PUBLIC_STRAPI_URL}${url}`
+                  }
+                }
+
+                return (
+                  <div key={call.id}>
+                    {index > 0 && <hr className="border-gray-300 dark:border-gray-600" />}
+                    <div className="py-12 opacity-60 relative rounded-2xl">
+                      <div className="flex items-start gap-6 pr-16">
+                        <div className="flex flex-col gap-3 min-w-[140px] ml-8">
+                          <span className="inline-block bg-gray-400 dark:bg-gray-600 text-white px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                            {new Date(call.Deadline).toLocaleDateString('el-GR')}
+                          </span>
+                          <span className="inline-block bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 px-5 py-2 rounded-full text-sm font-medium whitespace-nowrap">
+                            ΕΛΗΞΕ
+                          </span>
+                        </div>
+
+                        <div className="flex-1 flex gap-6">
+                          <div className="flex-1">
+                            <h3 className="text-xl md:text-2xl font-bold mb-4 text-gray-500 dark:text-gray-400">
+                              {call.Title}
+                            </h3>
+                            <p className="text-gray-500 dark:text-gray-500 leading-relaxed text-base mt-2 line-clamp-2">
+                              {descriptionText}
+                            </p>
+                          </div>
+
+                          {imageUrl && (
+                            <div className="flex-shrink-0">
+                              <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-gray-300 dark:border-gray-600 shadow-md opacity-50">
+                                <Image
+                                  src={imageUrl}
+                                  alt={(Array.isArray(call.Image) ? call.Image[0]?.alternativeText : call.Image?.alternativeText) || call.Title}
+                                  width={112}
+                                  height={112}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="mt-8 text-center">
+              {user ? (
+                <Link
+                  href="/open-calls"
+                  className="inline-block bg-coral dark:bg-coral-light text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors"
+                >
+                  ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+                </Link>
+              ) : (
+                <button
+                  onClick={handleViewAllClick}
+                  className="inline-block bg-coral dark:bg-coral-light text-white px-8 py-3 rounded-full font-medium hover:bg-coral-dark dark:hover:bg-coral transition-colors"
+                >
+                  ΟΛΕΣ ΟΙ ΠΡΟΣΚΛΗΣΕΙΣ
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </section>
+    </>
   )
 }
