@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -32,7 +32,7 @@ function extractTextFromBlocks(blocks: any): string {
   return ''
 }
 
-export default function ActivityDetailPage() {
+function ActivityDetailPageContent() {
   const params = useParams()
   const searchParams = useSearchParams()
   const slug = params.slug as string
@@ -385,5 +385,31 @@ export default function ActivityDetailPage() {
       <CookieConsent />
       <ScrollToTop />
     </main>
+  )
+}
+
+export default function ActivityDetailPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen dark:bg-gray-900">
+        <Navigation />
+        <div className="py-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="animate-pulse">
+              <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded w-2/3 mb-8"></div>
+              <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-2xl mb-8"></div>
+              <div className="space-y-4">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </main>
+    }>
+      <ActivityDetailPageContent />
+    </Suspense>
   )
 }

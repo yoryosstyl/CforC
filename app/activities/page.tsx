@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
@@ -33,7 +33,7 @@ function extractTextFromBlocks(blocks: any): string {
   return ''
 }
 
-export default function ActivitiesPage() {
+function ActivitiesPageContent() {
   const searchParams = useSearchParams()
   const [allActivities, setAllActivities] = useState<Activity[]>([])
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([])
@@ -284,5 +284,32 @@ export default function ActivitiesPage() {
       <CookieConsent />
       <ScrollToTop />
     </main>
+  )
+}
+
+export default function ActivitiesPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen dark:bg-gray-900">
+        <Navigation />
+        <section className="relative -bottom-20">
+          <div className="bg-coral dark:bg-gradient-to-r dark:from-gray-800 dark:to-gray-900 h-[25vh] flex items-center rounded-b-3xl relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-none dark:text-coral">
+                <div>ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ</div>
+              </h1>
+            </div>
+          </div>
+        </section>
+        <section className="py-24 bg-white dark:bg-gray-900">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <LoadingIndicator />
+          </div>
+        </section>
+        <Footer />
+      </main>
+    }>
+      <ActivitiesPageContent />
+    </Suspense>
   )
 }
