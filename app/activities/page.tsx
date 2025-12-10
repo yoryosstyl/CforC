@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
@@ -33,6 +34,7 @@ function extractTextFromBlocks(blocks: any): string {
 }
 
 export default function ActivitiesPage() {
+  const searchParams = useSearchParams()
   const [allActivities, setAllActivities] = useState<Activity[]>([])
   const [filteredActivities, setFilteredActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
@@ -42,6 +44,16 @@ export default function ActivitiesPage() {
   // Filter states
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current')
+
+  // Set initial tab based on query parameter
+  useEffect(() => {
+    const fromParam = searchParams.get('from')
+    if (fromParam === 'previous') {
+      setActiveTab('previous')
+    } else if (fromParam === 'current') {
+      setActiveTab('current')
+    }
+  }, [searchParams])
 
   // Detect language changes (e.g., Google Translate)
   useEffect(() => {
@@ -212,7 +224,7 @@ export default function ActivitiesPage() {
                 return (
                   <Link
                     key={activity.id}
-                    href={`/activities/${activity.documentId || activity.id}`}
+                    href={`/activities/${activity.documentId || activity.id}?from=${activeTab}`}
                     className="bg-orange-50 dark:bg-gray-700 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform hover:scale-105"
                   >
                     {/* Image with overlapping date */}

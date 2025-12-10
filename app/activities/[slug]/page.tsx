@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import CookieConsent from '@/components/CookieConsent'
@@ -34,7 +34,9 @@ function extractTextFromBlocks(blocks: any): string {
 
 export default function ActivityDetailPage() {
   const params = useParams()
+  const searchParams = useSearchParams()
   const slug = params.slug as string
+  const fromTab = searchParams.get('from') || 'current' // Default to 'current' if not specified
 
   const [activity, setActivity] = useState<Activity | null>(null)
   const [relatedActivities, setRelatedActivities] = useState<Activity[]>([])
@@ -119,7 +121,7 @@ export default function ActivityDetailPage() {
               <p className="text-orange-600 dark:text-orange-400 font-medium">
                 {error || 'Activity not found'}
               </p>
-              <Link href="/activities" className="inline-block mt-4 text-coral dark:text-coral-light hover:underline">
+              <Link href={`/activities?from=${fromTab}`} className="inline-block mt-4 text-coral dark:text-coral-light hover:underline">
                 ← Επιστροφή στις δραστηριότητες
               </Link>
             </div>
@@ -151,7 +153,7 @@ export default function ActivityDetailPage() {
       <section className="py-24 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back link */}
-          <Link href="/activities" className="inline-flex items-center text-coral dark:text-coral-light hover:underline mb-8">
+          <Link href={`/activities?from=${fromTab}`} className="inline-flex items-center text-coral dark:text-coral-light hover:underline mb-8">
             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -271,7 +273,7 @@ export default function ActivityDetailPage() {
               {relatedActivities.map((relatedActivity) => (
                 <Link
                   key={relatedActivity.id}
-                  href={`/activities/${relatedActivity.documentId || relatedActivity.id}`}
+                  href={`/activities/${relatedActivity.documentId || relatedActivity.id}?from=${fromTab}`}
                   className="bg-orange-50 dark:bg-gray-700 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow transform hover:scale-105"
                 >
                   {/* Image with overlapping date */}
